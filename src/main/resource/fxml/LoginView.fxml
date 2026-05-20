@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+        fx:controller="messagerie_instantane.client.controller.LoginChat"
+        alignment="CENTER" spacing="16"
+        styleClass="login-root"
+        xmlns="http://javafx.com/javafx">
+
+        <Label text="Messagerie Instantanée" styleClass="title"/>
+
+        <TextField fx:id="pseudoField"
+                promptText="Votre pseudo"
+                maxWidth="280"/>
+
+        <TextField fx:id="serverField"
+                promptText="Adresse du serveur (ex: localhost)"
+                maxWidth="280"
+                text="localhost"/>
+
+        <Button text="Se connecter"
+                onAction="#onConnect"
+                styleClass="btn-primary"
+                maxWidth="280"/>
+
+        <Label fx:id="errorLabel" styleClass="error"/>
+
+</VBox>

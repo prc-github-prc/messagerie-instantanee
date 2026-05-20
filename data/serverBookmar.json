@@ -1,0 +1,4 @@
+[
+    { "nom": "LocalHost", "adresse": "170.0.0.1", "port": 8090 },
+    { "nom": "Click pas",   "adresse": "monserveur.fr", "port": 8090 }
+]

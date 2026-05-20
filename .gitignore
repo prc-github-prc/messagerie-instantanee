@@ -1,17 +1,99 @@
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-.mvn/timing.properties
-# https://maven.apache.org/tools/wrapper/#Usage_with_or_without_Binary_JAR
-.mvn/wrapper/maven-wrapper.jar
+# ══════════════════════════════════════════════
+#  .gitignore — Messagerie Instantanée
+#  Java 17 + Maven + JavaFX + VS Code
+# ══════════════════════════════════════════════
 
-# Eclipse m2e generated files
-# Eclipse Core
-.project
-# JDT-specific (Eclipse Java Development Tools)
+
+# ── Build Maven ───────────────────────────────
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+
+# ── Logs ──────────────────────────────────────
+*.log
+*.log.*
+
+
+# ── VS Code ───────────────────────────────────
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/extensions.json
+# On garde .vscode/  mais on ignore les fichiers
+# personnels qui varient selon la machine.
+# Si toute l'équipe utilise VS Code, tu peux
+# committer .vscode/ entièrement en retirant
+# les lignes ci-dessus.
+
+
+# ── IntelliJ IDEA ─────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+
+# ── Eclipse ───────────────────────────────────
 .classpath
+.project
+.settings/
+bin/
+
+
+# ── NetBeans ──────────────────────────────────
+nbproject/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+
+# ── OS ────────────────────────────────────────
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+
+# ── Java ──────────────────────────────────────
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+
+# ── Maven wrapper ─────────────────────────────
+# Le .jar est lourd (≈50 Ko) mais évite tout
+# téléchargement réseau pour les collègues.
+# Choix A — on le committe (recommandé équipe) :
+#   → ne rien mettre ici
+# Choix B — on le télécharge automatiquement :
+#   → décommenter la ligne suivante
+# .mvn/wrapper/maven-wrapper.jar
+
+
+# ── Fichiers sensibles ─────────────────────────
+*.env
+.env.*
+secrets.properties
+config.local.properties
+
+
+# ── Divers ────────────────────────────────────
+*.tmp
+*.bak
+*.swp
+*.orig
