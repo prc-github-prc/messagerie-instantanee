@@ -11,7 +11,6 @@ import java.sql.Statement;
 
 public class DatabaseLaucher {
 
-
     private static boolean databaseExists(){
         try(Connection conn = DatabaseConnection.get_conn()){
             DatabaseMetaData dMetaData = conn.getMetaData();
@@ -27,14 +26,8 @@ public class DatabaseLaucher {
             throw new RuntimeException("Erreur lors de la vérification : " + e.getMessage());
         }
         return false;
-
     }
 
-    /**
-     * Méthode statique pour initialiser la base de données.
-     * 
-     * @throws Exception Si une erreur survient lors de l'initialisation de la base de données
-     */
     /**
      * Méthode statique pour initialiser la base de données.
      * 

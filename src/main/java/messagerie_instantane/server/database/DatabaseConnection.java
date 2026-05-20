@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-   public static Connection con;
-   private static String URL = "jdbc:sqlite:/data/messagerie.db";
-   
-   /** 
+    public static Connection con;
+    private static String URL = "jdbc:sqlite:/data/messagerie.db";
+    
+    /**
      * Méthode statique pour obtenir une connexion à la base de données SQLite.
      * 
      * @throws SQLException Si une erreur survient lors de l'établissement de la connexion à la base de données.
@@ -38,7 +38,7 @@ public class DatabaseConnection {
      * 
      * @return La connexion à la base de données (conn), ou null en cas d'échec de la connexion.
      */
-    public static Connection get_conn(){
+    public static Connection get_conn(){ //TODO recheck pk y'a deux getConn
         if (con == null) {
             try {
                 con = DatabaseConnection.getConnection();
