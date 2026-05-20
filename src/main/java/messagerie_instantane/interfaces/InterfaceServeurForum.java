@@ -1,4 +1,4 @@
-package messagerie_instantane.commun;
+package messagerie_instantane.interfaces;
 import java.rmi.*;
 
 public interface InterfaceServeurForum extends Remote {
