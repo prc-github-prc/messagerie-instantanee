@@ -60,4 +60,4 @@ CREATE TABLE IF NOT EXISTS Enum_Role(
     nom_role        VARCHAR(25)
 );
 
-INSERT INTO Enum_Role VALUES(1, 'Utilisateur'), (2, 'Administrateur');
+INSERT INTO Enum_Role VALUES(1, 'USER'), (2, 'ADMIN');
