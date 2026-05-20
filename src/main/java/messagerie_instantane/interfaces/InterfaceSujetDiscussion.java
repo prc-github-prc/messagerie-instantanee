@@ -1,6 +1,7 @@
-package messagerie_instantane.commun;
+package messagerie_instantane.interfaces;
 
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface InterfaceSujetDiscussion extends Remote {
     public void inscription(InterfaceAffichageClient c) throws RemoteException;
