@@ -11,5 +11,5 @@ public class Client implements InterfaceAffichageClient{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'affiche'");
     }
-    
+
 }
