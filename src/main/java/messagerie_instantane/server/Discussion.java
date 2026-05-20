@@ -9,6 +9,11 @@ public class Discussion implements InterfaceSujetDiscussion{
     List<Client> participants;
     String nom;
 
+    /**
+     * 
+     * @param nom
+     * @throws RemoteException
+     */
     public Discussion(String nom) throws RemoteException{
         this.nom = nom;
         // Récupérer la liste des participants.
@@ -18,6 +23,7 @@ public class Discussion implements InterfaceSujetDiscussion{
      * 
      * @param c
      * @return
+     * @throws RemoteException
      * 
      * La fonction inscription récupère des données fournies par l'utilisateur et effectue une requête auprès du DAO.
      */
@@ -31,6 +37,7 @@ public class Discussion implements InterfaceSujetDiscussion{
     /**
      * @param c
      * @return
+     * @throws RemoteException
      * 
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
@@ -44,6 +51,7 @@ public class Discussion implements InterfaceSujetDiscussion{
     /**
      * @param Message
      * @return
+     * @throws RemoteException
      * 
      * La fonction diffuse distribue le message à tous les clients/utilisateurs membres de la discussion.
      */
