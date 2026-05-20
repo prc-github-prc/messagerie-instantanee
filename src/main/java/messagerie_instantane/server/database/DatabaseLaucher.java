@@ -4,39 +4,27 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class DatabaseLaucher {
 
-    private static String URL = "jdbc:sqlite:/data/messagerie.db";
 
-    /** 
-     * Méthode statique pour obtenir une connexion à la base de données SQLite.
-     * 
-     * @throws SQLException Si une erreur survient lors de l'établissement de la connexion à la base de données.
-     * @return Une connexion à la base de données SQLite, ou une exception SQLException en cas d'échec de la connexion.
-     */
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(PATHS.get("URL"));
-    }
-
-    private static boolean databaseExists(Connection conn){
-        try( ResultSet rs = conn.getMetaData()){
-            while(rs.next()){
-                String currentDbName = rs.getString(1);
-                if("messagerie".equalsIgnoreCase(currentDbName)){
-                    return true;
+    private static boolean databaseExists(){
+        try(Connection conn = DatabaseConnection.get_conn()){
+            DatabaseMetaData dMetaData = conn.getMetaData();
+            try (ResultSet rs = dMetaData.getCatalogs()){
+                while(rs.next()){
+                    String currentDbName = rs.getString(1);
+                    if("messagerie".equalsIgnoreCase(currentDbName)){
+                        return true;
+                    }
                 }
             }
-        }catch (SQLException e) {
-            System.err.println("Erreur lors de la verification de la présence de base de donnée");
+        }catch(SQLException e){
+            throw new RuntimeException("Erreur lors de la vérification : " + e.getMessage());
         }
         return false;
 
@@ -47,10 +35,14 @@ public class DatabaseLaucher {
      * 
      * @throws Exception Si une erreur survient lors de l'initialisation de la base de données
      */
+    /**
+     * Méthode statique pour initialiser la base de données.
+     * 
+     * @throws Exception Si une erreur survient lors de l'initialisation de la base de données
+     */
     public static void initialiser() throws Exception {
-        try (Connection conn = getConnection()) {
-
-            if (!databaseExists(conn)) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            if (!databaseExists()) {
                 executerScript(conn, "schema.sql");
                 System.out.println("Base prete.");
             } else {
