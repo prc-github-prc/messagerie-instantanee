@@ -1,3 +1,4 @@
+package messagerie_instantane.server.database;
 
 import java.sql.Connection;
 

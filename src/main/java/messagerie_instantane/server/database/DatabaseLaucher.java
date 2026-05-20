@@ -1,3 +1,5 @@
+package messagerie_instantane.server.database;
+
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -66,7 +68,7 @@ public class DatabaseLaucher {
      * @throws Exception Si une erreur survient lors de la lecture du fichier ou de l'exécution des instructions SQL, une exception est levée avec un message d'erreur approprié.
      */
     private static void executerScript(Connection conn, String nomFichier) throws Exception {
-        InputStream is = DatabaseManager.class
+        InputStream is = DatabaseLaucher.class
                 .getClassLoader()
                 .getResourceAsStream(nomFichier);
 
