@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS User (
     id_user         INTEGER PRIMARY KEY AUTOINCREMENT,
     username        VARCHAR(25),
-    mot_de_passe    VARCHAR(500),
+    password_hash    VARCHAR(500),
     creation        DATE
 );
 
@@ -10,20 +10,14 @@ CREATE TABLE IF NOT EXISTS Messages (
     contenu         VARCHAR(250),
     horodatage      DATE,
     id_user         INTEGER NOT NULL,
+    id_dscussion    INTEGER NOT NULL,
+    FOREIGN KEY (id_dscussion) REFERENCES Discussion(id_dscussion)
     FOREIGN KEY (id_user) REFERENCES User(id_user)
 );
 
 CREATE TABLE IF NOT EXISTS Discussion(
     id_discussion   INTEGER PRIMARY KEY AUTOINCREMENT,
     nom_discussion  VARCHAR(50)
-);
-
-CREATE TABLE IF NOT EXISTS Messages_Discussion(
-    id_message      INTEGER NOT NULL,
-    id_discussion   INTEGER NOT NULL,
-    PRIMARY KEY (id_message,id_discussion)
-    FOREIGN KEY (id_message) REFERENCES Messages(id_message)
-    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
 );
 
 CREATE TABLE IF NOT EXISTS Hide(
