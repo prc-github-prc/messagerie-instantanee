@@ -1,4 +1,4 @@
-package messagerie_instantanee;
+package messagerie_instantanee.UI;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
