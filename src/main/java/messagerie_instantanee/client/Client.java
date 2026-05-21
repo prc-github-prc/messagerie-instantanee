@@ -39,39 +39,4 @@ public class Client implements InterfaceAffichageClient {
             zoneAffichage.appendText(message + "\n");
         });
     }
-
-    @FXML
-    public void actionEnvoi() {
-        String messageAEnvoyer = zoneSaisie.getText();
-        if (!messageAEnvoyer.isEmpty() && sujetActuel != null) {
-            try {
-                sujetActuel.diffuse(messageAEnvoyer);
-                zoneSaisie.clear();
-            } catch (RemoteException e) {
-                System.err.println("Erreur d'envoi : " + e.getMessage());
-            }
-        }
-    }
-
-    public void connecterAuForum(String sujetTitre) {
-        try {
-            InterfaceServeurForum serveur = (InterfaceServeurForum) Naming.lookup(URL_PAR_DEFAUT);
-            this.sujetActuel = serveur.obtientSujet(sujetTitre);
-            this.sujetActuel.inscription(this);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void connecterAuForum(String sujetTitre, String urlServeur) {
-        try {
-            InterfaceServeurForum serveur = (InterfaceServeurForum) Naming.lookup(urlServeur);
-            this.sujetActuel = serveur.obtientSujet(sujetTitre);
-            this.sujetActuel.inscription(this);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
