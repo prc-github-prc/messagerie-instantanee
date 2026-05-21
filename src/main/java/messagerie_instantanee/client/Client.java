@@ -1,15 +1,72 @@
 package messagerie_instantanee.client;
 
-import java.rmi.RemoteException;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import messagerie_instantanee.interfaces.*;
 
-public class Client implements InterfaceAffichageClient{
+public class Client implements InterfaceAffichageClient {
 
-    @Override
-    public void affiche(String Message) throws RemoteException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'affiche'");
+    @FXML
+    private TextArea zoneAffichage; // TextArea JavaFX
+    @FXML
+    private TextField zoneSaisie;   // champ de saisie de message
+
+    private InterfaceSujetDiscussion sujetActuel;
+
+    public static final String URL_PAR_DEFAUT = "//localhost:1099/leServeur";
+
+    public Client() throws RemoteException {
+        // Comme on ne peut pas hériter de UnicastRemoteObject, 
+        // on exporte l'objet manuellement pour le rendre accessible par RMI
+        UnicastRemoteObject.exportObject(this, 0);
     }
 
+    @Override
+    public void affiche(String message) throws RemoteException {
+        // TRÈS IMPORTANT : On bascule l'exécution sur le Thread JavaFX
+        Platform.runLater(() -> {
+            zoneAffichage.appendText(message + "\n");
+        });
+    }
+
+    @FXML
+    public void actionEnvoi() {
+        String messageAEnvoyer = zoneSaisie.getText();
+        if (!messageAEnvoyer.isEmpty() && sujetActuel != null) {
+            try {
+                sujetActuel.diffuse(messageAEnvoyer);
+                zoneSaisie.clear();
+            } catch (RemoteException e) {
+                System.err.println("Erreur d'envoi : " + e.getMessage());
+            }
+        }
+    }
+
+    public void connecterAuForum(String sujetTitre) {
+        try {
+            InterfaceServeurForum serveur = (InterfaceServeurForum) Naming.lookup(URL_PAR_DEFAUT);
+            this.sujetActuel = serveur.obtientSujet(sujetTitre);
+            this.sujetActuel.inscription(this);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void connecterAuForum(String sujetTitre, String urlServeur) {
+        try {
+            InterfaceServeurForum serveur = (InterfaceServeurForum) Naming.lookup(urlServeur);
+            this.sujetActuel = serveur.obtientSujet(sujetTitre);
+            this.sujetActuel.inscription(this);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

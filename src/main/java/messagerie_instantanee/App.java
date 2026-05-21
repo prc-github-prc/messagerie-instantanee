@@ -11,7 +11,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // 1. Charger le fichier FXML depuis les ressources
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/afficClient.fxml"));
         Parent root = loader.load();
 
         // 2. Créer la scène avec le contenu du FXML
