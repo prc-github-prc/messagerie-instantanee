@@ -34,7 +34,7 @@ public class DatabaseLaucher {
      * @throws Exception Si une erreur survient lors de l'initialisation de la base de données
      */
     public static void initialiser() throws Exception {
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        try (Connection conn = DatabaseConnection.get_conn()) {
             if (!databaseExists()) {
                 executerScript(conn, "schema.sql");
                 System.out.println("Base prete.");
