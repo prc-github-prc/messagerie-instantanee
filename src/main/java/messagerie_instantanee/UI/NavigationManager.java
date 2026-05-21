@@ -1,0 +1,78 @@
+package messagerie_instantanee.UI;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+
+/**
+ * Singleton de navigation.
+ * Détient le BorderPane racine de l'application et permet
+ * à n'importe quel controller de changer le panel affiché
+ * sans avoir besoin d'une référence directe à App.java.
+ *
+ * Utilisation :
+ *   // Dans App.java (une seule fois) :
+ *   NavigationManager.init(root);
+ *
+ *   // Dans n'importe quel controller :
+ *   NavigationManager.naviguerVers("/fxml/ChatView.fxml");
+ */
+public class NavigationManager {
+
+    // ── Instance unique ───────────────────────────────────────────────
+    private static NavigationManager instance;
+
+    // ── Référence au BorderPane racine de la fenêtre ──────────────────
+    private BorderPane root;
+
+    // ── Constructeur privé : empêche le new depuis l'extérieur ────────
+    private NavigationManager() {}
+
+    /**
+     * Initialise le singleton avec le root de App.java.
+     * À appeler UNE SEULE FOIS dans App.start().
+     */
+    public static void init(BorderPane root) {
+        if (instance == null) {
+            instance = new NavigationManager();
+        }
+        instance.root = root;
+    }
+
+    /**
+     * Retourne l'instance unique (doit être initialisée avant).
+     */
+    public static NavigationManager getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                "NavigationManager non initialisé. Appelez init(root) dans App.start() d'abord.");
+        }
+        return instance;
+    }
+
+    /**
+     * Charge un fichier FXML et l'affiche dans le centre du root.
+     * Retourne le FXMLLoader pour que l'appelant puisse récupérer
+     * le controller via loader.getController() si besoin.
+     *
+     * @param cheminFxml  ex: "/fxml/ChatView.fxml"
+     * @return le FXMLLoader après chargement
+     */
+    public FXMLLoader naviguerVers(String cheminFxml) throws Exception {
+        FXMLLoader loader = new FXMLLoader(
+            getClass().getResource(cheminFxml));
+        Pane panel = loader.load();
+        root.setCenter(panel);
+        return loader; // ← permet de récupérer le controller si besoin
+    }
+
+    /**
+     * Affiche directement un Pane déjà chargé (sans recharger le FXML).
+     * Utile si on veut mettre en cache un panel.
+     *
+     * @param panel le Pane à afficher
+     */
+    public void naviguerVers(Pane panel) {
+        root.setCenter(panel);
+    }
+}

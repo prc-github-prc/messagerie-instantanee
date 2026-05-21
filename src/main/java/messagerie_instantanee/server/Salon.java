@@ -17,7 +17,6 @@ public class Salon implements InterfaceSujetDiscussion{
     List<User> participants;
 
     /**
-     * 
      * @param id
      * @throws RemoteException
      * 
