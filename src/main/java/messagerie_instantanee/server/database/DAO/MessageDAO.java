@@ -28,7 +28,7 @@ public class MessageDAO {
         }
     }
     /*===================================Méthodes d'insertion=======================================*/
-    public static void addMessageToDiscussionById(Message message){
+    public static void addMessageToDiscussion(Message message){
         try{
             executeSQLQuerry("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
         } catch (SQLException e) {
