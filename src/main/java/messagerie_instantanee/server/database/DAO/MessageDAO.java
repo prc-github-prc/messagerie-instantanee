@@ -35,4 +35,12 @@ public class MessageDAO {
             System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage());
         } 
     }
+
+    public static void deleteMessageFromDiscussion(Message message){
+        try {
+            executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message());
+        } catch (SQLException e) {
+            System.out.println("[MessageDAO] Impossible de supprimer le lien dans hide : " + e.getMessage());
+        }
+    }
 }
