@@ -15,6 +15,7 @@ public class Salon implements InterfaceSujetDiscussion{
     private int id;
     private String nom;
     List<User> participants;
+    List<Message> messages;
 
     /**
      * 
@@ -42,10 +43,10 @@ public class Salon implements InterfaceSujetDiscussion{
      * La fonction inscription récupère des données fournies par l'utilisateur et effectue une requête auprès du DAO.
      */
     @Override
-    public void inscription(InterfaceAffichageClient c) throws RemoteException {
-        // I. Récupérer un objet client depuis le DAO.
-        // II. L'ajouter à la liste des participants.
-        throw new UnsupportedOperationException("Unimplemented method 'inscription'");
+    public void inscription(InterfaceAffichageClient c, User user) throws RemoteException {
+        participants.add(user);
+        // ajouter la partie BDD
+        c.affiche("Vous avez été ajouté.");
     }
 
     /**
@@ -56,10 +57,14 @@ public class Salon implements InterfaceSujetDiscussion{
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
     @Override
-    public void desInscription(InterfaceAffichageClient c) throws RemoteException {
-        // I. Effectuer une requête au DAO avec l'id de l'utilisateur, pour supprimer les données lui correspondant dans la BBD.
-        // II. Selon le retour du DAO, affichage d'un message via c.affiche() en fonction de la réponse du DA0 : Réussite de la désinscription ou erreur quelconque.
-        throw new UnsupportedOperationException("Unimplemented method 'desInscription'");
+    public void desInscription(InterfaceAffichageClient c, int id_client) throws RemoteException {
+        for (User user : participants) {
+            if (user.getId_user() == id_client) {
+                participants.remove(user);
+            }
+        }
+        // ajouter la partie BDD
+        c.affiche("Vous avez été désinscrit(e).");
     }
 
     /**
@@ -73,9 +78,9 @@ public class Salon implements InterfaceSujetDiscussion{
     public void diffuse(String Message) throws RemoteException {
         // I. Stocker le message en BDD en envoyant un message DAO.
         // II. Diffuser le message à tous les clients avec affiche pour chaque client.
+    }
+
+    public List<Message> RecupereArchive() {
         
-        for (Client p : participants) {
-            p.affiche(Message);
-        }
     }
 }

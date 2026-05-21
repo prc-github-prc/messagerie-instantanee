@@ -5,10 +5,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.util.List;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import messagerie_instantanee.interfaces.*;
+import messagerie_instantanee.server.Salon;
+
 
 public class Client implements InterfaceAffichageClient {
 
@@ -20,6 +23,8 @@ public class Client implements InterfaceAffichageClient {
     private InterfaceSujetDiscussion sujetActuel;
 
     public static final String URL_PAR_DEFAUT = "//localhost:1099/leServeur";
+
+    private String cookie;
 
     public Client() throws RemoteException {
         // Comme on ne peut pas hériter de UnicastRemoteObject, 
