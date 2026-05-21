@@ -81,8 +81,7 @@ public class Salon implements InterfaceSujetDiscussion{
     @Override
     public void diffuse(Message message) throws RemoteException {
         messages.add(message);
-        MessageDAO.addMessageToDiscussionByIds(message, id);
-        // Stocker le message en BDD en envoyant un message DAO.
+        MessageDAO.addMessageToDiscussionById(message);
         // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
