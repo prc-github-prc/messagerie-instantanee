@@ -177,3 +177,37 @@
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
 }
+
+/* Container du bouton Paramètres */
+.settings-btn-container {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    -fx-transition-duration: 0.2s;
+}
+
+/* Structure interne contenant l'icône */
+.settings-icon-wrapper {
+    /* Taille basée sur la viewBox de ton SVG (67x62) */
+    -fx-min-width: 32px;
+    -fx-max-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-transition-duration: 0.4s;
+}
+
+/* Effet au survol : Légère rotation de l'engrenage et changement d'opacité */
+.settings-btn-container:hover .settings-icon-wrapper {
+    -fx-rotate: 45; /* Fait tourner l'engrenage de 45 degrés */
+}
+
+.settings-btn-container:hover SVGPath {
+    -fx-stroke: #ffffff; /* L'icône devient blanche lumineuse au survol */
+}
+
+/* Effet de clic (Pressed) */
+.settings-btn-container:armed {
+    -fx-scale-x: 0.92;
+    -fx-scale-y: 0.92;
+}
