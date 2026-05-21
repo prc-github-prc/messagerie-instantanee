@@ -81,11 +81,24 @@ public class Salon implements InterfaceSujetDiscussion{
     @Override
     public void diffuse(Message message) throws RemoteException {
         messages.add(message);
-        MessageDAO.addMessageToDiscussionById(message);
+        MessageDAO.addMessageToDiscussion(message);
         // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
+    // ============================ getteurs ============================
     public List<Message> RecupereArchive() {
         return messages;
+    }
+
+    public int getSalonId(){
+        return id;
+    }
+
+    public String getSalonNom(){
+        return nom;
+    }
+
+    public List<User> getLstInscrit(){
+        return participants;
     }
 }
