@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Discussion;
-import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.Tag;
 
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;

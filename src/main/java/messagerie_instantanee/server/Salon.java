@@ -2,14 +2,10 @@ package messagerie_instantanee.server;
 
 import java.util.List;
 
-import messagerie_instantanee.client.*;
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.*;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.MessageDAO;
-
-import static messagerie_instantanee.server.utils.ResultSetConverter.*;
-
 import java.rmi.RemoteException;
 
 public class Salon implements InterfaceSujetDiscussion{

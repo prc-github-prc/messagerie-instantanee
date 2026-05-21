@@ -35,11 +35,11 @@ public class RoleDAO {
 
     public static Map<Role,List<User>> findRoleByDiscussion(int id_discussion){
         try{
-            HashMap roleByDiScussion = new HashMap<>();
+            HashMap<Role, List<User>> roleByDiScussion = new HashMap<>();
             ResultSet User_data = executeSQLQuerry("SELECT * FROM USER WHERE id_user = (SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion + "AND role = 0)");
             ResultSet Admin_data = executeSQLQuerry("SELECT * FROM USER WHERE id_user = (SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion + "AND role = 1)");
-            roleByDiScussion.put(0, rsToUser(User_data));
-            roleByDiScussion.put(1,rsToUser(Admin_data));
+            roleByDiScussion.put(Role.User, rsToUser(User_data));
+            roleByDiScussion.put(Role.Admin,rsToUser(Admin_data));
             return roleByDiScussion;
         } catch (SQLException e) {
             System.out.println("[RoleDAO] connexion impossible a la base de donnée" + e.getMessage()); 
