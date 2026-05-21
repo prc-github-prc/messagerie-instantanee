@@ -70,6 +70,8 @@ public class DiscussionDAO {
         }
     }
 
+    /*findRoleByIdDiscussion */
+
     /*==============Methode d'écriture ================ */
 
     public static void insertDiscussion(String titre,User user, List<User> users){
@@ -87,11 +89,29 @@ public class DiscussionDAO {
                     user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
                 }
             }
-            executeSQLQuerry(user_discussion);
+            excuteInsertSQL(user_discussion);
 
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
         }
+    }
+    /*addUserToDiscussionById */
+    public static void addUserToDiscussionById(int id_user ,int id_discussion){
+        try {
+            excuteInsertSQL("INSERT INTO Role VALUES ("+ id_user+","+ id_discussion +"0)");
+        } catch (SQLException e) {
+            System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
+        }
+
+    }
+    /*RemoveUserToDiscussionById */
+    public static void RemoveUserToDiscussionById(int id_user ,int id_discussion){
+        try {
+            executeSQLQuerry("DELETE FROM Role WHERE id_discussion ="+id_discussion + "AND id_user="+id_user);
+        } catch (SQLException e) {
+            System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
+        }
+
     }
     
 }
