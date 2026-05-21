@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.Tag;
 
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
@@ -45,10 +46,18 @@ public class TagDAO {
 
     public static void insertTag(String nom_tag, int id_discussion){
         try{
-            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +")");
+            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT DO NOTHING"); //TODO a test
             executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +")");
         } catch (SQLException e) {
             System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage());
         } 
     }
+
+    public static void deleteTagDiscussion(String nom_tag, int id_discussion){
+        try {
+            executeSQLQuerry("DELETE FROM Tags WHERE nom_tag = "+ nom_tag + "AND id_discussion = " + id_discussion);
+        } catch (SQLException e) {
+            System.out.println("[TagDAO] Impossible de supprimer le lien dans Tags : " + e.getMessage());
+        }
+    }    
 }

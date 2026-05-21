@@ -40,7 +40,7 @@ public class MessageDAO {
         try {
             executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message());
         } catch (SQLException e) {
-            System.out.println("[MessageDAO] Impossible de supprimer le lien dans hide : " + e.getMessage());
+            System.out.println("[MessageDAO] Impossible de supprimer le lien dans message : " + e.getMessage());
         }
     }
 }
