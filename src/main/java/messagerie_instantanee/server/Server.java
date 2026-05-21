@@ -17,7 +17,7 @@ public class Server implements InterfaceServeurForum {
     private Map<String, Salon> map_salons = new HashMap<>();
 
     public Server() throws RemoteException {
-        for(Discussion conv : getAllDiscussion()){ // implementer dans discussionDAO
+        for(Discussion conv : DiscussionDAO.findAllDiscussions()){ // implementer dans discussionDAO
             map_salons.put(conv.getNom_discussion(), new Salon(conv));
         } 
     }

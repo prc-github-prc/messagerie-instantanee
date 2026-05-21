@@ -4,7 +4,6 @@ public class User {
     private int id_user;
     private String username;
     private String password_hash;
-    // private ??? creation
 
     public User(int id_user, String username, String password_hash){
         this.id_user = id_user;

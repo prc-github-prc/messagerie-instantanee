@@ -18,6 +18,11 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 public class DiscussionDAO {
 
     /*=====================Methode de  lecture ============================= */
+    /**
+     * 
+     * @param id_discussion
+     * @return
+     */
     public static Discussion findDiscussionById(int id_discussion){
         try{
             ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion WHERE id_discussion = " + id_discussion + ";");
@@ -31,6 +36,11 @@ public class DiscussionDAO {
         }
     }
 
+    /**
+     * 
+     * @param id_discussion
+     * @return
+     */
     public static List<User> findUserByIDDiscussion(int id_discussion) {
         try{
             ResultSet discussion_users = executeSQLQuerry("SELECT * FROM Roles NATURAL JOIN USER WHERE id_discussion = " + id_discussion + ";");
@@ -44,6 +54,10 @@ public class DiscussionDAO {
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public static List<Discussion> findAllDiscussions(){
         try {
             ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Discussion ");
@@ -57,6 +71,11 @@ public class DiscussionDAO {
         }
     }
 
+    /**
+     * 
+     * @param id_discussion
+     * @return
+     */
     public static List<Message> findMessagesByIdDiscussion( int id_discussion){
         try {
             ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Message WHERE id_discussion ="+id_discussion);
@@ -70,10 +89,15 @@ public class DiscussionDAO {
         }
     }
 
-    /*findRoleByIdDiscussion */
 
     /*==============Methode d'écriture ================ */
 
+    /**
+     * 
+     * @param titre
+     * @param user
+     * @param users
+     */
     public static void insertDiscussion(String titre,User user, List<User> users){
         try {
             ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(titre) VALUES ("+ titre+")");
@@ -95,7 +119,12 @@ public class DiscussionDAO {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
         }
     }
-    /*addUserToDiscussionById */
+    
+    /**
+     * 
+     * @param id_user
+     * @param id_discussion
+     */
     public static void addUserToDiscussionById(int id_user ,int id_discussion){
         try {
             excuteInsertSQL("INSERT INTO Role VALUES ("+ id_user+","+ id_discussion +"0)");
@@ -104,7 +133,12 @@ public class DiscussionDAO {
         }
 
     }
-    /*RemoveUserToDiscussionById */
+    
+    /**
+     * 
+     * @param id_user
+     * @param id_discussion
+     */
     public static void RemoveUserToDiscussionById(int id_user ,int id_discussion){
         try {
             executeSQLQuerry("DELETE FROM Role WHERE id_discussion ="+id_discussion + "AND id_user="+id_user);
