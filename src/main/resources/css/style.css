@@ -33,7 +33,7 @@
 
 /* --- ZONE DE CHAT & MESSAGES --- */
 .chat-area {
-    -fx-background-color: #313338;
+    -fx-background-color: #640CBB;
 }
 .chat-header {
     -fx-background-color: #313338;
@@ -59,13 +59,10 @@
 
 /* --- ENTRÉE TEXTE ET BOUTONS --- */
 .chat-input {
-    -fx-background-color: #474749;
-    -fx-background-radius: 8px;
-    -fx-text-fill: #dbdee1;
-    -fx-prompt-text-fill: #949ba4;
-    -fx-padding: 10px 15px;
-    -fx-border-color: transparent;
-    -fx-font-size: 13px;
+    -fx-background-color: #3a3b3c;
+    -fx-background-radius: 25px; 
+    -fx-text-fill: #ffffff;
+    -fx-padding: 12px 20px;
 }
 .chat-input:focused {
     -fx-border-color: #5865f2;
@@ -140,4 +137,13 @@
 .sidebar-btn:armed {
     -fx-background-color: #3700b3;
     -fx-text-fill: #ffffff;
+}
+
+
+.bulle-message {
+    -fx-background-color: #424640;    /* Couleur de fond de la bulle (Bleu Discord) */
+    -fx-text-fill: white;             /* Couleur du texte */
+    -fx-background-radius: 15px;      /* Arrondit les angles pour faire l'effet "bulle" */
+    -fx-padding: 8px 14px 8px 14px;   /* Espace entre le texte et les bords de la bulle (Haut, Droite, Bas, Gauche) */
+    -fx-font-size: 14px;              /* Taille du texte */
 }

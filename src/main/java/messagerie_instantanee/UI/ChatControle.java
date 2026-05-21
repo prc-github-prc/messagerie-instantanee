@@ -33,10 +33,14 @@ public class ChatControle {
     }
 
     @FXML
-    private void actionEnvoi() {
-        String texte = inputField.getText().trim();
-        if (!texte.isEmpty()) {
-            messagesBox.getChildren().add(new Label("Moi: " + texte));
+    public void actionEnvoi() {        
+        String texte = inputField.getText();
+        if (texte != null && !texte.trim().isEmpty()) {
+            Label nouveauMessage = new Label(texte);
+            nouveauMessage.getStyleClass().add("bulle-message");
+            
+            messagesBox.getChildren().add(nouveauMessage);
+
             inputField.clear();
         }
     }
