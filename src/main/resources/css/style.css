@@ -1,0 +1,98 @@
+/* Définition des couleurs globales (Style sombre moderne) */
+.chat-root {
+    -fx-background-color: #313338;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+/* --- BARRE LATÉRALE --- */
+.sidebar {
+    -fx-background-color: #2b2d31;
+    -fx-border-color: transparent #1e1f22 transparent transparent;
+    -fx-border-width: 1px;
+}
+.sidebar-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 0 0 10 0;
+}
+.section-title {
+    -fx-text-fill: #949ba4;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-letter-spacing: 0.5px;
+}
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.sidebar-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* --- ZONE DE CHAT & MESSAGES --- */
+.chat-area {
+    -fx-background-color: #313338;
+}
+.chat-header {
+    -fx-background-color: #313338;
+    -fx-border-color: transparent transparent #1e1f22 transparent;
+    -fx-border-width: 1px;
+}
+.chat-title {
+    -fx-text-fill: #f2f3f5;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+.chat-scroll {
+    -fx-background-color: transparent;
+}
+.chat-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Conteneur des bulles ou blocs de messages */
+.messages-container {
+    -fx-background-color: transparent;
+}
+
+/* --- ENTRÉE TEXTE ET BOUTONS --- */
+.chat-input {
+    -fx-background-color: #383a40;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #dbdee1;
+    -fx-prompt-text-fill: #949ba4;
+    -fx-padding: 10px 15px;
+    -fx-border-color: transparent;
+    -fx-font-size: 13px;
+}
+.chat-input:focused {
+    -fx-border-color: #5865f2;
+    -fx-border-radius: 8px;
+}
+
+.btn-primary {
+    -fx-background-color: #5865f2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: #4752c4;
+}
+.btn-primary:pressed {
+    -fx-background-color: #3c45a5;
+}
+
+/* Personnalisation esthétique des barres de défilement (ScrollBars) */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-width: 8px;
+}
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #1a1b1e;
+    -fx-background-radius: 4px;
+}
