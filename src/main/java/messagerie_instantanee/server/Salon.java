@@ -29,7 +29,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
-        this.messages = MessageDAO.getMessagesByIDDiscussion(id);
+        this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
     }
 
     public Salon(String nom) throws RemoteException {
