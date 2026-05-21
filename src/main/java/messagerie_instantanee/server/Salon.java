@@ -29,7 +29,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
-        this.participants = MessageDAO.getDiscussionByIDDiscussion(id);
+        this.messages = MessageDAO.getMessagesByIDDiscussion(id);
     }
 
     public Salon(String nom) throws RemoteException {
@@ -47,8 +47,8 @@ public class Salon implements InterfaceSujetDiscussion{
     @Override
     public void inscription(InterfaceAffichageClient c, User user) throws RemoteException {
         participants.add(user);
-        // ajouter la partie BDD
-        c.affiche("Vous avez été ajouté.");
+        Discussion.addUserToDiscussionByIDs(user.getId_user(), id);
+        c.affiche("Utilisateur ajouté(e).");
     }
 
     /**
@@ -59,14 +59,14 @@ public class Salon implements InterfaceSujetDiscussion{
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
     @Override
-    public void desInscription(InterfaceAffichageClient c, int id_client) throws RemoteException {
+    public void desInscription(InterfaceAffichageClient c, User user) throws RemoteException {
         for (User user : participants) {
             if (user.getId_user() == id_client) {
                 participants.remove(user);
             }
         }
-        // ajouter la partie BDD
-        c.affiche("Vous avez été désinscrit(e).");
+        Discussion.removeUserToDiscussionByIDs(user.getId_user(), id);
+        c.affiche("Utilisateur désinscrit(e).");
     }
 
     /**
@@ -83,6 +83,6 @@ public class Salon implements InterfaceSujetDiscussion{
     }
 
     public List<Message> RecupereArchive() {
-        
+        return messages;
     }
 }
