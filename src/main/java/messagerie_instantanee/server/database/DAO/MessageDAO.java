@@ -28,11 +28,19 @@ public class MessageDAO {
         }
     }
     /*===================================Méthodes d'insertion=======================================*/
-    public static void addMessageToDiscussionById(Message message){
+    public static void addMessageToDiscussion(Message message){
         try{
             executeSQLQuerry("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
         } catch (SQLException e) {
             System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage());
         } 
+    }
+
+    public static void deleteMessageFromDiscussion(Message message){
+        try {
+            executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message());
+        } catch (SQLException e) {
+            System.out.println("[MessageDAO] Impossible de supprimer le lien dans hide : " + e.getMessage());
+        }
     }
 }
