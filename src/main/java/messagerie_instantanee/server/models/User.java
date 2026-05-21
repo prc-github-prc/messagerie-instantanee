@@ -1,4 +1,4 @@
-package messagerie_instantane.server.models;
+package messagerie_instantanee.server.models;
 
 public class User {
     private int id_user;

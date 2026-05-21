@@ -1,4 +1,4 @@
-package messagerie_instantane.server.models;
+package messagerie_instantanee.server.models;
 
 public class Discussion {
     private int id_discussion;

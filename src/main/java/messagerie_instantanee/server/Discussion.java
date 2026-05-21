@@ -1,9 +1,11 @@
-package messagerie_instantane.server;
+package messagerie_instantanee.server;
 
 import java.util.List;
+
+import messagerie_instantanee.client.*;
+import messagerie_instantanee.interfaces.*;
+
 import java.rmi.RemoteException;
-import messagerie_instantane.interfaces.*;
-import messagerie_instantane.client.*;
 
 public class Discussion implements InterfaceSujetDiscussion{
     List<Client> participants;

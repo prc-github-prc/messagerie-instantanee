@@ -1,4 +1,4 @@
-package messagerie_instantane.interfaces;
+package messagerie_instantanee.interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -1,4 +1,4 @@
-package messagerie_instantane.server.models;
+package messagerie_instantanee.server.models;
 
 public class Tag {
     private String nom_tag;

@@ -1,4 +1,4 @@
-package messagerie_instantane.server.database;
+package messagerie_instantanee.server.database;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

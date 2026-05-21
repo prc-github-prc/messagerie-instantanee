@@ -1,8 +1,8 @@
-package messagerie_instantane.client;
+package messagerie_instantanee.client;
 
 import java.rmi.RemoteException;
 
-import messagerie_instantane.interfaces.*;
+import messagerie_instantanee.interfaces.*;
 
 public class Client implements InterfaceAffichageClient{
 

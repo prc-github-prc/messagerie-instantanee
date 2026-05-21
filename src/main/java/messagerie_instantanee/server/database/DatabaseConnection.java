@@ -1,4 +1,4 @@
-package messagerie_instantane.server.database;
+package messagerie_instantanee.server.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

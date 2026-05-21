@@ -1,4 +1,6 @@
-package messagerie_instantane.server.database.DAO;
+package messagerie_instantanee.server.database.DAO;
+
+import static messagerie_instantanee.server.utils.utils.executeSQLQuerry;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import messagerie_instantane.server.models.Message;
-import static messagerie_instantane.server.utils.utils.executeSQLQuerry;
+import messagerie_instantanee.server.models.Message;
 
 public class MessageDAO {
-    public static Message findMessageById(int message_id){
+    public static Message findMessageById(int id_message){
         try{
-            ResultSet user_data = executeSQLQuerry("SELECT * WHERE message_id = " + message_id);
+            ResultSet user_data = executeSQLQuerry("SELECT * FROM Messages WHERE id_message = " + id_message);
             return rsToMessage(user_data).getFirst();
         } catch (SQLException e) {
             System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage()); 

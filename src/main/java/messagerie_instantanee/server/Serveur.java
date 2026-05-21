@@ -1,7 +1,8 @@
-package messagerie_instantane.server;
+package messagerie_instantanee.server;
 
 import java.rmi.RemoteException;
-import messagerie_instantane.interfaces.*;
+
+import messagerie_instantanee.interfaces.*;
 
 public class Serveur implements InterfaceServeurForum {
     @Override
