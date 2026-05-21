@@ -3,6 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 import java.rmi.Naming;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +24,16 @@ public class LoginControler {
     @FXML private TextField serverField;
     @FXML private Button SeConnecter;
     @FXML private Label errorLabel; 
+    @FXML private VBox sidebarMenu;
+
+    @FXML
+    private void handleToggleSidebar(ActionEvent event) {
+        if (sidebarMenu != null) {
+            boolean estVisible = sidebarMenu.isVisible();
+            sidebarMenu.setVisible(!estVisible);
+            sidebarMenu.setManaged(!estVisible);
+        }
+    }
 
     @FXML
     private void onConnect(){

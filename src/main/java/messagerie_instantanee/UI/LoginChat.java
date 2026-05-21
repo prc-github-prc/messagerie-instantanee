@@ -20,16 +20,7 @@ public class LoginChat {
     @FXML private TextField serverField;
     @FXML private Button SeConnecter;
     @FXML private Label errorLabel; 
-    @FXML private VBox sidebarMenu;
 
-    @FXML
-    private void handleToggleSidebar(ActionEvent event) {
-        if (sidebarMenu != null) {
-            boolean estVisible = sidebarMenu.isVisible();
-            sidebarMenu.setVisible(!estVisible);
-            sidebarMenu.setManaged(!estVisible);
-        }
-    }
     
     
     @FXML

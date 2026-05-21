@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
 
 import messagerie_instantanee.client.Client;
-import messagerie_instantanee.interfaces.InterfaceServeurForum;
+import messagerie_instantanee.server.Server;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.models.Discussion;
 
@@ -33,13 +33,13 @@ public class ChatControler {
     @FXML private TextField inputField;
 
     // ===== Etat ==================================
-    private InterfaceServeurForum    serveur;
+    private Server serveur;
     private InterfaceSujetDiscussion salonCourant;
     private Client clientRMI;
     private String pseudo;
     
     @FXML
-    public void initialize(InterfaceServeurForum server, String pseudo) { // RECHECK changer pseudo en User
+    public void initialize(Server server, String pseudo) { // RECHECK changer pseudo en User
         this.pseudo = pseudo;
         this.serveur = server;
 

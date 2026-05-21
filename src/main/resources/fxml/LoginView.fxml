@@ -11,11 +11,10 @@
 <?import javafx.geometry.Insets?>
 //RECHECK ME
 <StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="messagerie_instantanee.UI.LoginChat"
-           styleClass="login-root"
-           stylesheets="@../css/style.css"> 
-           
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="messagerie_instantanee.UI.LoginChat"
+            styleClass="login-root"
+
     <VBox mouseTransparent="true">
         <children>
             <Region VBox.vgrow="ALWAYS" styleClass="bg-top" prefHeight="2000.0" />
@@ -59,7 +58,7 @@
             <Button onAction="#handleToggleSidebar" styleClass="icon-button-clean">
                 <graphic>
                     <SVGPath content="M6 2H18C19.1 2 20 2.9 20 4V8C20 9.1 19.1 10 18 10H6C4.9 10 4 9.1 4 8V4C4 2.9 4.9 2 6 2ZM6 12H18C19.1 12 20 12.9 20 14V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V14C4 12.9 4.9 12 6 12Z" 
-                             fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
+                            fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
                 </graphic>
             </Button>
         </children>
