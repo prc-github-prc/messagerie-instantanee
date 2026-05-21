@@ -7,7 +7,7 @@ import messagerie_instantanee.interfaces.*;
 
 import java.rmi.RemoteException;
 
-public class Discussion implements InterfaceSujetDiscussion{
+public class Salon implements InterfaceSujetDiscussion{
     List<Client> participants;
     String nom;
 
@@ -16,7 +16,7 @@ public class Discussion implements InterfaceSujetDiscussion{
      * @param nom
      * @throws RemoteException
      */
-    public Discussion(String nom) throws RemoteException{
+    public Salon(String nom) throws RemoteException{
         this.nom = nom;
         // Récupérer la liste des participants.
     }
