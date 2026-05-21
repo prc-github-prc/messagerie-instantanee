@@ -2,12 +2,12 @@ package messagerie_instantanee.server.database.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Discussion;
-import static messagerie_instantanee.server.utils.utils.executeSQLQuerry;
+import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
+import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;;
 
 
 public class HideDAO {
@@ -22,15 +22,5 @@ public class HideDAO {
             System.out.println("[HideDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
-    }
-
-    private static List<Discussion> rsToDiscussion(ResultSet Discussion_data) throws SQLException{
-        List<Discussion> lst_Discussion = new ArrayList<>();
-        while (Discussion_data.next()) {
-            int id_Discussion = Discussion_data.getInt("id_Discussion");
-            String nom_discussion = Discussion_data.getString("nom_discussion");
-            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion));
-        }
-        return lst_Discussion;
     }
 }
