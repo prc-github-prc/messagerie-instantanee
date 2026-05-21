@@ -2,6 +2,7 @@ package messagerie_instantanee.server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import messagerie_instantanee.server.services.ServiceServer;
 
 public class Server implements InterfaceServeurForum {
 
@@ -29,6 +31,6 @@ public class Server implements InterfaceServeurForum {
 
     /** Retourne la liste des titres de salons disponibles. */
     public synchronized List<String> listerSalons() {
-        return salonToDiscussion(map_salons.keySet());
+        return salonToDiscussion(map_salons.values());
     }
 }
