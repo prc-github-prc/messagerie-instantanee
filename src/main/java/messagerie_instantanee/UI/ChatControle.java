@@ -56,8 +56,16 @@ public class ChatControle {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouvelle discussion");
         dialog.setContentText("Nom de la discussion :");
+    }
+    
+
+    @FXML
+    private void handleCreerSalon(ActionEvent event) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Nouveau Salon");
+        dialog.setContentText("Nom du salon :");
         Optional<String> result = dialog.showAndWait();
-         result.ifPresent(nomSalon -> {   
+        result.ifPresent(nomSalon -> {   
         String nomNettoye = nomSalon.trim();
         
         if (!nomNettoye.isEmpty()) {
@@ -72,15 +80,6 @@ public class ChatControle {
                 salonList.getSelectionModel().select(nomNettoye);
             }
         }}); 
-    }
-    
-
-    @FXML
-    private void handleCreerSalon(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouveau Salon");
-        dialog.setContentText("Nom du salon :");
-        Optional<String> result = dialog.showAndWait();
     }
 
     @FXML
