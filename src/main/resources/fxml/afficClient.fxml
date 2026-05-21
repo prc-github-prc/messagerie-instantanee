@@ -9,9 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane prefHeight="600.0" prefWidth="850.0" styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.UI.ChatControle">    <left>
-        <VBox prefWidth="220.0" styleClass="sidebar" spacing="10">
+<BorderPane styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.UI.ChatControle">    <left>
+        <VBox prefWidth="350.0" styleClass="sidebar" spacing="10">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
@@ -57,7 +59,19 @@
                     </padding>
                     <children>
                         <TextField fx:id="inputField" onAction="#actionEnvoi" promptText="Écrire un message dans ce salon…" styleClass="chat-input" HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#actionEnvoi" styleClass="btn-primary" text="Envoyer" />
+                        <Button onAction="#actionEnvoi" styleClass="envoi-btn-container">
+                            <graphic>
+                                <StackPane>
+                                    <SVGPath content="M 40.5 0 A 40.5 39 0 1 1 40.499 0 Z" fill="#40203B" />
+                                    <SVGPath content="M76.9999 40.9976L38.4999 41.9142 M76.9999 40.9976L31.8598 64.781L38.4999 41.9142L27.64 19.4642L76.9999 40.9976Z" 
+                                            stroke="#FB11FF" 
+                                            strokeWidth="2.0" 
+                                            strokeLineCap="ROUND" 
+                                            strokeLineJoin="ROUND" 
+                                            fill="transparent" />
+                                </StackPane>
+                            </graphic>
+                        </Button>
                     </children>
                 </HBox>
             </children>

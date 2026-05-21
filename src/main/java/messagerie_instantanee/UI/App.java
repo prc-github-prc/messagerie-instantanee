@@ -16,10 +16,11 @@ public class App extends Application {
         ChatControle controleur = loader.getController();
 
         // 2. Créer la scène avec le contenu du FXML
-        Scene scene = new Scene(root, 600, 400);
+        Scene scene = new Scene(root);
 
         // 3. Afficher la fenêtre
         stage.setTitle("Mon Application FXML");
+        stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();
     }

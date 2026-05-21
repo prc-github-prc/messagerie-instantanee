@@ -6,7 +6,7 @@
 
 /* --- BARRE LATÉRALE --- */
 .sidebar {
-    -fx-background-color: #2b2d31;
+    -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
     -fx-border-width: 1px;
 }
@@ -146,4 +146,34 @@
     -fx-background-radius: 15px;      
     -fx-padding: 8px 14px 8px 14px;   
     -fx-font-size: 14px;              
+}
+
+
+/* Nettoyage du bouton FXML pour laisser place au SVG */
+.envoi-btn-container {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+    
+    /* Application de l'effet d'ombre (DropShadow) du SVG original */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
+    
+    /* Animation de transition douce */
+    -fx-transition-duration: 0.2s;
+}
+
+/* Effet au survol (Hover) */
+.envoi-btn-container:hover {
+    /* Légère augmentation de la taille pour donner un effet interactif moderne */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    /* Intensification de l'ombre pour simuler une lueur rose */
+    -fx-effect: dropshadow(three-pass-box, rgba(251, 17, 255, 0.4), 8, 0, 0, 2);
+}
+
+/* Effet au clic (Pressed) */
+.envoi-btn-container:armed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
 }
