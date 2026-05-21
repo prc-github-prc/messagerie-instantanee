@@ -9,9 +9,9 @@ import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
 import messagerie_instantanee.server.models.Tag;
+import messagerie_instantanee.server.database.DAO.*;
 
 public class ResultSetConverter {
-
     public static List<User> rsToUser(ResultSet User_data) throws SQLException{
         List<User> lst_User = new ArrayList<>();
         while (User_data.next()) {
@@ -28,7 +28,7 @@ public class ResultSetConverter {
         while (Discussion_data.next()) {
             int id_Discussion = Discussion_data.getInt("id_Discussion");
             String nom_discussion = Discussion_data.getString("nom_discussion");
-            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion));
+            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion, DiscussionDAO.findUserByIDDiscussion(id_Discussion)));
         }
         return lst_Discussion;
     }

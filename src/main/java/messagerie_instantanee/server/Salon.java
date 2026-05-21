@@ -4,21 +4,33 @@ import java.util.List;
 
 import messagerie_instantanee.client.*;
 import messagerie_instantanee.interfaces.*;
+import messagerie_instantanee.server.models.*;
+import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+
+import static messagerie_instantanee.server.utils.ResultSetConverter.*;
 
 import java.rmi.RemoteException;
 
 public class Salon implements InterfaceSujetDiscussion{
-    List<Client> participants;
-    String nom;
+    private int id;
+    private String nom;
+    List<User> participants;
 
     /**
      * 
-     * @param nom
+     * @param id
      * @throws RemoteException
+     * 
+     * Crée un Salon à partir d'une discussion déjà existante.
      */
-    public Salon(String nom) throws RemoteException{
-        this.nom = nom;
-        // Récupérer la liste des participants.
+    public Salon(Discussion discussion) throws RemoteException{
+        this.id = discussion.getId_discussion();
+        this.nom = discussion.getNom_discussion();
+        this.participants = discussion.getParticipants();
+    }
+
+    public Salon(String nom) throws RemoteException {
+        throw new UnsupportedOperationException("Unimplemented method 'nouveau Salon'");
     }
 
     /**
