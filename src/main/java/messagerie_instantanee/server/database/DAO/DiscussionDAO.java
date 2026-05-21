@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;
+import static messagerie_instantanee.server.utils.ResultSetConverter.rsToMessage;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
 
@@ -46,6 +48,19 @@ public class DiscussionDAO {
         try {
             ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Discussion ");
             return rsToDiscussion(data_discussions);
+        } catch (SQLException e) {
+            System.out.println("[DiscutionDAO] connexion impossible a la base de donnée" + e.getMessage()); 
+            return null; 
+        } catch (NoSuchElementException e){
+            System.out.println("[DiscutionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<Message> findMessagesByIdDiscussion( int id_discussion){
+        try {
+            ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Message WHERE id_discussion ="+id_discussion);
+            return rsToMessage(data_discussions);
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] connexion impossible a la base de donnée" + e.getMessage()); 
             return null; 
