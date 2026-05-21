@@ -19,7 +19,6 @@ public class Salon implements InterfaceSujetDiscussion{
     List<Message> messages;
 
     /**
-     * 
      * @param id
      * @throws RemoteException
      * 
@@ -48,7 +47,7 @@ public class Salon implements InterfaceSujetDiscussion{
     @Override
     public void inscription(InterfaceAffichageClient c, User user) throws RemoteException {
         participants.add(user);
-        Discussion.addUserToDiscussionByIDs(user.getId_user(), id);
+        DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
         c.affiche("Utilisateur ajouté(e).");
     }
 
@@ -68,21 +67,23 @@ public class Salon implements InterfaceSujetDiscussion{
                 break;
             }
         }
-        Discussion.removeUserToDiscussionByIDs(user.getId_user(), id);
+        DiscussionDAO.RemoveUserToDiscussionById(user.getId_user(), id);
         c.affiche("Utilisateur désinscrit(e).");
     }
 
     /**
-     * @param Message
+     * @param message
      * @return
      * @throws RemoteException
      * 
      * La fonction diffuse distribue le message à tous les clients/utilisateurs membres de la discussion.
      */
     @Override
-    public void diffuse(String Message) throws RemoteException {
-        // I. Stocker le message en BDD en envoyant un message DAO.
-        // II. Diffuser le message à tous les clients avec affiche pour chaque client.
+    public void diffuse(Message message) throws RemoteException {
+        messages.add(message);
+        MessageDAO.addMessageToDiscussionByIds(message, id);
+        // Stocker le message en BDD en envoyant un message DAO.
+        // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
     public List<Message> RecupereArchive() {
