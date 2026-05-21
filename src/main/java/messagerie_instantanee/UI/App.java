@@ -13,6 +13,7 @@ public class App extends Application {
         // 1. Charger le fichier FXML depuis les ressources
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/afficClient.fxml"));
         Parent root = loader.load();
+        ChatControle controleur = loader.getController();
 
         // 2. Créer la scène avec le contenu du FXML
         Scene scene = new Scene(root, 600, 400);

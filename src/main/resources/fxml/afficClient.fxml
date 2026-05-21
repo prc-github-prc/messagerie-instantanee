@@ -8,8 +8,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?>
 
-<BorderPane prefHeight="600.0" prefWidth="850.0" styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.client.Client">    <left>
+<BorderPane prefHeight="600.0" prefWidth="850.0" styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.UI.ChatControle">    <left>
         <VBox prefWidth="220.0" styleClass="sidebar" spacing="10">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -17,12 +18,14 @@
             <children>
                 <Label styleClass="sidebar-title" text="FORUM DISCUSSION" />
                 <Label styleClass="section-title" text="SALONS DISPONIBLES" />
-                
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
-                    <content>
-                        <VBox fx:id="salonListContainer" spacing="4" styleClass="salon-links-container" />
-                    </content>
-                </ScrollPane>
+                <ListView fx:id="salonList" VBox.vgrow="ALWAYS" styleClass="sidebar-list" />
+                <VBox spacing="8" style="-fx-padding: 10px 0 0 0;">
+                    <Button text="+ Ajouter un tag" onAction="#handleAjouterTag" styleClass="sidebar-btn" maxWidth="Infinity"/>
+                    <Button text="+ Créer une discussion" onAction="#handleCreerDiscussion" styleClass="sidebar-btn" maxWidth="Infinity"/>
+                    <Button text="+ Créer un salon" onAction="#handleCreerSalon" styleClass="sidebar-btn" maxWidth="Infinity"/>
+                    <Button text="+ Créer un serveur" onAction="#handleCreerServeur" styleClass="sidebar-btn" maxWidth="Infinity"/>
+
+                </VBox>
             </children>
         </VBox>
     </left>
