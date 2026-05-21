@@ -141,9 +141,9 @@
 
 
 .bulle-message {
-    -fx-background-color: #424640;    /* Couleur de fond de la bulle (Bleu Discord) */
-    -fx-text-fill: white;             /* Couleur du texte */
-    -fx-background-radius: 15px;      /* Arrondit les angles pour faire l'effet "bulle" */
-    -fx-padding: 8px 14px 8px 14px;   /* Espace entre le texte et les bords de la bulle (Haut, Droite, Bas, Gauche) */
-    -fx-font-size: 14px;              /* Taille du texte */
+    -fx-background-color: #424640;    
+    -fx-text-fill: white;             
+    -fx-background-radius: 15px;      
+    -fx-padding: 8px 14px 8px 14px;   
+    -fx-font-size: 14px;              
 }
