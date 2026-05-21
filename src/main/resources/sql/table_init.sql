@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS User (
     id_user         INTEGER PRIMARY KEY AUTOINCREMENT,
     username        VARCHAR(25),
-    password_hash   VARCHAR(500),
-    creation        DATE
+    password_hash   VARCHAR(500)
 );
 
 CREATE TABLE IF NOT EXISTS Messages (
     id_message      INTEGER PRIMARY KEY AUTOINCREMENT,
     contenu         VARCHAR(250),
-    horodatage      DATE,
+    datage          DATE,
+    horo            TIME,
     id_user         INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
     FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Enum_Role(
     nom_role        VARCHAR(25)
 );
 
-INSERT INTO Enum_Role VALUES(1, 'USER'), (2, 'ADMIN');
+INSERT INTO Enum_Role VALUES(0, 'USER'), (1, 'ADMIN');
 
 CREATE TABLE IF NOT EXISTS Roles(
     id_user         INTEGER NOT NULL,
