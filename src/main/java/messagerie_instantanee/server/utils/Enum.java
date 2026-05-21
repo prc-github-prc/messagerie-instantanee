@@ -3,7 +3,7 @@ package messagerie_instantanee.server.utils;
 public class Enum {
     
     public enum Role {
-        Admin, Gueux;
+        Admin, User;
 
         /**
         * Génère le string de la colonne SQL adapter à la requête
@@ -13,7 +13,7 @@ public class Enum {
         public String getColonneSQL() {
             return switch (this) {
                 case Admin -> "Admin";
-                case Gueux -> "Gueux";
+                case User -> "User";
             };
         }
     }

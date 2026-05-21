@@ -13,6 +13,8 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscuss
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToTag;
 
 public class TagDAO {
+
+    /*===================================Méthodes de recherche=======================================*/
     public static List<Discussion> findDiscussionListByNomTag(String nom_tag){
         try{
             ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion d NATURAL JOIN Tags t WHERE t.nom_tag = " + nom_tag);
@@ -37,5 +39,16 @@ public class TagDAO {
             System.out.println("[TagDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
+    }
+
+    /*===================================Méthodes d'insertion=======================================*/
+
+    public static void insertTag(String nom_tag, int id_discussion){
+        try{
+            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +")");
+            executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +")");
+        } catch (SQLException e) {
+            System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage());
+        } 
     }
 }
