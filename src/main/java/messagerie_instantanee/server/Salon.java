@@ -6,6 +6,7 @@ import messagerie_instantanee.client.*;
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.*;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import messagerie_instantanee.server.database.DAO.MessageDAO;
 
 import static messagerie_instantanee.server.utils.ResultSetConverter.*;
 
@@ -28,6 +29,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
+        this.participants = MessageDAO.getDiscussionByIDDiscussion(id);
     }
 
     public Salon(String nom) throws RemoteException {
