@@ -47,8 +47,6 @@ public class ChatControle {
         dialog.setTitle("Nouveau tag");
         dialog.setContentText("Nom du tag :");
         Optional<String> result = dialog.showAndWait();
-
-
     }
 
     @FXML

@@ -25,12 +25,12 @@ public class LoginChat {
         String pseudo = pseudoField.getText().trim();
         String serveur = serverField.getText().trim();
         if (pseudo.isEmpty() || serveur.isEmpty()) {
-            errorLabel.setText("Veuillez remplir tous les champs.");
+            errorLabel.setText("Veuillez remplir tous les champs");
             return;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ChatView.fxml"));
             Parent chatRoot = loader.load();
             Stage stage = (Stage) SeConnecter.getScene().getWindow();
             

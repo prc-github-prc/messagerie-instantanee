@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="messagerie_instantane.client.UI.ChatControle"
+            fx:controller="messagerie_instantanee.UI.ChatControle"
             styleClass="chat-root"
             xmlns="http://javafx.com/javafx">
 
