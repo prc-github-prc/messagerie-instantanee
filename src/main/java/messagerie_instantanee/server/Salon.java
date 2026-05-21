@@ -39,6 +39,7 @@ public class Salon implements InterfaceSujetDiscussion{
     /**
      * 
      * @param c
+     * @param user
      * @return
      * @throws RemoteException
      * 
@@ -53,6 +54,7 @@ public class Salon implements InterfaceSujetDiscussion{
 
     /**
      * @param c
+     * @param user
      * @return
      * @throws RemoteException
      * 
@@ -60,9 +62,10 @@ public class Salon implements InterfaceSujetDiscussion{
      */
     @Override
     public void desInscription(InterfaceAffichageClient c, User user) throws RemoteException {
-        for (User user : participants) {
-            if (user.getId_user() == id_client) {
-                participants.remove(user);
+        for (User u : participants) {
+            if (user.getId_user() == u.getId_user()) {
+                participants.remove(u);
+                break;
             }
         }
         Discussion.removeUserToDiscussionByIDs(user.getId_user(), id);
