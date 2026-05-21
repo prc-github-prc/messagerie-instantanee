@@ -3,6 +3,7 @@ package messagerie_instantanee.UI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 /**
  * Singleton de navigation.
@@ -10,12 +11,6 @@ import javafx.scene.layout.Pane;
  * à n'importe quel controller de changer le panel affiché
  * sans avoir besoin d'une référence directe à App.java.
  *
- * Utilisation :
- *   // Dans App.java (une seule fois) :
- *   NavigationManager.init(root);
- *
- *   // Dans n'importe quel controller :
- *   NavigationManager.naviguerVers("/fxml/ChatView.fxml");
  */
 public class NavigationManager {
 
@@ -51,6 +46,17 @@ public class NavigationManager {
     }
 
     /**
+     * Retourne le stage de l'instance unique
+     */
+    public Stage getStage() {
+        if (instance == null) {
+            throw new IllegalStateException(
+                "NavigationManager non initialisé. Appelez init(root) dans App.start() d'abord.");
+        }
+        return (Stage) root.getScene().getWindow();
+    }
+
+    /**
      * Charge un fichier FXML et l'affiche dans le centre du root.
      * Retourne le FXMLLoader pour que l'appelant puisse récupérer
      * le controller via loader.getController() si besoin.
@@ -74,5 +80,13 @@ public class NavigationManager {
      */
     public void naviguerVers(Pane panel) {
         root.setCenter(panel);
+    }
+
+    /**
+     * permet de passez en pleine ecran
+     * @param value boolean t si oui 
+     */
+    public void setMaximized(Boolean value){
+        getStage().setMaximized(value);
     }
 }

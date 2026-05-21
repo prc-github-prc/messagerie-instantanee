@@ -14,6 +14,10 @@
                 promptText="Votre pseudo"
                 maxWidth="280"/>
 
+        <TextField fx:id="passwordField"
+                promptText="Votre mot de passe"
+                maxWidth="280"/>
+
         <TextField fx:id="serverField"
                 promptText="Adresse du serveur (ex: localhost)"
                 maxWidth="280"

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.User;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
@@ -28,7 +29,21 @@ public class Server implements InterfaceServeurForum {
     }
 
     /** Retourne la liste des titres de salons disponibles. */
-    public synchronized List<Discussion> listerSalons() {
+    public List<Discussion> listerSalons() {
         return salonToDiscussion(map_salons.values());
+    }
+
+    /**
+     * verifie les information d'un utilisateur
+     * 
+     * @param pseudo de l'utilisateur
+     * @return si l'utilisateur peut se connecter  
+     */
+    public Boolean checkId(String pseudo, String pwd_hash){
+        User user = findUserByPseudo(pseudo);//TODO me faire
+        if(user.getPassword_hash().compareTo(pwd_hash) == 0){
+            return true;
+        }
+        return false;
     }
 }

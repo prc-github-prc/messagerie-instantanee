@@ -1,5 +1,7 @@
-package messagerie_instantanee.UI;
+package messagerie_instantanee.UI.controllers;
 
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -14,17 +16,46 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 
-public class ChatControle {
+import messagerie_instantanee.client.Client;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
+import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.models.Discussion;
+
+public class ChatControler {
+
+    // ===== FXML ==================================
     @FXML private ListView<String> salonList;
     @FXML private Label salonLabel;
     @FXML private VBox messagesBox;
     @FXML private ScrollPane scrollPane;
     @FXML private TextField inputField;
+
+    // ===== Etat ==================================
+    private InterfaceServeurForum    serveur;
+    private InterfaceSujetDiscussion salonCourant;
+    private Client clientRMI;
+    private String pseudo;
     
     @FXML
-    public void initialize() {
-        salonList.getItems().addAll("Jeux vidéo", "Musique", "Cinéma");
+    public void initialize(InterfaceServeurForum server, String pseudo) { // RECHECK changer pseudo en User
+        this.pseudo = pseudo;
+        this.serveur = server;
 
+        try {
+            clientRMI = new Client(msg ->
+                Platform.runLater(() -> afficherBulle(msg, false)) // fonction qui affiche un message
+            );
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        // ======== charge tous les nom de discussion dans la barre lateral ==========
+        List<Discussion> lst_discussion = server.listerSalons();
+        for(Discussion discu :lst_discussion){
+            salonList.getItems().add(discu.getNom_discussion());
+        }
+
+        // ============ chepa a quoi ça sert ===============
         salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
                 salonLabel.setText("# " + nouveauSalon);

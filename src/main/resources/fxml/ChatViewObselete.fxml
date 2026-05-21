@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="messagerie_instantanee.UI.ChatControle"
+            styleClass="chat-root"
+            xmlns="http://javafx.com/javafx">
+
+    <!-- ── Barre latérale gauche : liste des salons ── -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="180">
+            <Label text="Salons" styleClass="section-title"/>
+            <ListView fx:id="salonList" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </left>
+
+    <!-- ── Zone centrale : messages ── -->
+    <center>
+        <VBox>
+            <Label fx:id="salonLabel" text="Sélectionnez un salon"
+                    styleClass="chat-title"/>
+
+            <ScrollPane fx:id="scrollPane"
+                        VBox.vgrow="ALWAYS"
+                        fitToWidth="true"
+                        hbarPolicy="NEVER">
+                <VBox fx:id="messagesBox"
+                        styleClass="messages-container"
+                        spacing="6"/>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+    <!-- ── Barre de saisie en bas ── -->
+    <bottom>
+        <HBox styleClass="input-bar" spacing="8">
+            <TextField fx:id="inputField"
+                        HBox.hgrow="ALWAYS"
+                        promptText="Écrire un message…"
+                        onAction="#onEnvoi"/>
+            <Button text="Envoyer"
+                    onAction="#onEnvoi"
+                    styleClass="btn-primary"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

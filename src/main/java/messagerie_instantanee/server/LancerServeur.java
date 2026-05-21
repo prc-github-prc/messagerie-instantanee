@@ -26,6 +26,7 @@ public class LancerServeur {
             scan.nextLine();
 
             System.out.println("Arrêt du serveur...");
+            
             Naming.unbind("//localhost:" + PORT + "/" + NOM);
 
             scan.close();

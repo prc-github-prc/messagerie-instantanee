@@ -1,42 +1,32 @@
 package messagerie_instantanee.client;
 
-import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 
-import java.util.List;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import messagerie_instantanee.interfaces.*;
-import messagerie_instantanee.server.Salon;
 
+/**
+ * Implémentation du callback RMI côté client.
+ * Le serveur appelle affiche() pour pousser les messages reçus.
+ * Le Consumer<String> reçu à la construction transmet le message au contrôleur JavaFX.
+ */
+public class Client extends UnicastRemoteObject implements InterfaceAffichageClient {
 
-public class Client implements InterfaceAffichageClient {
+    // la gestion du cookie est faitee par le controller 
+    //
 
-    @FXML
-    private TextArea zoneAffichage; // TextArea JavaFX
-    @FXML
-    private TextField zoneSaisie;   // champ de saisie de message
+    private final java.util.function.Consumer<String> onMessage;
 
-    private InterfaceSujetDiscussion sujetActuel;
-
-    public static final String URL_PAR_DEFAUT = "//localhost:1099/leServeur";
-
-    private String cookie;
-
-    public Client() throws RemoteException {
-        // Comme on ne peut pas hériter de UnicastRemoteObject, 
-        // on exporte l'objet manuellement pour le rendre accessible par RMI
-        UnicastRemoteObject.exportObject(this, 0);
+    public Client(java.util.function.Consumer<String> onMessage) throws RemoteException {
+        this.onMessage = onMessage;
     }
 
+    /**
+     * Appelé par le serveur (thread RMI) quand un message arrive.
+     * On délègue au Consumer qui appellera Platform.runLater() dans le contrôleur.
+     */
     @Override
     public void affiche(String message) throws RemoteException {
-        // TRÈS IMPORTANT : On bascule l'exécution sur le Thread JavaFX
-        Platform.runLater(() -> {
-            zoneAffichage.appendText(message + "\n");
-        });
+        onMessage.accept(message);
     }
 }
