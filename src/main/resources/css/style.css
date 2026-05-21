@@ -9,6 +9,7 @@
     -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
     -fx-border-width: 1px;
+    -fx-background-radius:25px;
 }
 .sidebar-title {
     -fx-text-fill: #ffffff;
@@ -149,36 +150,30 @@
 }
 
 
-/* Nettoyage du bouton FXML pour laisser place au SVG */
+
 .envoi-btn-container {
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-cursor: hand;
     -fx-alignment: center;
-    
-    /* Application de l'effet d'ombre (DropShadow) du SVG original */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
-    
-    /* Animation de transition douce */
     -fx-transition-duration: 0.2s;
 }
 
-/* Effet au survol (Hover) */
+
 .envoi-btn-container:hover {
-    /* Légère augmentation de la taille pour donner un effet interactif moderne */
     -fx-scale-x: 1.05;
     -fx-scale-y: 1.05;
-    /* Intensification de l'ombre pour simuler une lueur rose */
     -fx-effect: dropshadow(three-pass-box, rgba(251, 17, 255, 0.4), 8, 0, 0, 2);
 }
 
-/* Effet au clic (Pressed) */
+
 .envoi-btn-container:armed {
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
 }
 
-/* Container du bouton Paramètres */
+
 .settings-btn-container {
     -fx-background-color: transparent;
     -fx-padding: 0;
@@ -187,9 +182,8 @@
     -fx-transition-duration: 0.2s;
 }
 
-/* Structure interne contenant l'icône */
+
 .settings-icon-wrapper {
-    /* Taille basée sur la viewBox de ton SVG (67x62) */
     -fx-min-width: 32px;
     -fx-max-width: 32px;
     -fx-min-height: 32px;
@@ -197,17 +191,144 @@
     -fx-transition-duration: 0.4s;
 }
 
-/* Effet au survol : Légère rotation de l'engrenage et changement d'opacité */
+
 .settings-btn-container:hover .settings-icon-wrapper {
-    -fx-rotate: 45; /* Fait tourner l'engrenage de 45 degrés */
+    -fx-rotate: 15;
 }
 
 .settings-btn-container:hover SVGPath {
-    -fx-stroke: #ffffff; /* L'icône devient blanche lumineuse au survol */
+    -fx-stroke: #ffffff; 
 }
 
-/* Effet de clic (Pressed) */
+
 .settings-btn-container:armed {
     -fx-scale-x: 0.92;
     -fx-scale-y: 0.92;
+}
+
+.profile-name-link {
+    -fx-background-color: transparent; 
+    -fx-background-radius: 0;
+    -fx-padding: 0;                    
+    -fx-text-fill: #FFFFFF;           
+    -fx-alignment: center-left;       
+}
+
+.profile-name-link:hover {
+    -fx-text-fill: #EAD3D3;          
+    -fx-cursor: hand;                  
+}
+
+.search-btn {
+    -fx-background-color: transparent; 
+    -fx-border-color: transparent;    
+    -fx-padding: 4px;                 
+    -fx-cursor: hand;                  
+}
+
+/* Optionnel : un petit effet visuel quand on passe la souris dessus */
+.search-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1); /* Léger flash blanc transparent */
+    -fx-background-radius: 4px;
+}
+
+.server-badge {
+    -fx-background-color: #173675;   /* Fond gris foncé */
+    -fx-text-fill: #EDE3E3;          /* Couleur du texte */
+    -fx-background-radius: 10px;     /* Coins arrondis */
+    
+    /* Aligne le texte parfaitement au centre du badge */
+    -fx-alignment: center;           
+    
+    /* Dimensions et marges internes pour créer l'encadrement */
+     Milford-min-width: 150px;
+    -fx-padding: 8px 20px;           
+    -fx-font-weight: bold;           /* Optionnel: pour qu'il ressorte bien */
+}
+
+.bg-top {
+    -fx-background-color: #640CBB; /* Violet */
+    -fx-background-radius: 30px 30px 0 0;
+    -fx-min-height: 250px; /* ◄--- Force une hauteur minimale */
+    -fx-min-width: 500px;
+}
+
+.bg-bottom {
+    -fx-background-color: #1a1b1e; /* Noir/Gris très sombre */
+    -fx-background-radius: 0 0 30px 30px;
+    -fx-height: 250px; /* ◄--- Force une hauteur minimale */
+    -fx-min-width: 500px;
+}
+
+.login-card {
+    /* Fond gris foncé transparent pour laisser passer un peu le bicolore derrière */
+    -fx-background-color: rgba(43, 45, 49);
+    
+    /* Arrondir les angles de la boîte */
+    -fx-background-radius: 16px;
+    -fx-border-radius: 16px;
+    
+    /* Optionnel : une légère bordure pour bien la détacher du fond */
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1px;
+    
+    /* Effet d'ombre pour lui donner du relief (comme sur ton modèle) */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 15, 0, 0, 10);
+}
+
+.icon-button-clean {
+    -fx-background-color: transparent; /* Supprime le rectangle gris de base */
+    -fx-padding: 5px;
+    -fx-cursor: hand;                  /* Curseur main au survol */
+    -fx-transition-duration: 0.2s;
+}
+
+/* Petit effet de survol pour faire briller l'icône au passage de la souris */
+.icon-button-clean:hover {
+    -fx-opacity: 0.8;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Le bouton icône en haut à droite */
+.icon-button-clean {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+}
+.icon-button-clean:hover {
+    -fx-opacity: 0.8;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Styles pour la Sidebar importés de ton autre vue */
+.sidebar {
+    -fx-background-color: #252024;
+    -fx-border-color: transparent #1e1f22 transparent transparent;
+    -fx-border-width: 1px;
+    -fx-background-radius: 0 25px 25px 0; /* Coins arrondis uniquement à droite */
+}
+.sidebar-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.section-title {
+    -fx-text-fill: #949ba4;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+}
+/* La Sidebar à droite */
+.sidebar-right {
+    -fx-background-color: #252024;
+    -fx-border-color: transparent transparent transparent #1e1f22; /* Bordure fine à gauche */
+    -fx-border-width: 1px;
+    -fx-background-radius: 25px 0 0 25px; /* Coins arrondis uniquement à GAUCHE maintenant */
+}
+
+.sidebar-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
 }
