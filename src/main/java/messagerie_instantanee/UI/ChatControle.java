@@ -5,6 +5,7 @@ import java.util.Optional;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 
 public class ChatControle {
     @FXML private ListView<String> salonList;
@@ -38,7 +40,11 @@ public class ChatControle {
         if (texte != null && !texte.trim().isEmpty()) {
             Label nouveauMessage = new Label(texte);
             nouveauMessage.getStyleClass().add("bulle-message");
+            nouveauMessage.setWrapText(true);
+            nouveauMessage.setMaxWidth(300);
+            messagesBox.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             
+            messagesBox.setAlignment(Pos.CENTER_RIGHT);
             messagesBox.getChildren().add(nouveauMessage);
 
             inputField.clear();
