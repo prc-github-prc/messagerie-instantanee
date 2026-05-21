@@ -13,6 +13,11 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscuss
 
 public class HideDAO {
     /*=======================Méthode de Lecture====================================================== */
+    /**
+     * 
+     * @param id_user
+     * @return
+     */
     public static List<Discussion> findHidedDiscussionListByIdUser(int id_user){
         try{
             ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion d NATURAL JOIN Hide h WHERE h.id_user = " + id_user);
@@ -27,6 +32,11 @@ public class HideDAO {
     }
 
     /*================================Méthode d'écriture==================================================== */
+    /**
+     * 
+     * @param id_discussion
+     * @param id_user
+     */
     public static void addHideDiscussionByIdDiscussion(int id_discussion, int id_user){
         try {
             excuteInsertSQL("INSERT INTO Hide VALUES ("+id_user+","+id_discussion+")");
@@ -35,6 +45,11 @@ public class HideDAO {
         }
     }
 
+    /**
+     * 
+     * @param id_discussion
+     * @param id_user
+     */
     public static void deleteHideDiscussionByIdDiscussion(int id_discussion, int id_user){
         try {
             excuteInsertSQL("DELETE FROM Hide  WHERE id_user="+id_user+"AND id_discussion="+id_discussion);
