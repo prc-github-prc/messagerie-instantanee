@@ -6,6 +6,7 @@ import messagerie_instantanee.client.*;
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.*;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import messagerie_instantanee.server.database.DAO.MessageDAO;
 
 import static messagerie_instantanee.server.utils.ResultSetConverter.*;
 
@@ -15,9 +16,9 @@ public class Salon implements InterfaceSujetDiscussion{
     private int id;
     private String nom;
     List<User> participants;
+    List<Message> messages;
 
     /**
-     * 
      * @param id
      * @throws RemoteException
      * 
@@ -27,6 +28,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
+        this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
     }
 
     public Salon(String nom) throws RemoteException {
@@ -36,46 +38,55 @@ public class Salon implements InterfaceSujetDiscussion{
     /**
      * 
      * @param c
+     * @param user
      * @return
      * @throws RemoteException
      * 
      * La fonction inscription récupère des données fournies par l'utilisateur et effectue une requête auprès du DAO.
      */
     @Override
-    public void inscription(InterfaceAffichageClient c) throws RemoteException {
-        // I. Récupérer un objet client depuis le DAO.
-        // II. L'ajouter à la liste des participants.
-        throw new UnsupportedOperationException("Unimplemented method 'inscription'");
+    public void inscription(InterfaceAffichageClient c, User user) throws RemoteException {
+        participants.add(user);
+        DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
+        c.affiche("Utilisateur ajouté(e).");
     }
 
     /**
      * @param c
+     * @param user
      * @return
      * @throws RemoteException
      * 
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
     @Override
-    public void desInscription(InterfaceAffichageClient c) throws RemoteException {
-        // I. Effectuer une requête au DAO avec l'id de l'utilisateur, pour supprimer les données lui correspondant dans la BBD.
-        // II. Selon le retour du DAO, affichage d'un message via c.affiche() en fonction de la réponse du DA0 : Réussite de la désinscription ou erreur quelconque.
-        throw new UnsupportedOperationException("Unimplemented method 'desInscription'");
+    public void desInscription(InterfaceAffichageClient c, User user) throws RemoteException {
+        for (User u : participants) {
+            if (user.getId_user() == u.getId_user()) {
+                participants.remove(u);
+                break;
+            }
+        }
+        DiscussionDAO.RemoveUserToDiscussionById(user.getId_user(), id);
+        c.affiche("Utilisateur désinscrit(e).");
     }
 
     /**
-     * @param Message
+     * @param message
      * @return
      * @throws RemoteException
      * 
      * La fonction diffuse distribue le message à tous les clients/utilisateurs membres de la discussion.
      */
     @Override
-    public void diffuse(String Message) throws RemoteException {
-        // I. Stocker le message en BDD en envoyant un message DAO.
-        // II. Diffuser le message à tous les clients avec affiche pour chaque client.
-        
-        for (Client p : participants) {
-            p.affiche(Message);
-        }
+    public void diffuse(Message message) throws RemoteException {
+        messages.add(message);
+        MessageDAO.addMessageToDiscussionByIds(message, id);
+        // Stocker le message en BDD en envoyant un message DAO.
+        // Diffuser le message à tous les clients avec affiche pour chaque client.
+    }
+
+    public List<Message> RecupereArchive() {
+        return messages;
     }
 }

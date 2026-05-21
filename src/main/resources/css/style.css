@@ -59,7 +59,7 @@
 
 /* --- ENTRÉE TEXTE ET BOUTONS --- */
 .chat-input {
-    -fx-background-color: #383a40;
+    -fx-background-color: #474749;
     -fx-background-radius: 8px;
     -fx-text-fill: #dbdee1;
     -fx-prompt-text-fill: #949ba4;
@@ -95,4 +95,51 @@
 .scroll-pane .scroll-bar:vertical .thumb {
     -fx-background-color: #1a1b1e;
     -fx-background-radius: 4px;
+}
+
+.sidebar-list {
+    -fx-background-color: #252024; -fx-control-inner-background: #252024; -fx-background-insets: 0;    
+}
+
+.sidebar-list .list-cell:selected {
+    -fx-background-color: #710057; 
+    -fx-text-fill: #ffffff;       
+    -fx-font-weight: bold;         
+}
+
+.sidebar-list .list-cell:hover {
+    -fx-background-color: #710057; 
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 20px;
+}
+
+.sidebar-list .list-cell {
+    -fx-text-fill: #e0e0e0;         
+    -fx-background-color: #262626;  
+    -fx-background-radius: 20px;    
+    -fx-background-insets: 4px 10px 4px 10px; 
+    -fx-padding: 8px 16px;          
+}
+
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b3b3b3;          /* Gris clair discret par défaut */
+    -fx-alignment: center-left;     /* Aligne le texte à gauche */
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 20px;     /* Même arrondi ovale que tes salons ! */
+    -fx-font-size: 13px;
+    -fx-cursor: hand;                /* Transforme le curseur en main au survol */
+}
+
+/* Effet au survol du bouton */
+.sidebar-btn:hover {
+    -fx-background-color: #262626;   /* Fond légèrement gris sombre */
+    -fx-text-fill: #6200ee;          /* Texte violet flashy */
+}
+
+/* Effet quand on clique dessus */
+.sidebar-btn:armed {
+    -fx-background-color: #3700b3;
+    -fx-text-fill: #ffffff;
 }

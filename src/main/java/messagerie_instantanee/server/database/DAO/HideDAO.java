@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Discussion;
+import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;;
 
 
 public class HideDAO {
+    /*=======================Méthode de Lecture====================================================== */
     public static List<Discussion> findHidedDiscussionListByIdUser(int id_user){
         try{
             ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion d NATURAL JOIN Hide h WHERE h.id_user = " + id_user);
@@ -21,6 +23,23 @@ public class HideDAO {
         } catch (NoSuchElementException e){
             System.out.println("[HideDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
             return null;
+        }
+    }
+
+    /*================================Méthode d'écriture==================================================== */
+    public static void addHideDiscussionByIdDiscussion(int id_discussion, int id_user){
+        try {
+            excuteInsertSQL("INSERT INTO Hide VALUES ("+id_user+","+id_discussion+")");
+        } catch (SQLException e) {
+            System.out.println("[HideDAO] Impossible créer le lien dans hide : " + e.getMessage());
+        }
+    }
+
+    public static void deleteHideDiscussionByIdDiscussion(int id_discussion, int id_user){
+        try {
+            excuteInsertSQL("DELETE FROM Hide  WHERE id_user="+id_user+"AND id_discussion="+id_discussion);
+        } catch (SQLException e) {
+            System.out.println("[HideDAO] Impossible de supprimer le lien dans hide : " + e.getMessage());
         }
     }
 }
