@@ -51,10 +51,10 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
 
     @Override
     public Boolean checkId(String pseudo, String rawPassword) throws RemoteException {
-        User foundUser = findUserByUsername(pseudo);
+        User user = findUserByUsername(pseudo);
         // Utilisateur introuvable → false (pas de NPE)
-        if (foundUser == null) return false;
-        return rawPassword.equals(foundUser.getPassword_hash());
+        if (user == null) return false;
+        return rawPassword.equals(user.getPassword_hash());
     }
 
     @Override
