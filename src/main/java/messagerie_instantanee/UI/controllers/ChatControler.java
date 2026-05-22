@@ -15,12 +15,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
-
+import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
-import messagerie_instantanee.server.Server;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
 
 public class ChatControler {
@@ -101,6 +100,11 @@ public class ChatControler {
         String texte = inputField.getText();
         if (texte != null && !texte.trim().isEmpty()) {
             Label nouveauMessage = new Label(texte);
+            try {
+                salonCourant.diffuse(texte, pseudo);
+            } catch (RemoteException e) {
+                throw  new RuntimeException("Un problème est arrivé lors de la diffusion du message"+e.getMessage());
+            }
             nouveauMessage.getStyleClass().add("bulle-message");
             nouveauMessage.setWrapText(true);
             nouveauMessage.setMaxWidth(300);
