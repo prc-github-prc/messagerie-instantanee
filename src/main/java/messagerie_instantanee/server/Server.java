@@ -29,9 +29,11 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
+        
         if (convs != null) {
             for (Discussion conv : convs) {
                 map_salons.put(conv.getNom_discussion(), new Salon(conv));
+                System.out.println(conv.getNom_discussion());//TODO  à enlever après test
             }
         }
     }
@@ -68,7 +70,8 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     /* cree une discussion et cree un salon */
-    public Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
+    @Override
+    public synchronized Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
         ArrayList<User> users = new ArrayList<>(); 
         User host = findUserByUsername(username);
         int id = insertDiscussionReturnId(nom_Salon,est_privee, host,users);

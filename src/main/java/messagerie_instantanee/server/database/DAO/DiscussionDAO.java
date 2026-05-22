@@ -62,7 +62,7 @@ public class DiscussionDAO {
      */
     public static List<Discussion> findAllDiscussions(){
         try {
-            ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Discussion ");
+            ResultSet data_discussions = executeSQLQuerry("SELECT * FROM Discussion");
             return rsToDiscussion(data_discussions);
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] connexion impossible a la base de donnée" + e.getMessage()); 
