@@ -15,8 +15,9 @@ import messagerie_instantanee.server.database.DAO.UserDAO;
 public class Salon implements InterfaceSujetDiscussion{
     private int id;
     private String nom;
-    List<User> participants;
-    List<Message> messages;
+    private List<User> participants;
+    private List<Message> messages;
+    private Boolean estPrivee;
 
     /**
      * @param id
@@ -29,6 +30,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
         this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
+        this.estPrivee = discussion.estPrivee;
     }
 
      /**
@@ -38,12 +40,13 @@ public class Salon implements InterfaceSujetDiscussion{
      * 
      * Crée un Salon ainsi qu'une nouvelle discussion.
      */
-    public Salon(String nom, User user) throws RemoteException {
+    public Salon(String nom, User user, Boolean estPrivee) throws RemoteException {
         this.nom = nom;
         this.participants = new ArrayList<>();
         this.participants.add(user);
         this.messages = new ArrayList<>();
-        this.id = DiscussionDAO.insertDiscussionReturnId(nom, user, participants);
+        this.id = DiscussionDAO.insertDiscussionReturnId(nom, user, participants, estPrivee);
+        this.estPrivee = estPrivee;
     }
 
     /**
@@ -118,5 +121,13 @@ public class Salon implements InterfaceSujetDiscussion{
 
     public List<User> getLstInscrit(){
         return participants;
+    }
+
+    public List<User> getParticipants() {
+        return participants;
+    }
+
+    public Boolean getEstPrivee() {
+        return estPrivee;
     }
 }
