@@ -85,6 +85,7 @@ public class LoginControler {
             }
         } catch (Exception e) {
             errorLabel.setText("Connexion impossible : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
