@@ -64,7 +64,7 @@
                         <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !" onAction="#showSignup" 
                                 style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;" />
 
-                        <Label fx:id="errorLabel" styleClass="error"/>
+                        <Label fx:id="errorLabel" styleClass="error" style="-fx-text-fill: #bbb;"/>
 
                     </children>
                 </VBox>

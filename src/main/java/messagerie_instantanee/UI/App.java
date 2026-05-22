@@ -33,7 +33,7 @@ public class App extends Application {
     Scene scene = new Scene(wrapper);
     scene.getStylesheets().add(
         getClass().getResource("/css/style.css").toExternalForm());
-    stage.initStyle(StageStyle.UTILITY);
+    //stage.initStyle(StageStyle.UTILITY);
     stage.setTitle("Messagerie Instantanée");
     stage.setMaximized(true);
     stage.setScene(scene);

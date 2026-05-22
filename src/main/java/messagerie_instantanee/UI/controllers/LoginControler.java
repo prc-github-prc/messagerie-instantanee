@@ -33,7 +33,7 @@ public class LoginControler {
                 .naviguerVers("/fxml/RegisterView.fxml");
         } catch (Exception e) {
             e.printStackTrace();
-            errorLabel.setText("Erreur lors du chargement de l'application");
+            errorLabel.setText("Erreur lors de la page sign up");
         }
     }
 
