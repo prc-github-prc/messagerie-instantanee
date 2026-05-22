@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.Message;
+
+import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToMessage;
 
@@ -36,12 +38,19 @@ public class MessageDAO {
     /**
      * 
      * @param message
+     * @return cle du message
      */
-    public static void addMessageToDiscussion(Message message){
+    public static int addMessageToDiscussion(Message message){
         try{
-            executeSQLQuerry("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
+            ResultSet rs = excuteInsertSQL("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
+            int clé=0;
+            while(rs.next()){
+                clé=rs.getInt("id_discussion");
+            }
+            return clé;
         } catch (SQLException e) {
             System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage());
+            return -1;
         } 
     }
 
