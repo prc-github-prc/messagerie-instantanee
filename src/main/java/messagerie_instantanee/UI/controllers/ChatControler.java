@@ -1,7 +1,5 @@
 package messagerie_instantanee.UI.controllers;
 
-import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
-
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +20,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
-import messagerie_instantanee.server.Salon;
 import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
+import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
 
 public class ChatControler {
 
@@ -196,6 +194,15 @@ public class ChatControler {
      */
     @FXML
     private void handleCreerSalon(ActionEvent event) {
+        if (serveur == null) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur serveur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de créer un salon : le serveur n'est pas initialisé.");
+            alert.showAndWait();
+            return;
+        }
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau Salon");
         dialog.setContentText("Nom du salon :");
@@ -211,8 +218,9 @@ public class ChatControler {
                 alert.setContentText("Ce salon existe déjà ");
                 alert.showAndWait();
             } else {
-                salonList.getItems().add(nomNettoye);
-                salonList.getSelectionModel().select(nomNettoye);
+                Discussion nouveauSalon = serveur.creationSalon(nomNettoye, pseudo, false);
+                salonList.getItems().add(nouveauSalon);
+                salonList.getSelectionModel().select(nouveauSalon);
                 System.out.println("Création du salon");
             }
         }}); 
