@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" 
             xmlns:fx="http://microsoft.com/fxml/1" 
-            fx:controller="messagerie_instantanee.UI.AuthController"
+            fx:controller="messagerie_instantanee.UI.controllers.LoginControler"
             styleClass="chat-root"
             style="-fx-background-color: linear-gradient(to bottom right, #6b21a8, #9333ea);">
 
@@ -15,7 +15,7 @@
             <children>
                 
                 <VBox fx:id="loginPane" alignment="CENTER" maxWidth="450" spacing="25" 
-                      style="-fx-background-color: rgba(51, 51, 51, 0.85); -fx-background-radius: 20; -fx-border-radius: 20;">
+                    style="-fx-background-color: rgba(51, 51, 51, 0.85); -fx-background-radius: 20; -fx-border-radius: 20;">
                     <padding>
                         <Insets bottom="50" left="50" right="50" top="50" />
                     </padding>
@@ -36,12 +36,12 @@
                                 style="-fx-background-color: #444; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 20; -fx-font-size: 16; -fx-cursor: hand;" />
                         
                         <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !" onAction="#showSignup" 
-                                   style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;" />
+                                style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;" />
                     </children>
                 </VBox>
 
                 <VBox fx:id="signupPane" alignment="CENTER" maxWidth="450" spacing="20" visible="false" managed="false"
-                      style="-fx-background-color: rgba(51, 51, 51, 0.85); -fx-background-radius: 20; -fx-border-radius: 20;">
+                    style="-fx-background-color: rgba(51, 51, 51, 0.85); -fx-background-radius: 20; -fx-border-radius: 20;">
                     <padding>
                         <Insets bottom="50" left="50" right="50" top="50" />
                     </padding>
