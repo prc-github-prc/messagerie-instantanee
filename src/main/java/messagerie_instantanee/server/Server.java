@@ -13,10 +13,9 @@ import java.util.NoSuchElementException;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
-import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
-
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
