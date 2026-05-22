@@ -99,4 +99,6 @@
             </HBox>
         </right>
 
+    </BorderPane>
+
 </StackPane>
