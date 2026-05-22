@@ -28,12 +28,19 @@ public class Salon implements InterfaceSujetDiscussion{
         this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
     }
 
+     /**
+     * @param nom
+     * @param user
+     * @throws RemoteException
+     * 
+     * Crée un Salon ainsi qu'une nouvelle discussion
+     */
     public Salon(String nom, User user) throws RemoteException {
         this.nom = nom;
         this.participants = new ArrayList<>();
         this.participants.add(user);
         this.messages = new ArrayList<>();
-        
+        this.id = DiscussionDAO.insertDiscussionReturnId(nom, user, participants);
     }
 
     /**
