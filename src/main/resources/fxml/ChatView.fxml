@@ -15,7 +15,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.control.Hyperlink?>
 
-<BorderPane styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.UI.ChatControle">    
+<BorderPane styleClass="chat-root" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="messagerie_instantanee.UI.controllers.ChatControler">    
     <left>
         <VBox prefWidth="350.0" styleClass="sidebar" spacing="15">
             <padding>
