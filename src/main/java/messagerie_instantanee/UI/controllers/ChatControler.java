@@ -30,15 +30,21 @@ public class ChatControler {
     @FXML private VBox messagesBox;
     @FXML private ScrollPane scrollPane;
     @FXML private TextField inputField;
+    @FXML private VBox headerChatBox; 
+    @FXML private Label tagsLabel;    
+    @FXML private Label titreLabel;
 
     // ===== Etat ==================================
     private Server serveur;
     private InterfaceSujetDiscussion salonCourant;
     private Client clientRMI;
     private String pseudo;
-    private Label titreLabel;
-    private Label tags;
 
+    /**
+     * 
+     * @param server
+     * @param pseudo
+     */
     @FXML
     public void initialize(Server server, String pseudo) {
         this.pseudo = pseudo;
@@ -62,7 +68,11 @@ public class ChatControler {
             salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
                 Platform.runLater(() -> {
-                    Label titre = new Label(nouveauSalon);
+                    tagsLabel.setText("#discussion");
+                    titreLabel.setText(nouveauSalon);
+                    System.out.println("Affichage salon");
+                    System.out.println("Création tag");
+                    /*Label titre = new Label(nouveauSalon);
                     titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
                     
                     VBox enteteContenu = new VBox();
@@ -72,14 +82,19 @@ public class ChatControler {
                     
                     enteteContenu.getChildren().addAll(tags, titre);
                     
-                    salonLabel.setText("");
-                    salonLabel.setGraphic(enteteContenu);
+                    salonLabel.setText(null);
+                    salonLabel.setGraphic(enteteContenu);*/
                 });
             }
         });
     }
     
 
+    /**
+     * 
+     * @param msg
+     * @param estMoi
+     */
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");
@@ -94,7 +109,9 @@ public class ChatControler {
         }
         messagesBox.getChildren().add(conteneur);
     }
-
+    /**
+     * 
+     */
     @FXML
     public void actionEnvoi() {        
         String texte = inputField.getText();
@@ -117,8 +134,20 @@ public class ChatControler {
         }
     }
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleAjouterTag(ActionEvent event) {
+        if (tagsLabel == null || titreLabel.getText().equals("# Sélectionnez un salon")) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null);
+            alert.setContentText("Veuillez sélectionner un salon avant d'ajouter un tag ");
+            alert.showAndWait();
+            return; 
+        }
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau tag");
         dialog.setContentText("Nom du tag :");
@@ -130,16 +159,20 @@ public class ChatControler {
             if(!tagNettoye.startsWith("#")){
                 tagNettoye = "#" + tagNettoye;
             }
-            String tagsActuels = tags.getText();
+            String tagsActuels = tagsLabel.getText();
             if(tagsActuels == null || tagsActuels.isEmpty()){
-                tags.setText(tagNettoye);
+                tagsLabel.setText(tagNettoye);
             } else{
-                tags.setText(tagsActuels + " " + tagNettoye);
+                tagsLabel.setText(tagsActuels + " " + tagNettoye);
             }
 
         }}); 
     }
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleCreerDiscussion(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -149,6 +182,10 @@ public class ChatControler {
     }
     
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleCreerSalon(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -168,10 +205,15 @@ public class ChatControler {
             } else {
                 salonList.getItems().add(nomNettoye);
                 salonList.getSelectionModel().select(nomNettoye);
+                System.out.println("Création du salon");
             }
         }}); 
     }
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleCreerServeur(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
