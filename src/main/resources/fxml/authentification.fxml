@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" 
             xmlns:fx="http://microsoft.com/fxml/1" 
@@ -74,5 +75,25 @@
             </children>
         </StackPane>
     </center>
-
+    <right>
+        <VBox fx:id="sidebarMenu" prefWidth="300.0" styleClass="sidebar-right" visible="false" managed="false">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="25.0" />
+            </padding>
+            <children>
+                <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title" />
+            </children>
+        </VBox>
+    </right>
+    <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
+        <padding><Insets top="30" right="30"/></padding>
+        <children>
+            <Button onAction="#handleToggleSidebar" styleClass="icon-button-clean">
+                <graphic>
+                    <SVGPath content="M6 2H18C19.1 2 20 2.9 20 4V8C20 9.1 19.1 10 18 10H6C4.9 10 4 9.1 4 8V4C4 2.9 4.9 2 6 2ZM6 12H18C19.1 12 20 12.9 20 14V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V14C4 12.9 4.9 12 6 12Z" 
+                            fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
+                </graphic>
+            </Button>
+        </children>
+    </StackPane>
 </BorderPane>

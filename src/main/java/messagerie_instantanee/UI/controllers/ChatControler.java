@@ -37,7 +37,8 @@ public class ChatControler {
     private InterfaceSujetDiscussion salonCourant;
     private Client clientRMI;
     private String pseudo;
-    
+    private Label titreLabel;
+
     @FXML
     public void initialize(Server server, String pseudo) { // RECHECK changer pseudo en User
         this.pseudo = pseudo;
@@ -57,16 +58,27 @@ public class ChatControler {
             salonList.getItems().add(discu.getNom_discussion());
         }
 
-        // ============ chepa a quoi ça sert ===============
+        // détecter quand l’utilisateur change de salon sélectionné dans la list view
         salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
                 salonLabel.setText("# " + nouveauSalon);
             }
+            titreLabel = new Label(nouveauSalon);
         });
+        VBox enteteContenu = new VBox();
+        String simuleTags = "#discussion";
+        Label tags = new Label(simuleTags);
+        tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
+        enteteContenu.getChildren().addAll(tags, titreLabel);
+        salonLabel.setText("");
+        salonLabel.setGraphic(enteteContenu);
     }
 
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
+        message.getStyleClass().add("bulle-message");
+        message.setWrapText(true);
+        message.setMaxWidth(300);
         VBox conteneur = new VBox(message);
         if(estMoi){
             conteneur.setAlignment(Pos.CENTER_LEFT);
@@ -75,7 +87,6 @@ public class ChatControler {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
         }
         messagesBox.getChildren().add(conteneur);
-
     }
 
     @FXML
@@ -108,6 +119,7 @@ public class ChatControler {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouvelle discussion");
         dialog.setContentText("Nom de la discussion :");
+        Optional<String> result = dialog.showAndWait();
     }
     
 
