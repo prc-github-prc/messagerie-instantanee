@@ -23,7 +23,7 @@ public class App extends Application {
 
     // == Charge et affiche le panel Login au démarrage =============
     Pane panelLogin = FXMLLoader.load(
-        getClass().getResource("/fxml/LoginView.fxml")); //RECHECK post merge
+        getClass().getResource("/fxml/ChatView.fxml")); //RECHECK post merge
     root.setCenter(panelLogin);
 
     // == Mise en page et scène =====================================
