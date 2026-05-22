@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS User (
     id_user         INTEGER PRIMARY KEY AUTOINCREMENT,
-    username        VARCHAR(25),
+    username        VARCHAR(25) UNIQUE,
     password_hash   VARCHAR(500)
 );
 
