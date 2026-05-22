@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS Messages (
 
 CREATE TABLE IF NOT EXISTS Discussion(
     id_discussion   INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_discussion  VARCHAR(50)
+    nom_discussion  VARCHAR(50),
+    est_prive       BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS Hide(
