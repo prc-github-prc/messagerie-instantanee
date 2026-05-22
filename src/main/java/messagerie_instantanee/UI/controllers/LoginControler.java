@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
+import messagerie_instantanee.server.Server;
 
 public class LoginControler {
     @FXML private TextField pseudoField;
@@ -49,7 +50,7 @@ public class LoginControler {
 
         // ========= verification que le serveur existe ===========
         try {
-            InterfaceServeurForum server = (InterfaceServeurForum)
+            Server server = (Server)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
             // ============== verifie pseudo + pwd =============
