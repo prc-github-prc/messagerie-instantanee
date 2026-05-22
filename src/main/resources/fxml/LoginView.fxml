@@ -56,6 +56,12 @@
                                 style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
 
+                        <VBox spacing="8" fillWidth="true">
+                            <Label text="serveur" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
+                            <TextField fx:id="server"
+                                style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                        </VBox>
+
                         <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
                                 style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         <Button text="Se connecter" onAction="#handleLogin" prefWidth="250" styleClass="btn-connect"
