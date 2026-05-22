@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -87,6 +88,12 @@ public class ChatControler {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
         }
         messagesBox.getChildren().add(conteneur);
+    }
+
+    @FXML
+    public void currentSalon(MouseEvent event){
+        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
+        salonCourant = discussionToSalon(clicked);
     }
 
     @FXML
