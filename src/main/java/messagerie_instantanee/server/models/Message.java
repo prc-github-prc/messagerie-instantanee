@@ -30,4 +30,9 @@ public class Message {
     public int getId_discussion() {
         return id_discussion;
     }
+
+    /*=============Setter========================================= */
+    public void set_ID(int id){
+        this.id_message=id;
+    }
 }

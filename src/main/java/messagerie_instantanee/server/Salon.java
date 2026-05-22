@@ -7,7 +7,10 @@ import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.*;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.MessageDAO;
+
 import java.rmi.RemoteException;
+
+import messagerie_instantanee.server.database.DAO.UserDAO;
 
 public class Salon implements InterfaceSujetDiscussion{
     private int id;
@@ -87,9 +90,16 @@ public class Salon implements InterfaceSujetDiscussion{
      * La fonction diffuse distribue le message à tous les clients/utilisateurs membres de la discussion.
      */
     @Override
-    public void diffuse(Message message) throws RemoteException {
-        messages.add(message);
-        MessageDAO.addMessageToDiscussion(message);
+    public void diffuse(String message, String username) throws RemoteException {
+        User user =UserDAO.findUserByUsername(username);
+        if(user !=null){
+            Message msg = new Message(-1, message, user.getId_user() ,id);
+            int id_msg = MessageDAO.addMessageToDiscussion(msg);
+            msg.set_ID(id_msg);
+            messages.add(msg);
+        }else{
+            throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
+        }
         // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
