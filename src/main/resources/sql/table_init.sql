@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Messages (
     horo            TIME,
     id_user         INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
-    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
+    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion),
     FOREIGN KEY (id_user) REFERENCES User(id_user)
 );
 
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS Discussion(
 CREATE TABLE IF NOT EXISTS Hide(
     id_user         INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
-    PRIMARY KEY (id_user,id_discussion)
-    FOREIGN KEY (id_user) REFERENCES User(id_user)
+    PRIMARY KEY (id_user,id_discussion),
+    FOREIGN KEY (id_user) REFERENCES User(id_user),
     FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
 );
 
@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS Tag(
 CREATE TABLE IF NOT EXISTS Tags(
     nom_tag         VARCHAR(25) NOT NULL,
     id_discussion   INTEGER NOT NULL,
-    PRIMARY KEY (nom_tag, id_discussion)
-    FOREIGN KEY (nom_tag) REFERENCES Tag(nom_tag)
-    FOREIGN KEY (id_discussion) REFERENCES Discussion(nom_discussion)
+    PRIMARY KEY (nom_tag, id_discussion),
+    FOREIGN KEY (nom_tag) REFERENCES Tag(nom_tag),
+    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
 );
 
 CREATE TABLE IF NOT EXISTS Enum_Role(
@@ -46,14 +46,14 @@ CREATE TABLE IF NOT EXISTS Enum_Role(
     nom_role        VARCHAR(25)
 );
 
-INSERT INTO Enum_Role VALUES(0, 'USER'), (1, 'ADMIN');
+INSERT OR IGNORE INTO Enum_Role VALUES(0, 'USER'), (1, 'ADMIN');
 
 CREATE TABLE IF NOT EXISTS Roles(
     id_user         INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
-    roles           INTEGER NOT NULL
-    PRIMARY KEY (id_user,id_discussion)
-    FOREIGN KEY (id_user) REFERENCES User(id_user)
-    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
+    roles           INTEGER NOT NULL,
+    PRIMARY KEY (id_user,id_discussion),
+    FOREIGN KEY (id_user) REFERENCES User(id_user),
+    FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion),
     FOREIGN KEY (roles) REFERENCES Enum_Role(id_enum_role)
 );

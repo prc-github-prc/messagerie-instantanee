@@ -1,6 +1,7 @@
 package messagerie_instantanee.server;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +16,17 @@ import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
-public class Server implements InterfaceServeurForum {
+public class Server extends UnicastRemoteObject implements InterfaceServeurForum {
 
     private Map<String, Salon> map_salons = new HashMap<>();
 
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
-        for(Discussion conv : DiscussionDAO.findAllDiscussions()){ // implementer dans discussionDAO
-            map_salons.put(conv.getNom_discussion(), new Salon(conv));
+        List<Discussion> convs = DiscussionDAO.findAllDiscussions();
+        if(convs!= null){
+            for(Discussion conv : convs){ // implementer dans discussionDAO
+                map_salons.put(conv.getNom_discussion(), new Salon(conv));
+            }
         }
     }
 
