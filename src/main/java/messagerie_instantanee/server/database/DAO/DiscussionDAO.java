@@ -119,6 +119,37 @@ public class DiscussionDAO {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
         }
     }
+
+    /**
+     * 
+     * @param titre
+     * @param user
+     * @param users
+     * @return la clé
+     */
+    public static int insertDiscussionReturnId(String titre,User user, List<User> users){
+        try {
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(titre) VALUES ("+ titre+")");
+            int clé=0;
+            while(rs.next()){
+                clé=rs.getInt("id_discussion");
+            }
+            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1)";
+            
+            if(!users.isEmpty()){
+                user_discussion+=",";
+                for(User u : users){
+                    user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                }
+            }
+            excuteInsertSQL(user_discussion);
+            return clé;
+
+        } catch (SQLException e) {
+            System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
+            return -1;
+        }
+    }
     
     /**
      * 
