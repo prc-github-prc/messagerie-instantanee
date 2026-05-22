@@ -81,12 +81,7 @@
                     <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title" />
                 </children>
             </VBox>
-        </right>
-    </BorderPane>
-
-    <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
-        <padding><Insets top="30" right="30"/></padding>
-        <children>
+            <padding><Insets top="30" right="30"/></padding>
             <HBox spacing = "15">
                 <children>
                     <Button onAction="#handleToggleTheme" styleClass="icon-button-clean">
@@ -103,7 +98,6 @@
                     </Button>
                 </children>
             </HBox>
-        </children>
-    </StackPane>
+        </right>
 
 </StackPane>
