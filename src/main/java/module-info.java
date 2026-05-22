@@ -8,9 +8,9 @@ module messagerie_instantanee {
     requires spring.security.crypto;
 
     // UI
-    opens messagerie_instantanee.UI to javafx.fxml;
+    opens messagerie_instantanee.UI.controllers to javafx.fxml;
     exports messagerie_instantanee.UI;
-
+    
     // client 
     opens messagerie_instantanee.client to javafx.fxml;
     exports messagerie_instantanee.client;
