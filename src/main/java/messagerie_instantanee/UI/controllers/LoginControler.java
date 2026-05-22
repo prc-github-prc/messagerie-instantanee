@@ -28,7 +28,40 @@ public class LoginControler {
     @FXML private Button SeConnecter;
     @FXML private Label errorLabel; 
     @FXML private VBox sidebarMenu;
+    @FXML private VBox loginPane;
+    @FXML private VBox signupPane;
 
+    // Affiche le formulaire d'inscription
+    @FXML
+    private void showSignup() {
+        loginPane.setVisible(false);
+        loginPane.setManaged(false);
+        
+        signupPane.setVisible(true);
+        signupPane.setManaged(true);
+    }
+
+    // Affiche le formulaire de connexion
+    @FXML
+    private void showLogin() {
+        signupPane.setVisible(false);
+        signupPane.setManaged(false);
+        
+        loginPane.setVisible(true);
+        loginPane.setManaged(true);
+    }
+
+    @FXML
+    private void handleLogin(ActionEvent event) {
+        System.out.println("Tentative de connexion...");
+    }
+
+    @FXML
+    private void handleCreateAccount(ActionEvent event) {
+        System.out.println("Compte créé ! Retour à la connexion.");
+        showLogin(); // Retourne à la connexion après création
+    }
+    
     @FXML
     private void handleToggleSidebar(ActionEvent event) {
         if (sidebarMenu != null) {
@@ -56,7 +89,7 @@ public class LoginControler {
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
             // ============== verifie pseudo + pwd =============
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12)
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
             if (server.checkId(pseudo, encoder.encode(password))){
                 // ================== charge la page de l'application si c'est bon ===========
                 try {

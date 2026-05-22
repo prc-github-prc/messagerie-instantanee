@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.Discussion;
@@ -25,7 +26,9 @@ public class Server implements InterfaceServeurForum {
     @Override
     public synchronized InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException {
         // crée le salon à la volée s'il n'existe pas
-        map_salons.putIfAbsent(titre, new Salon(titre));
+        if(map_salons.get(titre) == null){
+            throw new NoSuchElementException();
+        }
         return map_salons.get(titre);
     }
 
