@@ -11,6 +11,10 @@ import java.sql.Statement;
 
 public class DatabaseLaucher {
 
+    /**
+     * Méthode statique pour vérifier si la BDD existe.
+     * @return
+     */
     private static boolean databaseExists(){
         Connection conn = DatabaseConnection.get_conn();
         try {
