@@ -9,13 +9,14 @@ import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.MessageDAO;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import messagerie_instantanee.server.database.DAO.UserDAO;
 
 /**
  * Représente un salon, lié à une unique discussion.
  */
-public class Salon implements InterfaceSujetDiscussion{
+public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussion{
     /**
      * id de la discussion.
      */
@@ -135,7 +136,7 @@ public class Salon implements InterfaceSujetDiscussion{
      * 
      * @return id
      */
-    public int getSalonId(){
+    public int getSalonId() throws RemoteException{
         return id;
     }
 
@@ -143,7 +144,7 @@ public class Salon implements InterfaceSujetDiscussion{
      * 
      * @return nom
      */
-    public String getSalonNom(){
+    public String getSalonNom() throws RemoteException{
         return nom;
     }
 

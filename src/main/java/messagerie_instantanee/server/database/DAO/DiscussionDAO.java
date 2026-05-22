@@ -62,13 +62,13 @@ public class DiscussionDAO {
      */
     public static List<Discussion> findAllDiscussions(){
         try {
-            ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Discussion ");
+            ResultSet data_discussions = executeSQLQuerry("SELECT * FROM Discussion");
             return rsToDiscussion(data_discussions);
         } catch (SQLException e) {
-            System.out.println("[DiscutionDAO] connexion impossible a la base de donnée" + e.getMessage()); 
+            System.out.println("[DiscussionDAO] connexion impossible a la base de donnée" + e.getMessage()); 
             return null; 
         } catch (NoSuchElementException e){
-            System.out.println("[DiscutionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
+            System.out.println("[DiscussionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
     }

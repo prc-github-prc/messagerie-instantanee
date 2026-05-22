@@ -19,7 +19,6 @@ import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
-import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
 
 public class Server extends UnicastRemoteObject implements InterfaceServeurForum {
@@ -45,8 +44,8 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     @Override
-    public List<Discussion> listerSalons() throws RemoteException {
-        return salonToDiscussion(map_salons.values());
+    public List<InterfaceSujetDiscussion> listerSalons() throws RemoteException {
+        return new ArrayList<>(map_salons.values());
     }
 
     @Override
@@ -68,13 +67,16 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     /* cree une discussion et cree un salon */
-    public Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
+    public InterfaceSujetDiscussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
+        // initialise les attribut de la discussion dans le bon type
         ArrayList<User> users = new ArrayList<>(); 
         User host = findUserByUsername(username);
         int id = insertDiscussionReturnId(nom_Salon,est_privee, host,users);
-        users.add(host);
+        users.add(host); //ajoute le creataur a la discussion
+        //créer une instance de discussion
         Discussion new_discussion = new Discussion(id, nom_Salon, users, est_privee);
+        // L'enregistre dans la map du serveur
         map_salons.put(nom_Salon, new Salon(new_discussion)) ;
-        return new_discussion; //RECHECK
+        return map_salons.get(nom_Salon);
     }
 }

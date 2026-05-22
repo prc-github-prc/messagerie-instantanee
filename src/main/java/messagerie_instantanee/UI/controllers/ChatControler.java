@@ -2,6 +2,7 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -16,21 +17,17 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
-import messagerie_instantanee.server.Server;
-import messagerie_instantanee.server.models.Discussion;
-import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
 
 /**
  * Représente un chatcontroler.
  */
 public class ChatControler {
 
-    @FXML private ListView<Discussion> salonList;
+    @FXML private ListView<InterfaceSujetDiscussion> salonList;
     @FXML private Label salonLabel;  //la liste des salon
     @FXML private VBox messagesBox;  
     @FXML private ScrollPane scrollPane;  //le layout des message
@@ -41,7 +38,7 @@ public class ChatControler {
 
     // InterfaceServeurForum au lieu de Server
     private InterfaceServeurForum serveur;
-    private InterfaceSujetDiscussion salonCourant;
+    private InterfaceSujetDiscussion currentSalon;
     private Client clientRMI;
     private String pseudo;
 
@@ -59,12 +56,19 @@ public class ChatControler {
         }
 
         try {
-            List<Discussion> lst_discussion = server.listerSalons();
-            for (Discussion discu : lst_discussion) {
-                salonList.getItems().add(discu);
+            List<InterfaceSujetDiscussion> lst_salon = server.listerSalons();
+            for (InterfaceSujetDiscussion discu : lst_salon) {
+                salonList.getItems().add(discu); //RECHECK chepa comment ça marche
             }
         } catch (RemoteException e) {
             e.printStackTrace();
+        }
+
+        try{
+            currentSalon = salonList.getItems().getFirst();
+        } catch(NoSuchElementException e){
+            currentSalon = null;
+            System.out.println("il n'y a pas de salon a selectionner");
         }
 
         // salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
@@ -95,28 +99,28 @@ public class ChatControler {
 
     @FXML
     public void currentSalon(MouseEvent event){
-        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
-        salonCourant = discussionToSalon(clicked);
+        InterfaceSujetDiscussion clicked = salonList.getSelectionModel().getSelectedItem();
+        currentSalon = clicked;
     }
 
     @FXML
     public void actionEnvoi() {        
-        String texte = inputField.getText();
-        if (texte != null && !texte.trim().isEmpty()) {
-            Label nouveauMessage = new Label(texte);
-            try {
-                salonCourant.diffuse(texte, pseudo);
-            } catch (RemoteException e) {
-                throw new RuntimeException("Un problème est arrivé lors de la diffusion du message" + e.getMessage());
-            }
-            nouveauMessage.getStyleClass().add("bulle-message");
-            nouveauMessage.setWrapText(true);
-            nouveauMessage.setMaxWidth(300);
-            messagesBox.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            messagesBox.setAlignment(Pos.CENTER_RIGHT);
-            messagesBox.getChildren().add(nouveauMessage);
-            inputField.clear();
+        String texte = inputField.getText().trim();
+        if (texte == null) {
+            return;
         }
+        try {
+            currentSalon.diffuse(texte, pseudo);
+        } catch (RemoteException e) {
+            throw new RuntimeException("Un problème est arrivé lors de la diffusion du message" + e.getMessage());
+        }
+        // nouveauMessage.getStyleClass().add("bulle-message");
+        // nouveauMessage.setWrapText(true);
+        // nouveauMessage.setMaxWidth(300);
+        // messagesBox.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        // messagesBox.setAlignment(Pos.CENTER_RIGHT);
+        // messagesBox.getChildren().add(nouveauMessage);
+        // inputField.clear();
     }
 
     @FXML
@@ -173,7 +177,7 @@ public class ChatControler {
         String nom_Salon = nomSalon.trim();
         
         if (!nom_Salon.isEmpty()) {
-            if (salonList.getItems().contains(nom_Salon)) {
+            if (salonList.getItems().contains(nom_Salon)) { //FIXME c'est pas si simple
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Erreur");
                 alert.setHeaderText(null);
@@ -181,10 +185,11 @@ public class ChatControler {
                 alert.showAndWait();
             } else {
                 try{
-                    Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
+                    InterfaceSujetDiscussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
                     salonList.getItems().add(nouveauSalon);
                     salonList.getSelectionModel().select(nouveauSalon);
-                    System.out.println("Creation du salon");
+                    currentSalon = nouveauSalon;
+                    System.out.println("Creation du salon"); //TODO remove me ligne de debug
                 } catch (Exception e){
                     //TODO mettre l'erreur display quand y'en aura un
                     System.out.println(e.getMessage());
