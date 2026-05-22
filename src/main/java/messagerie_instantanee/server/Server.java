@@ -9,6 +9,7 @@ import messagerie_instantanee.interfaces.*;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
 public class Server implements InterfaceServeurForum {
@@ -40,7 +41,7 @@ public class Server implements InterfaceServeurForum {
      * @return si l'utilisateur peut se connecter  
      */
     public Boolean checkId(String pseudo, String pwd_hash){
-        User user = findUserByPseudo(pseudo);//TODO me faire
+        User user = findUserByUsername(pseudo);
         if(user.getPassword_hash().compareTo(pwd_hash) == 0){
             return true;
         }
