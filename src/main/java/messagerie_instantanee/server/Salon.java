@@ -33,7 +33,7 @@ public class Salon implements InterfaceSujetDiscussion{
      * @param user
      * @throws RemoteException
      * 
-     * Crée un Salon ainsi qu'une nouvelle discussion
+     * Crée un Salon ainsi qu'une nouvelle discussion.
      */
     public Salon(String nom, User user) throws RemoteException {
         this.nom = nom;
