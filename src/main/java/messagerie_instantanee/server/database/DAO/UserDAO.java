@@ -44,7 +44,7 @@ public class UserDAO {
 
     public static void insertUser(String username, String password) throws SQLException {
         try {
-            // ✅ Guillemets autour des valeurs string en SQL
+            // Guillemets autour des valeurs string en SQL
             executeSQLQuerry(
                 "INSERT INTO User(username, password_hash) VALUES ('" + username + "', '" + password + "')"
             );

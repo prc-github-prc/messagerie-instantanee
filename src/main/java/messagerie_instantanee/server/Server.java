@@ -68,11 +68,13 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     /* cree une discussion et cree un salon */
-    public Discussion creationSalon(String nom_Salon,String username,Boolean est_privee){
+    public Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
         ArrayList<User> users = new ArrayList<>(); 
         User host = findUserByUsername(username);
         int id = insertDiscussionReturnId(nom_Salon,est_privee, host,users);
         users.add(host);
-        return new Discussion(id, nom_Salon, users, est_privee);
+        Discussion new_discussion = new Discussion(id, nom_Salon, users, est_privee);
+        map_salons.put(nom_Salon, new Salon(new_discussion)) ;
+        return new_discussion; //RECHECK
     }
 }

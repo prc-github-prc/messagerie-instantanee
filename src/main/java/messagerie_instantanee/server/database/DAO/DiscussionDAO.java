@@ -131,7 +131,7 @@ public class DiscussionDAO {
      */
     public static int insertDiscussionReturnId(String titre,Boolean est_prive,User user, List<User> users){
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +")");
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +")");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");

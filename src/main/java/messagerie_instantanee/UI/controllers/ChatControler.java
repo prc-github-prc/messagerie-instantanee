@@ -31,45 +31,18 @@ import static messagerie_instantanee.server.services.ServiceServer.discussionToS
 public class ChatControler {
 
     @FXML private ListView<Discussion> salonList;
-    /**
-     * liste des labels de salon.
-     */
-    @FXML private Label salonLabel;
-    /**
-     * boite de messages.
-     */
-    @FXML private VBox messagesBox;
-    /**
-     * scrollPane.
-     */
-    @FXML private ScrollPane scrollPane;
-    /**
-     * entrée utilisateur.
-     */
-    @FXML private TextField inputField;
-    /**
-     * headerChatbox.
-     */
-    @FXML private VBox headerChatBox; 
-    /**
-     * label de tag.
-     */
-    @FXML private Label tagsLabel;    
-    /**
-     * label de titre.
-     */
-    @FXML private Label titreLabel;
+    @FXML private Label salonLabel;  //la liste des salon
+    @FXML private VBox messagesBox;  
+    @FXML private ScrollPane scrollPane;  //le layout des message
+    @FXML private TextField inputField; //entrée de l'utilisateur
+    @FXML private VBox headerChatBox; // partie haute du layout de message
+    @FXML private Label tagsLabel;  //laebl de tag
+    @FXML private Label titreLabel; //label de titre.
 
-    // ✅ InterfaceServeurForum au lieu de Server
+    // InterfaceServeurForum au lieu de Server
     private InterfaceServeurForum serveur;
     private InterfaceSujetDiscussion salonCourant;
-    /**
-     * rmi du client.
-     */
     private Client clientRMI;
-    /**
-     * pseudo de l'utilisateur.
-     */
     private String pseudo;
 
     @FXML
@@ -94,16 +67,16 @@ public class ChatControler {
             e.printStackTrace();
         }
 
-        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
-            if (nouveauSalon != null) {
-                Platform.runLater(() -> {
-                    tagsLabel.setText("#discussion");
-                    titreLabel.setText(nouveauSalon.getNom_discussion());
-                    System.out.println("Affichage salon");
-                    System.out.println("Création tag");
-                });
-            }
-        });
+        // salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
+        //     if (nouveauSalon != null) {
+        //         Platform.runLater(() -> {
+        //             tagsLabel.setText("#discussion");
+        //             titreLabel.setText(nouveauSalon.getNom_discussion());
+        //             System.out.println("Affichage salon");
+        //             System.out.println("Création tag");
+        //         });
+        //     }
+        // });
     }
 
     private void afficherBulle(String msg, boolean estMoi) {
@@ -147,7 +120,7 @@ public class ChatControler {
     }
 
     @FXML
-    private void handleAjouterTag(ActionEvent event) {
+    private void createNewTag(ActionEvent event) {
         if (tagsLabel == null || titreLabel.getText().equals("# Sélectionnez un salon")) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Information");
@@ -177,15 +150,12 @@ public class ChatControler {
     }
 
     @FXML
-    private void handleCreerDiscussion(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouvelle discussion");
-        dialog.setContentText("Nom de la discussion :");
-        Optional<String> result = dialog.showAndWait();
+    private void doNothings(){
+        return;
     }
 
     @FXML
-    private void handleCreerSalon(ActionEvent event) {
+    private void createNewSalon(ActionEvent event) {
         if (serveur == null) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur serveur");
@@ -200,29 +170,26 @@ public class ChatControler {
         dialog.setContentText("Nom du salon :");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(nomSalon -> {   
-        String nomNettoye = nomSalon.trim();
+        String nom_Salon = nomSalon.trim();
         
-        if (!nomNettoye.isEmpty()) {
-            if (salonList.getItems().contains(nomNettoye)) {
+        if (!nom_Salon.isEmpty()) {
+            if (salonList.getItems().contains(nom_Salon)) {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Erreur");
                 alert.setHeaderText(null);
                 alert.setContentText("Ce salon existe déjà ");
                 alert.showAndWait();
             } else {
-                Discussion nouveauSalon = ((Server) serveur).creationSalon(nomNettoye, pseudo, false);
-                salonList.getItems().add(nouveauSalon);
-                salonList.getSelectionModel().select(nouveauSalon);
-                System.out.println("Création du salon");
+                try{
+                    Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
+                    salonList.getItems().add(nouveauSalon);
+                    salonList.getSelectionModel().select(nouveauSalon);
+                    System.out.println("Creation du salon");
+                } catch (Exception e){
+                    //TODO mettre l'erreur display quand y'en aura un
+                    System.out.println(e.getMessage());
+                }
             }
         }}); 
-    }
-
-    @FXML
-    private void handleCreerServeur(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouveau Serveur");
-        dialog.setContentText("Nom du serveur :");
-        Optional<String> result = dialog.showAndWait();
     }
 }
