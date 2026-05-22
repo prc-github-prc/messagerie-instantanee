@@ -13,10 +13,9 @@ import java.util.NoSuchElementException;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
-import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
-
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
@@ -51,9 +50,11 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     @Override
-    public Boolean checkId(String pseudo, String pwd_hash) throws RemoteException {
-        User user = findUserByUsername(pseudo);
-        return user.getPassword_hash().compareTo(pwd_hash) == 0;
+    public Boolean checkId(String pseudo, String rawPassword) throws RemoteException {
+        User foundUser = findUserByUsername(pseudo);
+        // Utilisateur introuvable → false (pas de NPE)
+        if (foundUser == null) return false;
+        return rawPassword.equals(foundUser.getPassword_hash());
     }
 
     @Override
