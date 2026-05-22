@@ -15,6 +15,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
+/**
+ * DAO pour les messages.
+ */
 public class MessageDAO {
     /*===================================Méthodes de recherche=======================================*/
     /**

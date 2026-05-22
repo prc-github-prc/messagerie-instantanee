@@ -15,6 +15,9 @@ public class Client extends UnicastRemoteObject implements InterfaceAffichageCli
     // la gestion du cookie est faitee par le controller 
     //
 
+    /**
+     * onMessage.
+     */
     private final java.util.function.Consumer<String> onMessage;
 
     public Client(java.util.function.Consumer<String> onMessage) throws RemoteException {

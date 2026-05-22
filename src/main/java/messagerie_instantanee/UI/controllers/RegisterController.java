@@ -16,11 +16,29 @@ import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.server.Server;
 
+/**
+ * Controller d'inscription.
+ */
 public class RegisterController {
+    /**
+     * champs de pseudo.
+     */
     @FXML private TextField pseudoField;
+    /**
+     * champs de mdp.
+     */
     @FXML private PasswordField passwordField;
+    /**
+     * champs du serveur.
+     */
     @FXML private TextField serverField;
+    /**
+     * barre des tâches.
+     */
     @FXML private VBox sidebarMenu;
+    /**
+     * zone d'erreur éventuelle.
+     */
     @FXML private Label errorLabel; 
 
     // Affiche le formulaire de connexion
@@ -35,6 +53,10 @@ public class RegisterController {
         }
     }
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleToggleSidebar(ActionEvent event) {
         if (sidebarMenu != null) {
@@ -44,6 +66,10 @@ public class RegisterController {
         }
     }
 
+    /**
+     * 
+     * @param event
+     */
     @FXML
     private void handleCreateAccount(ActionEvent event) {
         String pseudo = pseudoField.getText().trim();

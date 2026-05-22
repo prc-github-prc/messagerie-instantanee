@@ -7,8 +7,17 @@ public class Discussion implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id_discussion;
+    /**
+     * nom de la discussion.
+     */
     private String nom_discussion;
+    /**
+     * liste des participants à la discussion.
+     */
     private List<User> participants;
+    /**
+     * indique si la discussion est privée ou publique.
+     */
     private Boolean est_prive;
 
     public Discussion(int id_discussion, String nom_discussion, List<User> participants, Boolean est_prive) {

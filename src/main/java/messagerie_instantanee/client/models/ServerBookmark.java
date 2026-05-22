@@ -1,8 +1,20 @@
 package messagerie_instantanee.client.models;
 
+/**
+ * ServerBookmark.
+ */
 public class ServerBookmark {
+    /**
+     * nom.
+     */
     public String nom;
+    /**
+     * adresse.
+     */
     public String adresse;
+    /**
+     * port.
+     */
     public int    port;
 
     /**

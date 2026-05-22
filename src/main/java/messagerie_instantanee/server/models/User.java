@@ -6,7 +6,13 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id_user;
+    /**
+     * nom d'utilisateur.
+     */
     private String username;
+    /**
+     * hash du user.
+     */
     private String password_hash;
 
     public User(int id_user, String username, String password_hash) {

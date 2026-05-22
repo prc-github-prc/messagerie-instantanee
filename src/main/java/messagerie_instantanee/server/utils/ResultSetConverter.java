@@ -11,6 +11,9 @@ import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.Tag;
 import messagerie_instantanee.server.models.User;
 
+/**
+ * transforme les résultats de requêtes sql en modèles exploitables.
+ */
 public class ResultSetConverter {
     /**
      * 

@@ -5,6 +5,9 @@ import java.rmi.RemoteException;
 
 import messagerie_instantanee.server.models.User;
 
+/**
+ * Interface de sujet de discussion.
+ */
 public interface InterfaceSujetDiscussion extends Remote {
     /**
      * 

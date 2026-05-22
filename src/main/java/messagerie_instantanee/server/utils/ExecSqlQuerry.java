@@ -8,6 +8,9 @@ import java.sql.Statement;
 
 import messagerie_instantanee.server.database.DatabaseConnection;
 
+/**
+ * Permet l'exécution de requêtes sql.
+ */
 public class ExecSqlQuerry {
     /**
      * 

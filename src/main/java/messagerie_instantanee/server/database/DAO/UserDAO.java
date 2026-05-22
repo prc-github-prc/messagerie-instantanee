@@ -8,6 +8,10 @@ import messagerie_instantanee.server.models.User;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
+
+/**
+ * DAO pour les Users.
+ */
 public class UserDAO {
 
     public static User findUserById(int id_user) {

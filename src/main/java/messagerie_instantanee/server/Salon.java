@@ -12,11 +12,29 @@ import java.rmi.RemoteException;
 
 import messagerie_instantanee.server.database.DAO.UserDAO;
 
+/**
+ * Représente un salon, lié à une unique discussion.
+ */
 public class Salon implements InterfaceSujetDiscussion{
+    /**
+     * id de la discussion.
+     */
     private int id;
+    /**
+     * nom de la discussion.
+     */
     private String nom;
+    /**
+     * liste des participants à la discussion.
+     */
     private List<User> participants;
+    /**
+     * liste des messages envoyés.
+     */
     private List<Message> messages;
+    /**
+     * indique si la discussion est privée.
+     */
     private Boolean estPrivee; // boolean si vrai afficher seulement pour les user dans la table ROLE sinon ne pas afficher 
 
     /**
@@ -103,30 +121,52 @@ public class Salon implements InterfaceSujetDiscussion{
         }else{
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
     // ============================ getteurs ============================
+    /**
+     * 
+     * @return messages
+     */
     public List<Message> RecupereArchive() {
         return messages;
     }
-
+    /**
+     * 
+     * @return id
+     */
     public int getSalonId(){
         return id;
     }
 
+    /**
+     * 
+     * @return nom
+     */
     public String getSalonNom(){
         return nom;
     }
 
+    /**
+     * 
+     * @return participants
+     */
     public List<User> getLstInscrit(){
         return participants;
     }
 
+    /**
+     * 
+     * @return participants
+     */
     public List<User> getParticipants() {
         return participants;
     }
 
+    /**
+     * 
+     * @return estPrivee
+     */
     public Boolean getEstPrivee() {
         return estPrivee;
     }
