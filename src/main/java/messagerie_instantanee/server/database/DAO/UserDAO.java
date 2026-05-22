@@ -2,6 +2,7 @@ package messagerie_instantanee.server.database.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.User;
