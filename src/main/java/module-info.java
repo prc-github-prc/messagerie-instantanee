@@ -6,6 +6,7 @@ module messagerie_instantanee {
     requires java.sql;
     requires java.rmi;
     requires spring.security.crypto;
+    requires com.google.gson;
 
     // UI
     opens messagerie_instantanee.UI.controllers to javafx.fxml;
