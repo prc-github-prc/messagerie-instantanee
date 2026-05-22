@@ -17,7 +17,7 @@ public class Salon implements InterfaceSujetDiscussion{
     private String nom;
     private List<User> participants;
     private List<Message> messages;
-    private Boolean estPrivee;
+    private Boolean estPrivee; // boolean si vrai afficher seulement pour les user dans la table ROLE sinon ne pas afficher 
 
     /**
      * @param id
