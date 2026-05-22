@@ -20,11 +20,13 @@ import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
+import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
 
 public class ChatControler {
 
-    @FXML private ListView<String> salonList;
+    @FXML private ListView<Discussion> salonList;
     @FXML private Label salonLabel;
     @FXML private VBox messagesBox;
     @FXML private ScrollPane scrollPane;
@@ -55,7 +57,7 @@ public class ChatControler {
         try {
             List<Discussion> lst_discussion = server.listerSalons();
             for (Discussion discu : lst_discussion) {
-                salonList.getItems().add(discu.getNom_discussion());
+                salonList.getItems().add(discu);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -65,7 +67,7 @@ public class ChatControler {
             if (nouveauSalon != null) {
                 Platform.runLater(() -> {
                     tagsLabel.setText("#discussion");
-                    titreLabel.setText(nouveauSalon);
+                    titreLabel.setText(nouveauSalon.getNom_discussion());
                     System.out.println("Affichage salon");
                     System.out.println("Création tag");
                 });
@@ -147,26 +149,36 @@ public class ChatControler {
 
     @FXML
     private void handleCreerSalon(ActionEvent event) {
+        if (serveur == null) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur serveur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de créer un salon : le serveur n'est pas initialisé.");
+            alert.showAndWait();
+            return;
+        }
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau Salon");
         dialog.setContentText("Nom du salon :");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(nomSalon -> {   
-            String nomNettoye = nomSalon.trim();
-            if (!nomNettoye.isEmpty()) {
-                if (salonList.getItems().contains(nomNettoye)) {
-                    Alert alert = new Alert(AlertType.WARNING);
-                    alert.setTitle("Erreur");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Ce salon existe déjà ");
-                    alert.showAndWait();
-                } else {
-                    salonList.getItems().add(nomNettoye);
-                    salonList.getSelectionModel().select(nomNettoye);
-                    System.out.println("Création du salon");
-                }
+        String nomNettoye = nomSalon.trim();
+        
+        if (!nomNettoye.isEmpty()) {
+            if (salonList.getItems().contains(nomNettoye)) {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setTitle("Erreur");
+                alert.setHeaderText(null);
+                alert.setContentText("Ce salon existe déjà ");
+                alert.showAndWait();
+            } else {
+                Discussion nouveauSalon = serveur.creationSalon(nomNettoye, pseudo, false);
+                salonList.getItems().add(nouveauSalon);
+                salonList.getSelectionModel().select(nouveauSalon);
+                System.out.println("Création du salon");
             }
-        }); 
+        }}); 
     }
 
     @FXML
