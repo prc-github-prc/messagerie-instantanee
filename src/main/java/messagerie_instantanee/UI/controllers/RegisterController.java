@@ -63,7 +63,7 @@ public class RegisterController {
             // ============== verifie pseudo + pwd =============
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
             try{
-                if (server.register(pseudo, encoder.encode(password))){
+                if (server.creationUser(pseudo, encoder.encode(password))){
                 } else {
                     errorLabel.setText("Vous ne pouvez pas crée de compte");
                 }

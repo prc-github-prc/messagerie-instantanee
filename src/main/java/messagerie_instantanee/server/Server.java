@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import javax.management.InstanceAlreadyExistsException;
-import javax.management.InvalidAttributeValueException;
-
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
@@ -70,6 +67,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         boolean creation = false;
         try{
             insertUser(username, hash);
+            return true;
         }catch(SQLException e){
             throw new IllegalSelectorException();
         }
