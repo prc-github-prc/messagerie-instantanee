@@ -7,18 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import messagerie_instantanee.UI.NavigationManager;
-import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.server.Server;
 
 public class LoginControler {
@@ -52,16 +45,11 @@ public class LoginControler {
     }
 
     @FXML
-    private void handleLogin(ActionEvent event) {
-        System.out.println("Tentative de connexion...");
-    }
-
-    @FXML
     private void handleCreateAccount(ActionEvent event) {
         System.out.println("Compte créé ! Retour à la connexion.");
         showLogin(); // Retourne à la connexion après création
     }
-    
+
     @FXML
     private void handleToggleSidebar(ActionEvent event) {
         if (sidebarMenu != null) {
@@ -72,7 +60,7 @@ public class LoginControler {
     }
 
     @FXML
-    private void onConnect(){
+    private void handleLogin(){
         String pseudo = pseudoField.getText().trim();
         String serveur = serverField.getText().trim();
         String password = passwordField.getText().trim();
