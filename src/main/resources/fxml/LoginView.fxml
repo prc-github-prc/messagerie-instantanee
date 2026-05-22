@@ -87,12 +87,22 @@
     <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
         <padding><Insets top="30" right="30"/></padding>
         <children>
-            <Button onAction="#handleToggleSidebar" styleClass="icon-button-clean">
-                <graphic>
-                    <SVGPath content="M6 2H18C19.1 2 20 2.9 20 4V8C20 9.1 19.1 10 18 10H6C4.9 10 4 9.1 4 8V4C4 2.9 4.9 2 6 2ZM6 12H18C19.1 12 20 12.9 20 14V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V14C4 12.9 4.9 12 6 12Z" 
-                            fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
-                </graphic>
-            </Button>
+            <HBox spacing = "15">
+                <children>
+                    <Button onAction="#handleToggleTheme" styleClass="icon-button-clean">
+                                <graphic>
+                                    <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" 
+                                            fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
+                                </graphic>
+                    </Button>
+                    <Button onAction="#handleToggleSidebar" styleClass="icon-button-clean">
+                        <graphic>
+                            <SVGPath content="M6 2H18C19.1 2 20 2.9 20 4V8C20 9.1 19.1 10 18 10H6C4.9 10 4 9.1 4 8V4C4 2.9 4.9 2 6 2ZM6 12H18C19.1 12 20 12.9 20 14V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V14C4 12.9 4.9 12 6 12Z" 
+                                    fill="#EDE3E3" scaleX="1.5" scaleY="1.5" />
+                        </graphic>
+                    </Button>
+                </children>
+            </HBox>
         </children>
     </StackPane>
 
