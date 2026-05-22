@@ -50,7 +50,7 @@
                         <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
                                style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         
-                        <Button text="Se connecter" onAction="#handleLogin" prefWidth="250"
+                        <Button text="Se connecter" onAction="#handleLogin" prefWidth="250"; styleclass="btn-connect" ;
                                 style="-fx-background-color: #444; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 20; -fx-font-size: 16; -fx-cursor: hand;" />
                         
                         <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !" onAction="#showSignup" 
@@ -84,7 +84,7 @@
                         <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
                                style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         
-                        <Button text="Créer le compte" onAction="#handleCreateAccount" prefWidth="250"
+                        <Button text="Créer le compte" onAction="#handleCreateAccount" prefWidth="250";styleclass="btn-connect" ;
                                 style="-fx-background-color: #444; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 20; -fx-font-size: 16; -fx-cursor: hand;" />
                         
                         <Hyperlink text="Déjà un compte ? Connectez-vous" onAction="#showLogin" 
