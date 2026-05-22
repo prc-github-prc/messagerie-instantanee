@@ -102,14 +102,13 @@ public class ChatControler {
     }
 
     @FXML
-    public void currentSalon(MouseEvent event){
+    public void getCurrentSalon(MouseEvent event){
         Discussion clicked = salonList.getSelectionModel().getSelectedItem();
         if (clicked == null) {
             return;
         }
         try {
             currentSalon = serveur.obtientSujet(clicked.getNom_discussion());
-            System.out.println(currentSalon);//TODO envlever après test
         } catch (RemoteException e) {
             throw new RuntimeException("Impossible de récupérer le salon distant : " + e.getMessage(), e);
         }
@@ -122,6 +121,11 @@ public class ChatControler {
             return;
         }
         try {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur serveur");
+            alert.setHeaderText(null);
+            alert.setContentText("currentSalon = " + currentSalon);
+            alert.showAndWait();
             currentSalon.diffuse(texte, pseudo);
         } catch (RemoteException e) {
             throw new RuntimeException("Un problème est arrivé lors de la diffusion du message" + e.getMessage());
@@ -203,7 +207,6 @@ public class ChatControler {
                     salonList.getItems().add(nouveauSalon);
                     salonList.getSelectionModel().select(nouveauSalon);
                     currentSalon = serveur.obtientSujet(nom_Salon);
-                    System.out.println("Creation du salon");//TODO à enlever après nettoyage
                 } catch (Exception e){
                     //TODO mettre l'erreur display quand y'en aura un
                     System.out.println(e.getMessage());
