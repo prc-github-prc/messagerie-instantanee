@@ -13,7 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.UI.NavigationManager;
-import messagerie_instantanee.server.Server;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
 
 public class LoginControler {
     @FXML private TextField pseudoField;
@@ -27,10 +27,9 @@ public class LoginControler {
 
     private boolean isDarkTheme = true;
 
-    // Affiche le formulaire d'inscription
     @FXML
     private void showSignup() {
-        try{
+        try {
             NavigationManager.getInstance()
                 .naviguerVers("/fxml/RegisterView.fxml");
         } catch (Exception e) {
@@ -48,48 +47,43 @@ public class LoginControler {
         }
     }
 
-    // =================== Gere la connection ===================
     @FXML
-    private void handleLogin(){
+    private void handleLogin() {
         String pseudo = pseudoField.getText().trim();
         String serveur = serverField.getText().trim();
         String password = passwordField.getText().trim();
 
-        // =========== validation du contenue des champ ===========
         if (pseudo.isEmpty() || serveur.isEmpty() || password.isEmpty()) {
             errorLabel.setText("Veuillez remplir tous les champs");
             return;
         }
 
-        // ========= verification que le serveur existe ===========
         try {
-            Server server = (Server)
+            // ✅ Cast vers l'interface, pas vers Server
+            InterfaceServeurForum server = (InterfaceServeurForum)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
-            // ============== verifie pseudo + pwd =============
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-            if (server.checkId(pseudo, encoder.encode(password))){
-                // ================== charge la page de l'application si c'est bon ===========
+            if (server.checkId(pseudo, encoder.encode(password))) {
                 try {
-                    // ====== charge la vue ======
-                    ChatControler ctrl = NavigationManager.getInstance().naviguerVers("/fxml/ChatView.fxml").getController();
-
-                    // ====== initialise le controller =====
+                    ChatControler ctrl = NavigationManager.getInstance()
+                        .naviguerVers("/fxml/ChatView.fxml").getController();
                     ctrl.initialize(server, pseudo);
                 } catch (IOException e) {
                     e.printStackTrace();
                     errorLabel.setText("Erreur lors du chargement de l'application");
                 }
             } else {
-                errorLabel.setText("Vos information de connexion sont erronée");
+                errorLabel.setText("Vos informations de connexion sont erronées");
             }
         } catch (Exception e) {
             errorLabel.setText("Connexion impossible : " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
     @FXML
-        private void handleToggleTheme(ActionEvent event) {
+    private void handleToggleTheme(ActionEvent event) {
         var root = loginPane.getScene().getRoot();
         if (isDarkTheme) {
             root.getStyleClass().remove("dark-theme");

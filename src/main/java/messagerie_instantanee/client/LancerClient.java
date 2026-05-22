@@ -7,6 +7,12 @@ import messagerie_instantanee.UI.App;
  * Délègue au main JavaFX de App.
  */
 public class LancerClient {
+    /**
+     * 
+     * @param args
+     * 
+     * Lance le client.
+     */
     public static void main(String[] args) {
         App.main(args);
     }

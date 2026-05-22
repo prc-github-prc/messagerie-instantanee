@@ -15,10 +15,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
@@ -26,7 +26,6 @@ import static messagerie_instantanee.server.services.ServiceServer.discussionToS
 
 public class ChatControler {
 
-    // ===== FXML ==================================
     @FXML private ListView<Discussion> salonList;
     @FXML private Label salonLabel;
     @FXML private VBox messagesBox;
@@ -36,86 +35,58 @@ public class ChatControler {
     @FXML private Label tagsLabel;    
     @FXML private Label titreLabel;
 
-    // ===== Etat ==================================
-    private Server serveur;
+    // ✅ InterfaceServeurForum au lieu de Server
+    private InterfaceServeurForum serveur;
     private InterfaceSujetDiscussion salonCourant;
     private Client clientRMI;
     private String pseudo;
 
-    /**
-     * 
-     * @param server
-     * @param pseudo
-     */
     @FXML
-    public void initialize(Server server, String pseudo) {
+    public void initialize(InterfaceServeurForum server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
 
         try {
             clientRMI = new Client(msg ->
-                Platform.runLater(() -> afficherBulle(msg, false)) // fonction qui affiche un message
+                Platform.runLater(() -> afficherBulle(msg, false))
             );
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
-        // ======== charge tous les nom de discussion dans la barre lateral ==========
-        List<Discussion> lst_discussion = server.listerSalons();
-        for(Discussion discu :lst_discussion){
-            salonList.getItems().add(discu);
+        try {
+            List<Discussion> lst_discussion = server.listerSalons();
+            for (Discussion discu : lst_discussion) {
+                salonList.getItems().add(discu);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
 
-        // détecter quand l’utilisateur change de salon sélectionné dans la list view
-            salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
+        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
                 Platform.runLater(() -> {
                     tagsLabel.setText("#discussion");
                     titreLabel.setText(nouveauSalon.getNom_discussion());
                     System.out.println("Affichage salon");
                     System.out.println("Création tag");
-                    /*Label titre = new Label(nouveauSalon);
-                    titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
-                    
-                    VBox enteteContenu = new VBox();
-                    String simuleTags = "#discussion";
-                    tags = new Label(simuleTags);
-                    tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
-                    
-                    enteteContenu.getChildren().addAll(tags, titre);
-                    
-                    salonLabel.setText(null);
-                    salonLabel.setGraphic(enteteContenu);*/
                 });
             }
         });
     }
-    
 
-    /**
-     * 
-     * @param msg
-     * @param estMoi
-     */
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");
         message.setWrapText(true);
         message.setMaxWidth(300);
         VBox conteneur = new VBox(message);
-        if(estMoi){
+        if (estMoi) {
             conteneur.setAlignment(Pos.CENTER_LEFT);
-        }
-        else{
+        } else {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
         }
         messagesBox.getChildren().add(conteneur);
-    }
-
-    @FXML
-    public void currentSalon(MouseEvent event){
-        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
-        salonCourant = discussionToSalon(clicked);
     }
 
     @FXML
@@ -126,24 +97,18 @@ public class ChatControler {
             try {
                 salonCourant.diffuse(texte, pseudo);
             } catch (RemoteException e) {
-                throw  new RuntimeException("Un problème est arrivé lors de la diffusion du message"+e.getMessage());
+                throw new RuntimeException("Un problème est arrivé lors de la diffusion du message" + e.getMessage());
             }
             nouveauMessage.getStyleClass().add("bulle-message");
             nouveauMessage.setWrapText(true);
             nouveauMessage.setMaxWidth(300);
             messagesBox.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-            
             messagesBox.setAlignment(Pos.CENTER_RIGHT);
             messagesBox.getChildren().add(nouveauMessage);
-
             inputField.clear();
         }
     }
 
-    /**
-     * 
-     * @param event
-     */
     @FXML
     private void handleAjouterTag(ActionEvent event) {
         if (tagsLabel == null || titreLabel.getText().equals("# Sélectionnez un salon")) {
@@ -159,26 +124,21 @@ public class ChatControler {
         dialog.setContentText("Nom du tag :");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(tag -> {   
-        String tagNettoye = tag.trim();
-        
-        if (!tagNettoye.isEmpty()) {
-            if(!tagNettoye.startsWith("#")){
-                tagNettoye = "#" + tagNettoye;
+            String tagNettoye = tag.trim();
+            if (!tagNettoye.isEmpty()) {
+                if (!tagNettoye.startsWith("#")) {
+                    tagNettoye = "#" + tagNettoye;
+                }
+                String tagsActuels = tagsLabel.getText();
+                if (tagsActuels == null || tagsActuels.isEmpty()) {
+                    tagsLabel.setText(tagNettoye);
+                } else {
+                    tagsLabel.setText(tagsActuels + " " + tagNettoye);
+                }
             }
-            String tagsActuels = tagsLabel.getText();
-            if(tagsActuels == null || tagsActuels.isEmpty()){
-                tagsLabel.setText(tagNettoye);
-            } else{
-                tagsLabel.setText(tagsActuels + " " + tagNettoye);
-            }
-
-        }}); 
+        }); 
     }
 
-    /**
-     * 
-     * @param event
-     */
     @FXML
     private void handleCreerDiscussion(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -186,12 +146,7 @@ public class ChatControler {
         dialog.setContentText("Nom de la discussion :");
         Optional<String> result = dialog.showAndWait();
     }
-    
 
-    /**
-     * 
-     * @param event
-     */
     @FXML
     private void handleCreerSalon(ActionEvent event) {
         if (serveur == null) {
@@ -226,10 +181,6 @@ public class ChatControler {
         }}); 
     }
 
-    /**
-     * 
-     * @param event
-     */
     @FXML
     private void handleCreerServeur(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -237,9 +188,4 @@ public class ChatControler {
         dialog.setContentText("Nom du serveur :");
         Optional<String> result = dialog.showAndWait();
     }
-
-    /*private void messageSystem(String texte) {
-        Label labelSys = new Label(texte);
-        Platform.runLater(() -> messagesBox.getChildren().add(labelSys));
-    }*/
 }

@@ -13,6 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.UI.NavigationManager;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.server.Server;
 
 public class RegisterController {
@@ -57,8 +58,10 @@ public class RegisterController {
 
         // ========= verification que le serveur existe ===========
         try {
-            Server server = (Server)
+            InterfaceServeurForum interfaceserver = (InterfaceServeurForum)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
+            
+            Server server = (Server) interfaceserver;
 
             // ============== verifie pseudo + pwd =============
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -74,7 +77,7 @@ public class RegisterController {
             errorLabel.setText("Connexion impossible : " + e.getMessage());
         }
 
-        errorLabel.setText("Compte créé ! Retour à la connexion."); //TODO asser ça pop upsi on a le temps
+        errorLabel.setText("Compte créé ! Retour à la connexion."); //TODO asser ça pop up si on a le temps
         showLogin(); // Retourne à la connexion après création
     }
 }
