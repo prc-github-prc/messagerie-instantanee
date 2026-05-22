@@ -1,16 +1,23 @@
 package messagerie_instantanee.server;
 
+import java.nio.channels.IllegalSelectorException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.InvalidAttributeValueException;
+
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
+import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
+
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
@@ -56,5 +63,15 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
             return true;
         }
         return false;
+    }
+
+    /* Cree un user renvoie une exception si le pseudo est deja pris */
+    public Boolean creationUser(String username, String hash) throws IllegalSelectorException{
+        boolean creation = false;
+        try{
+            insertUser(username, hash);
+        }catch(SQLException e){
+            throw new IllegalSelectorException();
+        }
     }
 }

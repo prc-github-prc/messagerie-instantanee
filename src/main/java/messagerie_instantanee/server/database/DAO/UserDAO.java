@@ -53,11 +53,12 @@ public class UserDAO {
      * @param username
      * @param password //déjà haché
      */
-    public static void insertUser(String username,String password){
+    public static void insertUser(String username,String password) throws SQLException{
         try{
             executeSQLQuerry("INSERT INTO User(username,password_hash,creation) VALUES ("+ username +","+ password+")");
         } catch (SQLException e) {
             System.out.println("[UserDAO] connexion impossible a la base de donnée" + e.getMessage());
+            throw new SQLException();
         } 
     }
 }
