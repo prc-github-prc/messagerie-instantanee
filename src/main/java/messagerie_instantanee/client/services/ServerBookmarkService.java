@@ -15,6 +15,13 @@ import messagerie_instantanee.client.models.ServerBookmark;
 public class ServerBookmarkService {
     private static final Path FICHIER = Path.of("data/serversBookmark.json");
 
+    /**
+     * 
+     * @return
+     * @throws IOException
+     * 
+     * Charge une liste de serverBookmark.
+     */
     public List<ServerBookmark> charger() throws IOException {
         if (!Files.exists(FICHIER)) return new ArrayList<>();
         return new Gson().fromJson(

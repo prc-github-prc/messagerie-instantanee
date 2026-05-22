@@ -4,5 +4,12 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface InterfaceAffichageClient extends Remote {
+    /**
+     * 
+     * @param Message
+     * @throws RemoteException
+     * 
+     * Affiche un message chez le client.
+     */
     public void affiche(String Message) throws RemoteException;
 }

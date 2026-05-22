@@ -5,13 +5,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
-import messagerie_instantanee.server.models.User;
 import messagerie_instantanee.server.models.Tag;
-import messagerie_instantanee.server.database.DAO.*;
+import messagerie_instantanee.server.models.User;
 
 public class ResultSetConverter {
+    /**
+     * 
+     * @param User_data
+     * @return
+     * @throws SQLException
+     * 
+     * Transforme le résultat d'une requête SQL en liste d'utilisateurs.
+     */
     public static List<User> rsToUser(ResultSet User_data) throws SQLException{
         List<User> lst_User = new ArrayList<>();
         while (User_data.next()) {
@@ -23,6 +31,14 @@ public class ResultSetConverter {
         return lst_User;
     }
 
+    /**
+     * 
+     * @param Discussion_data
+     * @return
+     * @throws SQLException
+     * 
+     * Transforme le résultat d'une requête SQL en liste de discussions.
+     */
     public static List<Discussion> rsToDiscussion(ResultSet Discussion_data) throws SQLException{
         List<Discussion> lst_Discussion = new ArrayList<>();
         while (Discussion_data.next()) {
@@ -34,6 +50,14 @@ public class ResultSetConverter {
         return lst_Discussion;
     }
     
+    /**
+     * 
+     * @param message_data
+     * @return
+     * @throws SQLException
+     * 
+     * Transforme le résultat d'une requête SQL en liste de messages.
+     */
     public static List<Message> rsToMessage(ResultSet message_data) throws SQLException{
         List<Message> lst_message = new ArrayList<>();
         while (message_data.next()) {
@@ -46,6 +70,14 @@ public class ResultSetConverter {
         return lst_message;
     }
 
+    /**
+     * 
+     * @param tag_data
+     * @return
+     * @throws SQLException
+     * 
+     * Transforme le résultat d'une requête SQL en liste de tags.
+     */
     public static List<Tag> rsToTag(ResultSet tag_data) throws SQLException{
         List<Tag> lst_tag = new ArrayList<>();
         while (tag_data.next()) {

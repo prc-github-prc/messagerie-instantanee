@@ -4,6 +4,7 @@ import java.nio.channels.IllegalSelectorException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
+import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
 
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
@@ -24,6 +26,10 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
 
     private Map<String, Salon> map_salons = new HashMap<>();
 
+    /**
+     * Démarre le Serveur.
+     * @throws RemoteException
+     */
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
@@ -34,6 +40,12 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }
     }
 
+    /**
+     * @param titre
+     * @return
+     * 
+     * Crée un salon à partir du titre de la discussion.
+     */
     @Override
     public synchronized InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException {
         // crée le salon à la volée s'il n'existe pas
@@ -71,5 +83,14 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }catch(SQLException e){
             throw new IllegalSelectorException();
         }
+    }
+
+    /* cree une discussion et cree un salon */
+    public Discussion creationSalon(String nom_Salon,String username,Boolean est_privee){
+        ArrayList<User> users = new ArrayList<>(); 
+        User host = findUserByUsername(username);
+        int id = insertDiscussionReturnId(nom_Salon,est_privee, host,users);
+        users.add(host);
+        return new Discussion(id, nom_Salon, users, est_privee);
     }
 }
