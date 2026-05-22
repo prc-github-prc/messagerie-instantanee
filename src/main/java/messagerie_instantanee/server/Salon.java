@@ -121,7 +121,6 @@ public class Salon implements InterfaceSujetDiscussion{
         }else{
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        // Diffuser le message à tous les clients avec affiche pour chaque client.
     }
 
     // ============================ getteurs ============================
