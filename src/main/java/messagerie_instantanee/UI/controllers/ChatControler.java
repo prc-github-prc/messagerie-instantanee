@@ -65,6 +65,19 @@ public class ChatControler {
         });
     }
 
+    private void afficherBulle(String msg, boolean estMoi) {
+        Label message = new Label(msg);
+        VBox conteneur = new VBox(message);
+        if(estMoi){
+            conteneur.setAlignment(Pos.CENTER_LEFT);
+        }
+        else{
+            conteneur.setAlignment(Pos.CENTER_RIGHT);
+        }
+        messagesBox.getChildren().add(conteneur);
+
+    }
+
     @FXML
     public void actionEnvoi() {        
         String texte = inputField.getText();

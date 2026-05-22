@@ -15,6 +15,11 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToTag;
 public class TagDAO {
 
     /*===================================Méthodes de recherche=======================================*/
+    /**
+     * 
+     * @param nom_tag
+     * @return
+     */
     public static List<Discussion> findDiscussionListByNomTag(String nom_tag){
         try{
             ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion d NATURAL JOIN Tags t WHERE t.nom_tag = " + nom_tag);
@@ -27,7 +32,11 @@ public class TagDAO {
             return null;
         }
     }
-
+    /**
+     * 
+     * @param id_discussion
+     * @return
+     */
     public static List<Tag> findTagByIdDiscussion(int id_discussion){
         try{
             ResultSet tag_data = executeSQLQuerry("SELECT * FROM Tag t NATURAL JOIN Tags ts NATURAL JOIN Discussion d WHERE d.id_discussion = " + id_discussion);
@@ -43,6 +52,11 @@ public class TagDAO {
 
     /*===================================Méthodes d'insertion=======================================*/
 
+    /**
+     * 
+     * @param id_discussion
+     * @param nom_tag
+     */
     public static void insertTag(String nom_tag, int id_discussion){
         try{
             executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT DO NOTHING"); //TODO a test
@@ -52,6 +66,11 @@ public class TagDAO {
         } 
     }
 
+    /**
+     * 
+     * @param id_discussion
+     * @param nom_tag
+     */
     public static void deleteTagDiscussion(String nom_tag, int id_discussion){
         try {
             executeSQLQuerry("DELETE FROM Tags WHERE nom_tag = "+ nom_tag + "AND id_discussion = " + id_discussion);

@@ -1,5 +1,6 @@
 package messagerie_instantanee.server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import messagerie_instantanee.interfaces.*;
@@ -27,8 +28,19 @@ public class Salon implements InterfaceSujetDiscussion{
         this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
     }
 
-    public Salon(String nom) throws RemoteException {
-        throw new UnsupportedOperationException("Unimplemented method 'nouveau Salon'");
+     /**
+     * @param nom
+     * @param user
+     * @throws RemoteException
+     * 
+     * Crée un Salon ainsi qu'une nouvelle discussion.
+     */
+    public Salon(String nom, User user) throws RemoteException {
+        this.nom = nom;
+        this.participants = new ArrayList<>();
+        this.participants.add(user);
+        this.messages = new ArrayList<>();
+        this.id = DiscussionDAO.insertDiscussionReturnId(nom, user, participants);
     }
 
     /**
