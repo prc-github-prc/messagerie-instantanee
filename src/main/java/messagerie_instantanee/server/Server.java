@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
@@ -57,7 +55,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         User user = findUserByUsername(pseudo);
         // Utilisateur introuvable → false (pas de NPE)
         if (user == null) return false;
-        return rawPassword.equals(user.getPassword_hash());
+        return rawPassword.equals(user.getPassword());
     }
 
     @Override

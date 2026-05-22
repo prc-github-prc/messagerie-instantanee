@@ -13,15 +13,15 @@ public class User implements Serializable {
     /**
      * hash du user.
      */
-    private String password_hash;
+    private String password;
 
-    public User(int id_user, String username, String password_hash) {
+    public User(int id_user, String username, String password) {
         this.id_user = id_user;
         this.username = username;
-        this.password_hash = password_hash;
+        this.password = password;
     }
 
     public int getId_user() { return id_user; }
     public String getUsername() { return username; }
-    public String getPassword_hash() { return password_hash; }
+    public String getPassword() { return password; }
 }

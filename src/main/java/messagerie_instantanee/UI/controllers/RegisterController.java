@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.channels.IllegalSelectorException;
 import java.rmi.Naming;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

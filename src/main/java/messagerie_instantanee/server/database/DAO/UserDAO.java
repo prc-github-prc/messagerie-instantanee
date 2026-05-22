@@ -29,7 +29,6 @@ public class UserDAO {
 
     public static User findUserByUsername(String username) {
         try {
-            // ✅ Guillemets autour de la valeur string en SQL
             ResultSet userData = executeSQLQuerry(
                 "SELECT * FROM User WHERE username = '" + username + "'"
             );
