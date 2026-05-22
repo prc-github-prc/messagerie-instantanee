@@ -11,6 +11,11 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 public class UserDAO {
 
     /*===================================Méthodes de recherche=======================================*/
+    /**
+     * 
+     * @param id_user
+     * @return
+     */
     public static User findUserById(int id_user){
         try{
             ResultSet User_data = executeSQLQuerry("SELECT * FROM User WHERE id_User = " + id_user);
@@ -24,6 +29,11 @@ public class UserDAO {
         }
     }
 
+    /**
+     * 
+     * @param username
+     * @return
+     */
     public static User findUserByUsername(String unsername){
         try{
             ResultSet User_data = executeSQLQuerry("SELECT * FROM User WHERE username = " + unsername);
@@ -38,6 +48,11 @@ public class UserDAO {
     }
 
     /*===================================Méthodes d'insertion=======================================*/
+    /**
+     * 
+     * @param username
+     * @param password //déjà haché
+     */
     public static void insertUser(String username,String password){
         try{
             executeSQLQuerry("INSERT INTO User(username,password_hash,creation) VALUES ("+ username +","+ password+")");

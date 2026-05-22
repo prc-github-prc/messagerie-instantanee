@@ -15,7 +15,13 @@ import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
 public class RoleDAO {
-    
+
+    /**
+     * 
+     * @param id_discussion
+     * @param role
+     * @return
+     */
     public static List<User> findUserByRole(int id_discussion,Role role){
         int id_role = switch(role){
             case Role.Admin -> 0;
@@ -33,6 +39,11 @@ public class RoleDAO {
         }
     }
 
+    /**
+     * 
+     * @param id_discussion
+     * @return
+     */
     public static Map<Role,List<User>> findRoleByDiscussion(int id_discussion){
         try{
             HashMap<Role, List<User>> roleByDiScussion = new HashMap<>();

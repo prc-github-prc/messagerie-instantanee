@@ -15,6 +15,11 @@ import java.time.LocalTime;
 
 public class MessageDAO {
     /*===================================Méthodes de recherche=======================================*/
+    /**
+     * 
+     * @param id_message
+     * @return
+     */
     public static Message findMessageById(int id_message){
         try{
             ResultSet user_data = executeSQLQuerry("SELECT * FROM Messages WHERE id_message = " + id_message);
@@ -28,6 +33,10 @@ public class MessageDAO {
         }
     }
     /*===================================Méthodes d'insertion=======================================*/
+    /**
+     * 
+     * @param message
+     */
     public static void addMessageToDiscussion(Message message){
         try{
             executeSQLQuerry("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
@@ -36,6 +45,10 @@ public class MessageDAO {
         } 
     }
 
+    /**
+     * 
+     * @param message
+     */
     public static void deleteMessageFromDiscussion(Message message){
         try {
             executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message());
