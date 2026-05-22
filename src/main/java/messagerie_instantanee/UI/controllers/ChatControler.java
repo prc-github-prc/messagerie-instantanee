@@ -41,7 +41,7 @@ public class ChatControler {
     private Label tags;
 
     @FXML
-    public void initialize(Server server, String pseudo) { // RECHECK changer pseudo en User
+    public void initialize(Server server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
 

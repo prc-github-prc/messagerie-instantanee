@@ -36,7 +36,10 @@
                 
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <children>
-                        <TextField fx:id="searchField" promptText="Rechercher..." styleClass="chat-input" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchField" 
+                            promptText="Rechercher..." 
+                            styleClass="chat-input" 
+                            HBox.hgrow="ALWAYS" />
                         <Button styleClass="search-btn">
                             <graphic>
                                 <StackPane>

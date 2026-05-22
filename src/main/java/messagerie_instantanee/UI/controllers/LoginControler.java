@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.UI.NavigationManager;
@@ -16,7 +17,7 @@ import messagerie_instantanee.server.Server;
 
 public class LoginControler {
     @FXML private TextField pseudoField;
-    @FXML private TextField passwordField;
+    @FXML private PasswordField passwordField;
     @FXML private TextField serverField;
     @FXML private Button SeConnecter;
     @FXML private Label errorLabel; 
@@ -59,6 +60,7 @@ public class LoginControler {
         }
     }
 
+    // =================== Gere la connection ===================
     @FXML
     private void handleLogin(){
         String pseudo = pseudoField.getText().trim();
