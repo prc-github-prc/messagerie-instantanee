@@ -30,9 +30,8 @@ public class UserDAO {
     public static User findUserByUsername(String username) {
         try {
             ResultSet userData = executeSQLQuerry(
-                "SELECT * FROM User WHERE username = " + username
+                "SELECT * FROM User WHERE username = '" + username + "'"
             );
-            System.out.println(rsToUser(userData).size());
             return rsToUser(userData).getFirst();
         } catch (SQLException e) {
             System.out.println("[UserDAO] connexion impossible a la base de donnée : " + e.getMessage());
