@@ -6,6 +6,9 @@ import java.util.List;
 
 import messagerie_instantanee.server.models.Discussion;
 
+/**
+ * Interface de serveur de forum.
+ */
 public interface InterfaceServeurForum extends Remote {
     InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException;
     Boolean checkId(String pseudo, String pwd_hash) throws RemoteException;

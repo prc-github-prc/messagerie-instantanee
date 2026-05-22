@@ -14,7 +14,9 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscuss
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToMessage;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
-
+/**
+ * DAO pour les discussions.
+ */
 public class DiscussionDAO {
 
     /*=====================Methode de  lecture ============================= */

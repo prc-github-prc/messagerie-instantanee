@@ -1,9 +1,24 @@
 package messagerie_instantanee.server.models;
 
+/**
+ * Représente un message.
+ */
 public class Message {
+    /**
+     * id du message.
+     */
     private int id_message;
+    /**
+     * contenu du message.
+     */
     private String contenu;
+    /**
+     * id de l'auteur du message.
+     */
     private int id_author;
+    /**
+     * id de la discussion.
+     */
     private int id_discussion;
     
     /**

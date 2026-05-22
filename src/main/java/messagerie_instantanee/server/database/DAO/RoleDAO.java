@@ -14,6 +14,10 @@ import messagerie_instantanee.server.utils.Enum.Role;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
+
+/**
+ * DAO pour les roles.
+ */
 public class RoleDAO {
 
     /**

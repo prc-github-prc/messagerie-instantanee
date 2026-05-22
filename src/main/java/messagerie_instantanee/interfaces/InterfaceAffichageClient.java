@@ -3,6 +3,9 @@ package messagerie_instantanee.interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Interface d'affichage client.
+ */
 public interface InterfaceAffichageClient extends Remote {
     /**
      * 

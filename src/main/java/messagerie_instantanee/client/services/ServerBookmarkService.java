@@ -12,7 +12,13 @@ import com.google.gson.reflect.TypeToken;
 
 import messagerie_instantanee.client.models.ServerBookmark;
 
+/**
+ * Service de ServerBookmark.
+ */
 public class ServerBookmarkService {
+    /**
+     * chemin vers le fichier json.
+     */
     private static final Path FICHIER = Path.of("data/serversBookmark.json");
 
     /**

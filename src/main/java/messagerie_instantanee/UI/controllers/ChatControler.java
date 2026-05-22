@@ -25,21 +25,51 @@ import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
 import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
 
+/**
+ * Représente un chatcontroler.
+ */
 public class ChatControler {
 
     @FXML private ListView<Discussion> salonList;
+    /**
+     * liste des labels de salon.
+     */
     @FXML private Label salonLabel;
+    /**
+     * boite de messages.
+     */
     @FXML private VBox messagesBox;
+    /**
+     * scrollPane.
+     */
     @FXML private ScrollPane scrollPane;
+    /**
+     * entrée utilisateur.
+     */
     @FXML private TextField inputField;
+    /**
+     * headerChatbox.
+     */
     @FXML private VBox headerChatBox; 
+    /**
+     * label de tag.
+     */
     @FXML private Label tagsLabel;    
+    /**
+     * label de titre.
+     */
     @FXML private Label titreLabel;
 
     // ✅ InterfaceServeurForum au lieu de Server
     private InterfaceServeurForum serveur;
     private InterfaceSujetDiscussion salonCourant;
+    /**
+     * rmi du client.
+     */
     private Client clientRMI;
+    /**
+     * pseudo de l'utilisateur.
+     */
     private String pseudo;
 
     @FXML

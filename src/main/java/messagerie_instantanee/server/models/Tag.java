@@ -1,6 +1,12 @@
 package messagerie_instantanee.server.models;
 
+/**
+ * Représente un tag.
+ */
 public class Tag {
+    /**
+     * nom du tag.
+     */
     private String nom_tag;
 
     /**

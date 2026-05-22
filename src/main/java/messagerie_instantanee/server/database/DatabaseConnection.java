@@ -6,9 +6,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
+/**
+ * Connexion à la BDD.
+ */
 public class DatabaseConnection {
+    /**
+     * connexion.
+     */
     public static Connection con;
+    /**
+     * chemin de fichier vers la BDD.
+     */
     private static final Path DB_PATH = Paths.get("data", "messagerie.db").toAbsolutePath();
+    /**
+     * url de la BDD.
+     */
     private static final String URL = "jdbc:sqlite:" + DB_PATH;
     
 

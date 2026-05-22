@@ -8,6 +8,9 @@ import java.util.List;
 import messagerie_instantanee.server.Salon;
 import messagerie_instantanee.server.models.Discussion;
 
+/**
+ * Serveur de services.
+ */
 public class ServiceServer {
     /**
      * 

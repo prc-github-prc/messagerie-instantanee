@@ -12,6 +12,10 @@ import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToTag;
 
+
+/**
+ * DAO pour les Tags.
+ */
 public class TagDAO {
 
     /*===================================Méthodes de recherche=======================================*/

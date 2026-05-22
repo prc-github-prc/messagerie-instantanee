@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+/**
+ * launcher de BDD.
+ */
 public class DatabaseLaucher {
 
     /**

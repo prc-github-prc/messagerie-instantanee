@@ -10,7 +10,9 @@ import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;;
 
-
+/**
+ * DAO pour les Hide.
+ */
 public class HideDAO {
     /*=======================Méthode de Lecture====================================================== */
     /**

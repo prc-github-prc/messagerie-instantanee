@@ -15,12 +15,21 @@ import javafx.stage.Stage;
 public class NavigationManager {
 
     // ── Instance unique ───────────────────────────────────────────────
+    /**
+     * instance de gestionnaire de navigation.
+     */
     private static NavigationManager instance;
 
     // ── Référence au BorderPane racine de la fenêtre ──────────────────
+    /**
+     * root.
+     */
     private BorderPane root;
 
     // ── Constructeur privé : empêche le new depuis l'extérieur ────────
+    /**
+     * 
+     */
     private NavigationManager() {}
 
     /**

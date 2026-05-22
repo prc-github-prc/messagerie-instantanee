@@ -1,5 +1,8 @@
 package messagerie_instantanee.server.utils;
 
+/**
+ * Enumère les rôles dans une discussion.
+ */
 public class Enum {
     
     public enum Role {
