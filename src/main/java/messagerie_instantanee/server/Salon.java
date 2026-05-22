@@ -30,7 +30,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
         this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
-        this.estPrivee = discussion.estPrivee;
+        this.estPrivee = discussion.getPrive();
     }
 
      /**
@@ -45,7 +45,7 @@ public class Salon implements InterfaceSujetDiscussion{
         this.participants = new ArrayList<>();
         this.participants.add(user);
         this.messages = new ArrayList<>();
-        this.id = DiscussionDAO.insertDiscussionReturnId(nom, user, participants, estPrivee);
+        this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, user, participants);
         this.estPrivee = estPrivee;
     }
 
