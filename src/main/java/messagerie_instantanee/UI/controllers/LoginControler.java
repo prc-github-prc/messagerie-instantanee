@@ -28,27 +28,13 @@ public class LoginControler {
     // Affiche le formulaire d'inscription
     @FXML
     private void showSignup() {
-        loginPane.setVisible(false);
-        loginPane.setManaged(false);
-        
-        signupPane.setVisible(true);
-        signupPane.setManaged(true);
-    }
-
-    // Affiche le formulaire de connexion
-    @FXML
-    private void showLogin() {
-        signupPane.setVisible(false);
-        signupPane.setManaged(false);
-        
-        loginPane.setVisible(true);
-        loginPane.setManaged(true);
-    }
-
-    @FXML
-    private void handleCreateAccount(ActionEvent event) {
-        System.out.println("Compte créé ! Retour à la connexion.");
-        showLogin(); // Retourne à la connexion après création
+        try{
+            NavigationManager.getInstance()
+                .naviguerVers("/fxml/RegisterView.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorLabel.setText("Erreur lors du chargement de l'application");
+        }
     }
 
     @FXML
