@@ -1,11 +1,15 @@
 package messagerie_instantanee.server.database;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConnection {
     public static Connection con;
-    private static String URL = "jdbc:sqlite:/data/messagerie.db";
+    private static final Path DB_PATH = Paths.get("data", "messagerie.db").toAbsolutePath();
+    private static final String URL = "jdbc:sqlite:" + DB_PATH;
     
 
     /**
@@ -16,8 +20,10 @@ public class DatabaseConnection {
     public DatabaseConnection(){ 
         try{
             con = DatabaseConnection.get_conn();
-        } catch (Exception e){
-            System.out.println("la connection a échouer a la base de donnée");
+        } catch (RuntimeException e){
+            System.err.println("La connexion à la base de données a échoué dans le constructeur : " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -26,15 +32,17 @@ public class DatabaseConnection {
      * Cette méthode vérifie si la connexion (conn) est déjà établie. Si ce n'est pas le cas, elle tente d'établir la connexion en appelant la méthode getConnection() de la classe DatabaseManager.
      * Si la connexion échoue, un message d'erreur est affiché dans la console. 
      * 
-     * @return La connexion à la base de données (conn), ou null en cas d'échec de la connexion.
+     * @return La connexion à la base de données (conn)
      */
     public static Connection get_conn(){
-        if (con == null) {
-            try {
-                return DriverManager.getConnection(URL);
-            } catch (Exception e) {
-                System.out.println("La connexion à la base de données a échoué");
+        try {
+            if (con == null || con.isClosed()) {
+                con = DriverManager.getConnection(URL);
             }
+        } catch (SQLException e) {
+            System.err.println("La connexion à la base de données a échoué sur URL='" + URL + "'");
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return con;
     }

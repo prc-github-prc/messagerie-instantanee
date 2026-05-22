@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import messagerie_instantanee.interfaces.*;
-import messagerie_instantanee.server.models.Discussion;
-import messagerie_instantanee.server.models.User;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
+import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
+import messagerie_instantanee.server.database.DatabaseLaucher;
+import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.User;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
 public class Server implements InterfaceServeurForum {
@@ -18,9 +20,10 @@ public class Server implements InterfaceServeurForum {
     private Map<String, Salon> map_salons = new HashMap<>();
 
     public Server() throws RemoteException {
+        DatabaseLaucher.initialiser();
         for(Discussion conv : DiscussionDAO.findAllDiscussions()){ // implementer dans discussionDAO
             map_salons.put(conv.getNom_discussion(), new Salon(conv));
-        } 
+        }
     }
 
     @Override

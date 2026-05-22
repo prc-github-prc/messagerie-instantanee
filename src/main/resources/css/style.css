@@ -332,3 +332,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
+
+.btn-connect:hover {
+    -fx-background-color: #640CBB;           
+}

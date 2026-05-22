@@ -12,7 +12,8 @@ import java.sql.Statement;
 public class DatabaseLaucher {
 
     private static boolean databaseExists(){
-        try(Connection conn = DatabaseConnection.get_conn()){
+        Connection conn = DatabaseConnection.get_conn();
+        try {
             DatabaseMetaData dMetaData = conn.getMetaData();
             try (ResultSet rs = dMetaData.getCatalogs()){
                 while(rs.next()){
@@ -33,14 +34,19 @@ public class DatabaseLaucher {
      * 
      * @throws Exception Si une erreur survient lors de l'initialisation de la base de données
      */
-    public static void initialiser() throws Exception {
-        try (Connection conn = DatabaseConnection.get_conn()) {
+    public static void initialiser() {
+        Connection conn = DatabaseConnection.get_conn();
+        try {
             if (!databaseExists()) {
-                executerScript(conn, "schema.sql");
+                executerScript(conn, "sql/table_init.sql");
                 System.out.println("Base prete.");
             } else {
                 System.out.println("Base existante detectee, demarrage immediat.");
             }
+        }catch( SQLException s){
+            throw  new RuntimeException("Un problème est arrivé lors de la connection à la base de donnée" + s.getMessage());
+        }catch(Exception e){
+            throw  new RuntimeException("Un problème est arrivé lors de l'execution du script" + e.getMessage());
         }
     }
 
@@ -53,12 +59,12 @@ public class DatabaseLaucher {
      * @throws Exception Si une erreur survient lors de la lecture du fichier ou de l'exécution des instructions SQL, une exception est levée avec un message d'erreur approprié.
      */
     private static void executerScript(Connection conn, String nomFichier) throws Exception {
+        String resourcePath = nomFichier.startsWith("/") ? nomFichier : "/" + nomFichier;
         InputStream is = DatabaseLaucher.class
-                .getClassLoader()
-                .getResourceAsStream(nomFichier);
+                .getResourceAsStream(resourcePath);
 
         if (is == null) {
-            throw new RuntimeException("Fichier introuvable dans le classpath : " + nomFichier);
+            throw new RuntimeException("Fichier introuvable dans le classpath : " + resourcePath);
         }
 
         String contenu = new String(is.readAllBytes(), StandardCharsets.UTF_8);
