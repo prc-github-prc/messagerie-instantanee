@@ -46,6 +46,9 @@
                             <Label text="mot de passe" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
                             <PasswordField style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
+
+                        <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
+                               style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         
                         <Button text="Se connecter" onAction="#handleLogin" prefWidth="250"
                                 style="-fx-background-color: #444; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 20; -fx-font-size: 16; -fx-cursor: hand;" />
@@ -77,6 +80,9 @@
                             <Label text="confirmation mot de passe" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
                             <PasswordField style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
+
+                        <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
+                               style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         
                         <Button text="Créer le compte" onAction="#handleCreateAccount" prefWidth="250"
                                 style="-fx-background-color: #444; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 20; -fx-font-size: 16; -fx-cursor: hand;" />
