@@ -28,8 +28,8 @@ public class ResultSetConverter {
         while (Discussion_data.next()) {
             int id_Discussion = Discussion_data.getInt("id_Discussion");
             String nom_discussion = Discussion_data.getString("nom_discussion");
-            Boolean est_priver = Discussion_data.getBoolean("est_prive");
-            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion, DiscussionDAO.findUserByIDDiscussion(id_Discussion), est_priver));
+            Boolean est_privee = Discussion_data.getBoolean("est_prive");
+            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion, DiscussionDAO.findUserByIDDiscussion(id_Discussion), est_privee));
         }
         return lst_Discussion;
     }

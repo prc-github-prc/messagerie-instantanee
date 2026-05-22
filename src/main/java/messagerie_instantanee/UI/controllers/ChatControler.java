@@ -15,12 +15,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.Region;
-
+import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
-import messagerie_instantanee.server.Server;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
 
 public class ChatControler {
@@ -60,20 +59,26 @@ public class ChatControler {
         }
 
         // détecter quand l’utilisateur change de salon sélectionné dans la list view
-        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
+            salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
-                Label titre = new Label(nouveauSalon);
-                titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
-                VBox enteteContenu = new VBox();
-                String simuleTags = "#discussion";
-                tags = new Label(simuleTags);
-                tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
-                enteteContenu.getChildren().addAll(tags, titreLabel);
-                salonLabel.setText("");
-                salonLabel.setGraphic(enteteContenu);
+                Platform.runLater(() -> {
+                    Label titre = new Label(nouveauSalon);
+                    titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
+                    
+                    VBox enteteContenu = new VBox();
+                    String simuleTags = "#discussion";
+                    tags = new Label(simuleTags);
+                    tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
+                    
+                    enteteContenu.getChildren().addAll(tags, titre);
+                    
+                    salonLabel.setText("");
+                    salonLabel.setGraphic(enteteContenu);
+                });
             }
         });
     }
+    
 
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
@@ -95,6 +100,11 @@ public class ChatControler {
         String texte = inputField.getText();
         if (texte != null && !texte.trim().isEmpty()) {
             Label nouveauMessage = new Label(texte);
+            try {
+                salonCourant.diffuse(texte, pseudo);
+            } catch (RemoteException e) {
+                throw  new RuntimeException("Un problème est arrivé lors de la diffusion du message"+e.getMessage());
+            }
             nouveauMessage.getStyleClass().add("bulle-message");
             nouveauMessage.setWrapText(true);
             nouveauMessage.setMaxWidth(300);

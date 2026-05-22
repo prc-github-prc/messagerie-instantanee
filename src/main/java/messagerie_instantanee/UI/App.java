@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class App extends Application {
 
@@ -22,7 +23,7 @@ public class App extends Application {
 
     // == Charge et affiche le panel Login au démarrage =============
     Pane panelLogin = FXMLLoader.load(
-        getClass().getResource("/fxml/LoginView.fxml")); //RECHECK post merge
+        getClass().getResource("/fxml/ChatView.fxml")); //RECHECK post merge
     root.setCenter(panelLogin);
 
     // == Mise en page et scène =====================================
@@ -32,7 +33,7 @@ public class App extends Application {
     Scene scene = new Scene(wrapper);
     scene.getStylesheets().add(
         getClass().getResource("/css/style.css").toExternalForm());
-
+    stage.initStyle(StageStyle.UTILITY);
     stage.setTitle("Messagerie Instantanée");
     stage.setMaximized(true);
     stage.setScene(scene);

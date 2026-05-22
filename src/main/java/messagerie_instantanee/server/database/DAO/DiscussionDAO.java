@@ -98,9 +98,9 @@ public class DiscussionDAO {
      * @param user
      * @param users
      */
-    public static void insertDiscussion(String titre,User user, List<User> users){
+    public static void insertDiscussion(String titre,Boolean est_prive,User user, List<User> users){
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(titre) VALUES ("+ titre+")");
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +")");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
@@ -127,9 +127,9 @@ public class DiscussionDAO {
      * @param users
      * @return la clé
      */
-    public static int insertDiscussionReturnId(String titre,User user, List<User> users){
+    public static int insertDiscussionReturnId(String titre,Boolean est_prive,User user, List<User> users){
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(titre) VALUES ("+ titre+")");
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +")");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
