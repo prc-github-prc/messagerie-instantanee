@@ -139,7 +139,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * 
      * @return id
      */
-    public int getSalonId() throws RemoteException{
+    public int getSalonId(){
         return id;
     }
 
@@ -147,7 +147,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * 
      * @return nom
      */
-    public String getSalonNom() throws RemoteException{
+    public String getSalonNom(){
         return nom;
     }
 

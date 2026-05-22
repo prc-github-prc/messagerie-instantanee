@@ -38,7 +38,4 @@ public interface InterfaceSujetDiscussion extends Remote {
      * Diffuse un message à tous les participants.
      */
     public void diffuse(String Message, String username) throws RemoteException;
-
-    public String getSalonNom() throws RemoteException;
-    public int getSalonId() throws RemoteException;
 }

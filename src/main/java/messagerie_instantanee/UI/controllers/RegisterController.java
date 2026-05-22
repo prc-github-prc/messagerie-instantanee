@@ -1,6 +1,5 @@
 package messagerie_instantanee.UI.controllers;
 
-import java.io.IOException;
 import java.nio.channels.IllegalSelectorException;
 import java.rmi.Naming;
 
@@ -12,32 +11,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
-import messagerie_instantanee.server.Server;
 
 /**
  * Controller d'inscription.
  */
 public class RegisterController {
-    /**
-     * champs de pseudo.
-     */
     @FXML private TextField pseudoField;
-    /**
-     * champs de mdp.
-     */
     @FXML private PasswordField passwordField;
-    /**
-     * champs du serveur.
-     */
     @FXML private TextField serverField;
-    /**
-     * barre des tâches.
-     */
     @FXML private VBox sidebarMenu;
-    /**
-     * zone d'erreur éventuelle.
-     */
-    @FXML private Label errorLabel; 
+    @FXML private Label errorLabel; //zone d'erreur éventuelle.
 
     // Affiche le formulaire de connexion
     @FXML

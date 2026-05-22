@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import javax.sql.rowset.spi.SyncResolver;
+import java.util.stream.Collectors;
 
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -18,6 +17,8 @@ import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.DiscussionDAO.insertDiscussionReturnId;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
+import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
+
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
@@ -48,8 +49,10 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     @Override
-    public List<InterfaceSujetDiscussion> listerSalons() throws RemoteException {
-        return new ArrayList<>(map_salons.values());
+    public List<Discussion> listerSalons() throws RemoteException {
+        return new ArrayList<>(map_salons.values().stream()
+            .map((Salon salon) -> salonToDiscussion(salon))
+            .collect(Collectors.toList()));
     }
 
     @Override
@@ -71,7 +74,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     /* cree une discussion et cree un salon */
-    public synchronized InterfaceSujetDiscussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
+    public synchronized Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
         // initialise les attribut de la discussion dans le bon type
         ArrayList<User> users = new ArrayList<>(); 
         User host = findUserByUsername(username);
@@ -81,6 +84,13 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         Discussion new_discussion = new Discussion(id, nom_Salon, users, est_privee);
         // L'enregistre dans la map du serveur
         map_salons.put(nom_Salon, new Salon(new_discussion)) ;
-        return map_salons.get(nom_Salon);
+        return new_discussion;
+    }
+
+    /**
+     * serveur.close gere le stockage en base de donnée des donnée courante
+     */
+    public void close(){
+        //TODO finish me
     }
 }

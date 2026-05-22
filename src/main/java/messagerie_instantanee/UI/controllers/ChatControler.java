@@ -28,7 +28,7 @@ import messagerie_instantanee.server.models.Discussion;
  */
 public class ChatControler {
 
-    @FXML private ListView<InterfaceSujetDiscussion> salonList;
+    @FXML private ListView<Discussion> salonList;
     @FXML private Label salonLabel;  //la liste des salon
     @FXML private VBox messagesBox;  
     @FXML private ScrollPane scrollPane;  //le layout des message
@@ -57,8 +57,8 @@ public class ChatControler {
         }
 
         try {
-            List<InterfaceSujetDiscussion> lst_salon = server.listerSalons();
-            for (InterfaceSujetDiscussion discu : lst_salon) {
+            List<Discussion> lst_salon = server.listerSalons();
+            for (Discussion discu : lst_salon) {
                 salonList.getItems().add(discu); //RECHECK chepa comment ça marche
             }
         } catch (RemoteException e) {
@@ -66,10 +66,13 @@ public class ChatControler {
         }
 
         try{
-            currentSalon = salonList.getItems().getFirst();
+            currentSalon = serveur.obtientSujet(salonList.getItems().getFirst().getNom_discussion());
         } catch(NoSuchElementException e){
             currentSalon = null;
             System.out.println("il n'y a pas de salon a selectionner");
+        } catch(RemoteException e ){
+            currentSalon = null;
+            System.out.println("erreur lors du chargement");
         }
 
         // salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
@@ -105,8 +108,8 @@ public class ChatControler {
             return;
         }
         try {
-            salonCourant = serveur.obtientSujet(clicked.getNom_discussion());
-            System.out.println(salonCourant);//TODO envlever après test
+            currentSalon = serveur.obtientSujet(clicked.getNom_discussion());
+            System.out.println(currentSalon);//TODO envlever après test
         } catch (RemoteException e) {
             throw new RuntimeException("Impossible de récupérer le salon distant : " + e.getMessage(), e);
         }
@@ -196,7 +199,7 @@ public class ChatControler {
                 alert.showAndWait();
             } else {
                 try{
-                    InterfaceSujetDiscussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
+                    Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
                     salonList.getItems().add(nouveauSalon);
                     salonList.getSelectionModel().select(nouveauSalon);
                     currentSalon = serveur.obtientSujet(nom_Salon);
