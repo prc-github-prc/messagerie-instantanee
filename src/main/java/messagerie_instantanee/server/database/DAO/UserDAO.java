@@ -2,6 +2,7 @@ package messagerie_instantanee.server.database.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.User;
@@ -34,10 +35,10 @@ public class UserDAO {
      * @param username
      * @return
      */
-    public static User findUserByUsername(String unsername){
+    public static List<User> findUserByUsername(String unsername){
         try{
             ResultSet User_data = executeSQLQuerry("SELECT * FROM User WHERE username = " + unsername);
-            return rsToUser(User_data).getFirst();
+            return rsToUser(User_data);
         } catch (SQLException e) {
             System.out.println("[UserDAO] connexion impossible a la base de donnée" + e.getMessage()); 
             return null; 
