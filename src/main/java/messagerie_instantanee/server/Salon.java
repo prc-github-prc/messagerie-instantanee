@@ -1,17 +1,18 @@
 package messagerie_instantanee.server;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import messagerie_instantanee.interfaces.*;
-import messagerie_instantanee.server.models.*;
+import messagerie_instantanee.interfaces.InterfaceAffichageClient;
+import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.MessageDAO;
-
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-
 import messagerie_instantanee.server.database.DAO.UserDAO;
+import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.Message;
+import messagerie_instantanee.server.models.User;
 
 /**
  * Représente un salon, lié à une unique discussion.
@@ -45,6 +46,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * Crée un Salon à partir d'une discussion déjà existante.
      */
     public Salon(Discussion discussion) throws RemoteException{
+        super();
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.participants = discussion.getParticipants();
@@ -60,6 +62,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * Crée un Salon ainsi qu'une nouvelle discussion.
      */
     public Salon(String nom, User user, Boolean estPrivee) throws RemoteException {
+        super();
         this.nom = nom;
         this.participants = new ArrayList<>();
         this.participants.add(user);

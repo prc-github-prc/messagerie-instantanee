@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import javax.sql.rowset.spi.SyncResolver;
+
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
@@ -28,9 +30,11 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
+        
         if (convs != null) {
             for (Discussion conv : convs) {
                 map_salons.put(conv.getNom_discussion(), new Salon(conv));
+                System.out.println(conv.getNom_discussion());//TODO  à enlever après test
             }
         }
     }
@@ -67,7 +71,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     /* cree une discussion et cree un salon */
-    public InterfaceSujetDiscussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
+    public synchronized InterfaceSujetDiscussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
         // initialise les attribut de la discussion dans le bon type
         ArrayList<User> users = new ArrayList<>(); 
         User host = findUserByUsername(username);

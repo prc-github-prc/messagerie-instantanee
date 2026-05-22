@@ -31,4 +31,9 @@ public class Discussion implements Serializable {
     public String getNom_discussion() { return nom_discussion; }
     public List<User> getParticipants() { return participants; }
     public Boolean getPrive() { return est_prive; }
+
+    @Override
+    public String toString(){
+        return nom_discussion;
+    }
 }

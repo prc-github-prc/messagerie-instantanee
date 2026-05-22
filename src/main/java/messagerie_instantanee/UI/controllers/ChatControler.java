@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.models.Discussion;
 
 /**
  * Représente un chatcontroler.
@@ -99,8 +100,16 @@ public class ChatControler {
 
     @FXML
     public void currentSalon(MouseEvent event){
-        InterfaceSujetDiscussion clicked = salonList.getSelectionModel().getSelectedItem();
-        currentSalon = clicked;
+        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
+        if (clicked == null) {
+            return;
+        }
+        try {
+            salonCourant = serveur.obtientSujet(clicked.getNom_discussion());
+            System.out.println(salonCourant);//TODO envlever après test
+        } catch (RemoteException e) {
+            throw new RuntimeException("Impossible de récupérer le salon distant : " + e.getMessage(), e);
+        }
     }
 
     @FXML
@@ -177,7 +186,9 @@ public class ChatControler {
         String nom_Salon = nomSalon.trim();
         
         if (!nom_Salon.isEmpty()) {
-            if (salonList.getItems().contains(nom_Salon)) { //FIXME c'est pas si simple
+            boolean existe = salonList.getItems().stream()
+                .anyMatch(d -> nom_Salon.equals(d.getNom_discussion()));//TODO Est qu'on envlève la verification de nom car dans ce qu'on a def c'est possible d'avoir 2 salon avec le même nom
+            if (existe) {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Erreur");
                 alert.setHeaderText(null);
@@ -188,8 +199,8 @@ public class ChatControler {
                     InterfaceSujetDiscussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
                     salonList.getItems().add(nouveauSalon);
                     salonList.getSelectionModel().select(nouveauSalon);
-                    currentSalon = nouveauSalon;
-                    System.out.println("Creation du salon"); //TODO remove me ligne de debug
+                    currentSalon = serveur.obtientSujet(nom_Salon);
+                    System.out.println("Creation du salon");//TODO à enlever après nettoyage
                 } catch (Exception e){
                     //TODO mettre l'erreur display quand y'en aura un
                     System.out.println(e.getMessage());
