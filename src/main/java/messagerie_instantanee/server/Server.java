@@ -26,6 +26,10 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
 
     private Map<String, Salon> map_salons = new HashMap<>();
 
+    /**
+     * Démarre le Serveur.
+     * @throws RemoteException
+     */
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
@@ -36,6 +40,12 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }
     }
 
+    /**
+     * @param titre
+     * @return
+     * 
+     * Crée un salon à partir du titre de la discussion.
+     */
     @Override
     public synchronized InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException {
         // crée le salon à la volée s'il n'existe pas
