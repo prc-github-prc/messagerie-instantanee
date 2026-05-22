@@ -38,6 +38,7 @@ public class ChatControler {
     private Client clientRMI;
     private String pseudo;
     private Label titreLabel;
+    private Label tags;
 
     @FXML
     public void initialize(Server server, String pseudo) { // RECHECK changer pseudo en User
@@ -61,17 +62,17 @@ public class ChatControler {
         // détecter quand l’utilisateur change de salon sélectionné dans la list view
         salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
-                salonLabel.setText("# " + nouveauSalon);
+                Label titre = new Label(nouveauSalon);
+                titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
+                VBox enteteContenu = new VBox();
+                String simuleTags = "#discussion";
+                tags = new Label(simuleTags);
+                tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
+                enteteContenu.getChildren().addAll(tags, titreLabel);
+                salonLabel.setText("");
+                salonLabel.setGraphic(enteteContenu);
             }
-            titreLabel = new Label(nouveauSalon);
         });
-        VBox enteteContenu = new VBox();
-        String simuleTags = "#discussion";
-        Label tags = new Label(simuleTags);
-        tags.setStyle("-fx-text-fill: #949ba4; -fx-font-size: 12px;");
-        enteteContenu.getChildren().addAll(tags, titreLabel);
-        salonLabel.setText("");
-        salonLabel.setGraphic(enteteContenu);
     }
 
     private void afficherBulle(String msg, boolean estMoi) {
@@ -112,6 +113,21 @@ public class ChatControler {
         dialog.setTitle("Nouveau tag");
         dialog.setContentText("Nom du tag :");
         Optional<String> result = dialog.showAndWait();
+        result.ifPresent(tag -> {   
+        String tagNettoye = tag.trim();
+        
+        if (!tagNettoye.isEmpty()) {
+            if(!tagNettoye.startsWith("#")){
+                tagNettoye = "#" + tagNettoye;
+            }
+            String tagsActuels = tags.getText();
+            if(tagsActuels == null || tagsActuels.isEmpty()){
+                tags.setText(tagNettoye);
+            } else{
+                tags.setText(tagsActuels + " " + tagNettoye);
+            }
+
+        }}); 
     }
 
     @FXML
