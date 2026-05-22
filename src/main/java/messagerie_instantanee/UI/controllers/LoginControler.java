@@ -25,6 +25,8 @@ public class LoginControler {
     @FXML private VBox loginPane;
     @FXML private VBox signupPane;
 
+    private boolean isDarkTheme = true;
+
     // Affiche le formulaire d'inscription
     @FXML
     private void showSignup() {
@@ -84,5 +86,18 @@ public class LoginControler {
         } catch (Exception e) {
             errorLabel.setText("Connexion impossible : " + e.getMessage());
         }
+    }
+
+    @FXML
+        private void handleToggleTheme(ActionEvent event) {
+        var root = loginPane.getScene().getRoot();
+        if (isDarkTheme) {
+            root.getStyleClass().remove("dark-theme");
+            root.getStyleClass().add("light-theme");
+        } else {
+            root.getStyleClass().remove("light-theme");
+            root.getStyleClass().add("dark-theme");
+        }
+        isDarkTheme = !isDarkTheme;
     }
 }
