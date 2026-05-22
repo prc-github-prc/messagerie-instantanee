@@ -100,4 +100,6 @@
             </HBox>
         </right>
 
+    </BorderPane>
+
 </StackPane>
