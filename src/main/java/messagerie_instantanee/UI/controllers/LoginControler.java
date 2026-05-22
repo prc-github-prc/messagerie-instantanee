@@ -3,6 +3,8 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 import java.rmi.Naming;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,8 +56,8 @@ public class LoginControler {
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
             // ============== verifie pseudo + pwd =============
-            if (server.checkId(pseudo, password.hash())){  //FIXME fonction de hash pas encore choisie
-
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12)
+            if (server.checkId(pseudo, encoder.encode(password))){
                 // ================== charge la page de l'application si c'est bon ===========
                 try {
                     // ====== charge la vue ======
