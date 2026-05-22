@@ -58,23 +58,24 @@ public class RegisterController {
 
         // ========= verification que le serveur existe ===========
         try {
-            InterfaceServeurForum interfaceserver = (InterfaceServeurForum)
+            InterfaceServeurForum server = (InterfaceServeurForum)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
-            
-            Server server = (Server) interfaceserver;
 
             // ============== verifie pseudo + pwd =============
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
             try{
-                if (server.creationUser(pseudo, encoder.encode(password))){
+                if (server.creationUser(pseudo, password)){
+                    System.out.println("compte crée");
                 } else {
                     errorLabel.setText("Vous ne pouvez pas crée de compte");
+                    return;
                 }
             } catch(IllegalSelectorException e){
                 errorLabel.setText("Ce nom d'utilisateur est deja utiliser");
+                return;
             }
         } catch (Exception e) {
             errorLabel.setText("Connexion impossible : " + e.getMessage());
+            return;
         }
 
         errorLabel.setText("Compte créé ! Retour à la connexion."); //TODO asser ça pop up si on a le temps

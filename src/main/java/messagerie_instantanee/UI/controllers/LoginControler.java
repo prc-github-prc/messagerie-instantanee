@@ -3,8 +3,6 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 import java.rmi.Naming;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,7 +18,7 @@ public class LoginControler {
     @FXML private PasswordField passwordField;
     @FXML private TextField serverField;
     @FXML private Button SeConnecter;
-    @FXML private Label errorLabel; 
+    @FXML private Label errorLabel;
     @FXML private VBox sidebarMenu;
     @FXML private VBox loginPane;
     @FXML private VBox signupPane;
@@ -30,8 +28,7 @@ public class LoginControler {
     @FXML
     private void showSignup() {
         try {
-            NavigationManager.getInstance()
-                .naviguerVers("/fxml/RegisterView.fxml");
+            NavigationManager.getInstance().naviguerVers("/fxml/RegisterView.fxml");
         } catch (Exception e) {
             e.printStackTrace();
             errorLabel.setText("Erreur lors de la page sign up");
@@ -59,12 +56,11 @@ public class LoginControler {
         }
 
         try {
-            // ✅ Cast vers l'interface, pas vers Server
             InterfaceServeurForum server = (InterfaceServeurForum)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-            if (server.checkId(pseudo, encoder.encode(password))) {
+            // Mot de passe brut — le serveur fait encoder.matches()
+            if (server.checkId(pseudo, password)) {
                 try {
                     ChatControler ctrl = NavigationManager.getInstance()
                         .naviguerVers("/fxml/ChatView.fxml").getController();
@@ -74,11 +70,12 @@ public class LoginControler {
                     errorLabel.setText("Erreur lors du chargement de l'application");
                 }
             } else {
-                errorLabel.setText("Vos informations de connexion sont erronées");
+                errorLabel.setText("Pseudo ou mot de passe incorrect");
             }
         } catch (Exception e) {
-            errorLabel.setText("Connexion impossible : " + e.getMessage());
-            System.out.println(e.getMessage());
+            String msg = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+            errorLabel.setText("Connexion impossible : " + msg);
+            e.printStackTrace();
         }
     }
 
