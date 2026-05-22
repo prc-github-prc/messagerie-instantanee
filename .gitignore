@@ -91,6 +91,9 @@ replay_pid*
 secrets.properties
 config.local.properties
 
+# data
+data/messagerie.db
+
 
 # ── Divers ────────────────────────────────────
 *.tmp
