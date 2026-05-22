@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS Roles(
     id_user         INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
     roles           INTEGER NOT NULL
-    PRIMARY KEY (id_message,id_discussion)
+    PRIMARY KEY (id_user,id_discussion)
     FOREIGN KEY (id_user) REFERENCES User(id_user)
     FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion)
     FOREIGN KEY (roles) REFERENCES Enum_Role(id_enum_role)
