@@ -336,3 +336,12 @@
 .btn-connect:hover {
     -fx-background-color: #640CBB;           
 }
+
+.btn-connect{
+    -fx-background-color: #444; 
+    -fx-text-fill: white; 
+    -fx-padding: 12; 
+    -fx-background-radius: 20; 
+    -fx-font-size: 16; 
+    -fx-cursor: hand;
+}
