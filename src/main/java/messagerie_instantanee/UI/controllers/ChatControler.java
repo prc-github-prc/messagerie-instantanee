@@ -15,9 +15,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.input.MouseEvent;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -180,7 +180,7 @@ public class ChatControler {
                 alert.setContentText("Ce salon existe déjà ");
                 alert.showAndWait();
             } else {
-                Discussion nouveauSalon = serveur.creationSalon(nomNettoye, pseudo, false);
+                Discussion nouveauSalon = ((Server) serveur).creationSalon(nomNettoye, pseudo, false);
                 salonList.getItems().add(nouveauSalon);
                 salonList.getSelectionModel().select(nouveauSalon);
                 System.out.println("Création du salon");
