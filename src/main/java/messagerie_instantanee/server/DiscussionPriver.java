@@ -32,7 +32,7 @@ public class DiscussionPriver extends Salon {
      * @param user
      * @throws RemoteException
      * 
-     * Crée une discussion priver qu'une nouvelle discussion.
+     * Crée une discussion priver ainsi qu'une nouvelle discussion.
      */
     public DiscussionPriver(String nom, User user) throws RemoteException {
         super(nom, user);
