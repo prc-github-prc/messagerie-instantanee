@@ -1,5 +1,7 @@
 package messagerie_instantanee.UI.controllers;
 
+import static messagerie_instantanee.server.services.ServiceServer.discussionToSalon;
+
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
@@ -15,17 +17,19 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
+import messagerie_instantanee.server.Salon;
 import messagerie_instantanee.server.Server;
 import messagerie_instantanee.server.models.Discussion;
 
 public class ChatControler {
 
     // ===== FXML ==================================
-    @FXML private ListView<String> salonList;
+    @FXML private ListView<Discussion> salonList;
     @FXML private Label salonLabel;
     @FXML private VBox messagesBox;
     @FXML private ScrollPane scrollPane;
@@ -55,14 +59,14 @@ public class ChatControler {
         // ======== charge tous les nom de discussion dans la barre lateral ==========
         List<Discussion> lst_discussion = server.listerSalons();
         for(Discussion discu :lst_discussion){
-            salonList.getItems().add(discu.getNom_discussion());
+            salonList.getItems().add(discu);
         }
 
         // détecter quand l’utilisateur change de salon sélectionné dans la list view
             salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null) {
                 Platform.runLater(() -> {
-                    Label titre = new Label(nouveauSalon);
+                    Label titre = new Label(nouveauSalon.getNom_discussion());
                     titre.setStyle("-fx-text-fill: #f2f3f5; -fx-font-weight: bold; -fx-font-size: 16px;");
                     
                     VBox enteteContenu = new VBox();
@@ -93,6 +97,12 @@ public class ChatControler {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
         }
         messagesBox.getChildren().add(conteneur);
+    }
+
+    @FXML
+    public void currentSalon(MouseEvent event){
+        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
+        salonCourant = discussionToSalon(clicked);
     }
 
     @FXML
@@ -159,16 +169,9 @@ public class ChatControler {
         String nomNettoye = nomSalon.trim();
         
         if (!nomNettoye.isEmpty()) {
-            if (salonList.getItems().contains(nomNettoye)) {
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Ce salon existe déjà ");
-                alert.showAndWait();
-            } else {
-                salonList.getItems().add(nomNettoye);
-                salonList.getSelectionModel().select(nomNettoye);
-            }
+            serveur.
+            salonList.getItems().add(nomNettoye);
+            salonList.getSelectionModel().select(nomNettoye);
         }}); 
     }
 

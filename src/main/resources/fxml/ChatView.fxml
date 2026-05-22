@@ -72,7 +72,7 @@
                             VBox.vgrow="ALWAYS" 
                             styleClass="sidebar-scroll">
                     <content>
-                        <ListView fx:id="salonList" styleClass="sidebar-list" />
+                        <ListView fx:id="salonList" styleClass="sidebar-list" onMouseClicked="#currentSalon" />
                     </content>
                 </ScrollPane>
                 
