@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -123,11 +124,11 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         lst_participants.removeAll(aSupprimer);
     }
 
-    public Message[] getArchive() {
-        Message[] archive = new Message[20];
+    public Queue<Message> getArchive() {
+        Queue<Message> archive = new java.util.LinkedList<>();
         for(int i = lst_messages.size() - 1; i >= lst_messages.size() - 20 && i >= 0; i--){
             if(lst_messages.get(i) != null){
-                archive[lst_messages.size() - 1 - i] = lst_messages.get(i);
+                archive.add(lst_messages.get(i));
             }
         }
         return archive;
