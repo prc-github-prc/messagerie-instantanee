@@ -44,7 +44,7 @@ public class DiscussionDAO {
      * @param id_discussion
      * @return
      */
-    public static List<InterfaceAffichageClient> findUserByIDDiscussion(int id_discussion) {
+    public static List<User> findUserByIDDiscussion(int id_discussion) {
         try{
             ResultSet discussion_users = executeSQLQuerry("SELECT * FROM Roles NATURAL JOIN USER WHERE id_discussion = " + id_discussion + ";");
             return rsToUser(discussion_users);
