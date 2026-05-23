@@ -44,9 +44,9 @@ public class MessageDAO {
      * @param message
      * @return cle du message
      */
-    public static int addMessageToDiscussion(Message message){
+    public static int addMessageToDiscussion(Message message) throws SQLException{
         try{
-            ResultSet rs = excuteInsertSQL("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +")");
+            ResultSet rs = excuteInsertSQL("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +"ON CONFLICT ROLLBACK)");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
@@ -54,7 +54,7 @@ public class MessageDAO {
             return clé;
         } catch (SQLException e) {
             System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage());
-            return -1;
+            throw e;
         } 
     }
 
@@ -62,11 +62,12 @@ public class MessageDAO {
      * 
      * @param message
      */
-    public static void deleteMessageFromDiscussion(Message message){
+    public static void deleteMessageFromDiscussion(Message message) throws SQLException{
         try {
-            executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message());
+            executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message()+"");
         } catch (SQLException e) {
             System.out.println("[MessageDAO] Impossible de supprimer le lien dans message : " + e.getMessage());
+            throw e;
         }
     }
 }
