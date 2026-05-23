@@ -2,6 +2,7 @@ package messagerie_instantanee.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,12 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         this.nom = nom;
         this.lst_participants = new ArrayList<>();
         List<User> autresParticipants = new ArrayList<>();  // personne d'autre à la création
-        this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
+        try {
+            this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.estPrivee = estPrivee;
     }
 
@@ -64,7 +70,12 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     @Override
     public synchronized void inscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.add(user);
-        DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
+        try {
+            DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -73,7 +84,12 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     @Override
     public synchronized void desinscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.remove(user);
-        DiscussionDAO.RemoveUserToDiscussionById(user.getId_user(), id);
+        try {
+            DiscussionDAO.RemoveUserFromDiscussionById(user.getId_user(), id);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -125,7 +125,7 @@ public class ChatControler {
         });
     }
 
-    // ==================================== me en forme un message =====================================
+    // ==================================== mets en forme un message =====================================
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");

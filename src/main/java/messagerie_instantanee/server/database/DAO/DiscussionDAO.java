@@ -165,7 +165,7 @@ public class DiscussionDAO {
      * @param id_user
      * @param id_discussion
      */
-    public static void RemoveUserToDiscussionById(int id_user ,int id_discussion) throws SQLException{
+    public static void RemoveUserFromDiscussionById(int id_user ,int id_discussion) throws SQLException{
         try {
             executeSQLQuerry("DELETE FROM Role WHERE id_discussion =" + id_discussion + "AND id_user=" + id_user);
         } catch (SQLException e) {
