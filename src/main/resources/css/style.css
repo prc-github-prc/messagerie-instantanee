@@ -8,7 +8,7 @@
 .sidebar {
     -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
-    -fx-border-width: 1px;
+    /*-fx-border-width: 1px;*/
     -fx-background-radius:25px;
 }
 .sidebar-title {
@@ -226,7 +226,6 @@
     -fx-cursor: hand;                  
 }
 
-/* Optionnel : un petit effet visuel quand on passe la souris dessus */
 .search-btn:hover {
     -fx-background-color: rgba(255, 255, 255, 0.1); /* Léger flash blanc transparent */
     -fx-background-radius: 4px;
@@ -246,33 +245,13 @@
     -fx-font-weight: bold;           /* Optionnel: pour qu'il ressorte bien */
 }
 
-.bg-top {
-    -fx-background-color: #640CBB; /* Violet */
-    -fx-background-radius: 30px 30px 0 0;
-    -fx-min-height: 250px; /* ◄--- Force une hauteur minimale */
-    -fx-min-width: 500px;
-}
-
-.bg-bottom {
-    -fx-background-color: #1a1b1e; /* Noir/Gris très sombre */
-    -fx-background-radius: 0 0 30px 30px;
-    -fx-height: 250px; /* ◄--- Force une hauteur minimale */
-    -fx-min-width: 500px;
-}
-
 .login-card {
-    /* Fond gris foncé transparent pour laisser passer un peu le bicolore derrière */
     -fx-background-color: rgba(43, 45, 49);
-    
-    /* Arrondir les angles de la boîte */
-    -fx-background-radius: 16px;
-    -fx-border-radius: 16px;
-    
-    /* Optionnel : une légère bordure pour bien la détacher du fond */
+    -fx-background-radius: 0px !important;
+    -fx-border-radius: 0px !important;
     -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-width: 1px;
     
-    /* Effet d'ombre pour lui donner du relief (comme sur ton modèle) */
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 15, 0, 0, 10);
 }
 
@@ -283,7 +262,6 @@
     -fx-transition-duration: 0.2s;
 }
 
-/* Petit effet de survol pour faire briller l'icône au passage de la souris */
 .icon-button-clean:hover {
     -fx-opacity: 0.8;
     -fx-scale-x: 1.1;
@@ -350,4 +328,87 @@
     -fx-text-fill: #b9bbbe; 
     -fx-font-size: 14px;
     -fx-font-style: italic;
+}
+
+.dark-theme .login-box {
+    -fx-background-color: rgba(51, 51, 51, 0.95);
+}
+.dark-theme .login-header {
+    -fx-text-fill: white;
+}
+.dark-theme .input-label {
+    -fx-text-fill: #ccc;
+}
+.dark-theme .login-input {
+    -fx-background-color: rgba(51, 51, 51, 0.95);
+    -fx-text-fill: white;
+}
+.dark-theme .login-link {
+    -fx-text-fill: #bbb;
+}
+.dark-theme .theme-icon {
+    -icon-color: white;
+}
+
+.dark-theme .bg-top {
+    -fx-background-color: #640CBB; 
+    -fx-min-height: 250px; 
+    -fx-min-width: 500px;
+}
+
+.dark-theme .bg-bottom {
+    -fx-background-color: #1a1b1e;
+    -fx-height: 250px; 
+    -fx-min-width: 500px;
+}
+
+.dark-theme .login-box {
+    -fx-background-color: #222;
+}
+
+.dark-theme .login-box .label {
+    -fx-text-fill: #cccccc;
+}
+
+.dark-theme .login-header {
+    -fx-text-fill: #ffffff;
+}
+
+/* Thème clair */
+.light-theme .login-box {
+    -fx-background-color: #C7C292;
+}
+.light-theme .login-header {
+    -fx-text-fill: #C7C292;
+}
+
+.light-theme .login-input {
+    -fx-background-color: #928AD0;
+}
+.light-theme .login-link {
+    -fx-text-fill: #444444;
+}
+.light-theme .theme-icon {
+    -icon-color: #333333; 
+}
+
+.light-theme .bg-top {
+    -fx-background-color: #188750; 
+    -fx-min-height: 250px; 
+    -fx-min-width: 500px;
+}
+
+.light-theme .bg-bottom {
+    -fx-background-color: #928AD0; 
+    -fx-height: 250px; 
+    -fx-min-width: 500px;
+}
+
+.light-theme .input-label {
+    -fx-text-fill: #3a3821;     
+}
+
+
+.light-theme .login-box .label {
+    -fx-text-fill: black;
 }

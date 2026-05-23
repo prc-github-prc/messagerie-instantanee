@@ -31,42 +31,39 @@
             <StackPane pickOnBounds="false">
                 <children>
                 
-                <VBox fx:id="loginPane" alignment="CENTER" maxWidth="450" spacing="25" 
-                    style="-fx-background-color: rgba(51, 51, 51); -fx-border-radius: 20;">
+                <VBox fx:id="loginPane" alignment="CENTER" maxWidth="450" spacing="25" styleClass="login-box">
                     <padding>
                         <Insets bottom="50" left="50" right="50" top="50" />
                     </padding>
                     <children>
-                        <Label text="Connexion au compte" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;" />
+                        <Label text="Connexion au compte" style="-fx-font-size: 28; -fx-font-weight: bold;" />
                         
                         <VBox spacing="8" fillWidth="true">
-                            <Label text="username" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
+                            <Label text="username" styleClass="input-label" style="-fx-font-size: 14;" />
                             <TextField fx:id="pseudoField"
-                                style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                styleClass="login-input"
+                                style="-fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
                         
                         <VBox spacing="8" fillWidth="true">
-                            <Label text="mot de passe" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
-                            <PasswordField fx:id="passwordField"
-                                style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                            <Label text="mot de passe" styleClass="input-label" style="-fx-font-size: 14;" />
+                            <PasswordField fx:id="passwordField" styleClass="login-input" style="-fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
                         
                         <VBox spacing="8" fillWidth="true">
-                            <Label text="serveur" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
+                            <Label text="serveur"  styleClass="input-label" style="-fx-font-size: 14;" />
                             <TextField fx:id="serverField"
                                 text="localhost"
-                                style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                styleClass="login-input"
+                                style="-fx-padding: 12; -fx-background-radius: 8;" />
                         </VBox>
 
                         <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
                                 style="-fx-text-fill: #ff6b6b; -fx-font-size: 14; -fx-font-weight: bold;" />
                         <Button text="Se connecter" onAction="#handleLogin" prefWidth="250" styleClass="btn-connect"/>        
 
-                        <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !" onAction="#showSignup" 
-                                style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;" />
-
-                        <Label fx:id="errorLabel" styleClass="error" style="-fx-text-fill: #bbb;"/>
-
+                        <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !" onAction="#showSignup" styleClass="login-link"
+                                style="-fx-underline: false; -fx-font-size: 13;" />
                     </children>
                 </VBox>
             </children>
