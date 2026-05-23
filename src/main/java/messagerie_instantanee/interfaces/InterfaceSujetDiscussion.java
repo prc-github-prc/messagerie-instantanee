@@ -24,7 +24,7 @@ public interface InterfaceSujetDiscussion extends Remote {
      * @param user
      * @throws RemoteException
      */
-    public void desInscription(InterfaceAffichageClient c) throws RemoteException;
+    public void desinscription(InterfaceAffichageClient c) throws RemoteException;
 
     /**
      * Diffuse un message à tous les participants.

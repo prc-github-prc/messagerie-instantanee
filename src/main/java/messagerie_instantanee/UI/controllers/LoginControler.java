@@ -17,37 +17,13 @@ import messagerie_instantanee.interfaces.InterfaceServeurForum;
  * controller de login.
  */
 public class LoginControler {
-    /**
-     * champs de pseudo.
-     */
     @FXML private TextField pseudoField;
-    /**
-     * champs de mot de passe.
-     */
     @FXML private PasswordField passwordField;
-    /**
-     * champs de connexion au serveur.
-     */
     @FXML private TextField serverField;
-    /**
-     * bouton de validation du formulaire en vue de la connexion.
-     */
-    @FXML private Button SeConnecter;
-    /**
-     * affichage d'une éventuelle erreur.
-     */
-    @FXML private Label errorLabel; 
-    /**
-     * barre des tâches.
-     */
+    @FXML private Button SeConnecter; // bouton de validation du formulaire en vue de la connexion.
+    @FXML private Label errorLabel;
     @FXML private VBox sidebarMenu;
-    /**
-     * login.
-     */
     @FXML private VBox loginPane;
-    /**
-     * signup.
-     */
     @FXML private VBox signupPane;
 
     /**
