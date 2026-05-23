@@ -126,16 +126,18 @@ public class ChatControler {
         });
     }
 
+    // ==================================== me en forme un message =====================================
     private void afficherBulle(String msg, boolean estMoi) {
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");
         message.setWrapText(true);
         message.setMaxWidth(300);
         VBox conteneur = new VBox(message);
+        // Bug 6 corrigé : alignement inversé (mes messages à droite, les autres à gauche)
         if (estMoi) {
-            conteneur.setAlignment(Pos.CENTER_LEFT);
-        } else {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
+        } else {
+            conteneur.setAlignment(Pos.CENTER_LEFT);
         }
         messagesBox.getChildren().add(conteneur);
     }
@@ -153,29 +155,48 @@ public class ChatControler {
         }
     }
 
+    private void rejoindre(String titre) {
+        try {//TODO finish me
+            if (currentSalon != null && clientRMI != null) {
+                currentSalon.desInscription(clientRMI);
+            }
+            currentSalon = serveur.obtientSujet(titre);
+            currentSalon.inscription(clientRMI);
+            salonLabel.setText("# " + titre);
+            messagesBox.getChildren().clear();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ====================================== envoy un message ==================================
     @FXML
-    public void actionEnvoi() {        
+    public void actionEnvoi() {
         String texte = inputField.getText().trim();
-        if (texte == null) {
+
+        if (texte.isEmpty()) {
             return;
         }
-        try {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur serveur");
+
+        if (currentSalon == null) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Aucun salon sélectionné");
             alert.setHeaderText(null);
-            alert.setContentText("currentSalon = " + currentSalon);
+            alert.setContentText("Veuillez sélectionner un salon avant d'envoyer un message.");
             alert.showAndWait();
-            currentSalon.diffuse(texte, pseudo);
-        } catch (RemoteException e) {
-            throw new RuntimeException("Un problème est arrivé lors de la diffusion du message" + e.getMessage());
+            return;
         }
-        // nouveauMessage.getStyleClass().add("bulle-message");
-        // nouveauMessage.setWrapText(true);
-        // nouveauMessage.setMaxWidth(300);
-        // messagesBox.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        // messagesBox.setAlignment(Pos.CENTER_RIGHT);
-        // messagesBox.getChildren().add(nouveauMessage);
-        // inputField.clear();
+
+        try {
+            currentSalon.diffuse(texte, pseudo);
+            inputField.clear();
+        } catch (RemoteException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur d'envoi");
+            alert.setHeaderText(null);
+            alert.setContentText("Un problème est arrivé lors de la diffusion : " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -208,11 +229,13 @@ public class ChatControler {
         }); 
     }
 
+    // ======================== evite les erreur de compilation des bouton pas relier ==========================
     @FXML
     private void doNothings(){
         return;
     }
 
+    // ====================== crée un nouveaux salon (et le selctione auto) ====================
     @FXML
     private void createNewSalon(ActionEvent event) {
         if (serveur == null) {

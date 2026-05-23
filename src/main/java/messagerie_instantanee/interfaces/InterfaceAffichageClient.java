@@ -15,4 +15,6 @@ public interface InterfaceAffichageClient extends Remote {
      * Affiche un message chez le client.
      */
     public void affiche(String Message) throws RemoteException;
+
+    public int getId_user();
 }
