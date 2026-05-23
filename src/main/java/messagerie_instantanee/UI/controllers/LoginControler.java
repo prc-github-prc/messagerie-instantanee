@@ -92,9 +92,9 @@ public class LoginControler {
             // Mot de passe brut — le serveur fait encoder.matches()
             if (server.checkId(pseudo, password)) {
                 try {
-                    ChatControler ctrl = NavigationManager.getInstance()
-                        .naviguerVers("/fxml/ChatView.fxml").getController();
-                    ctrl.initialize(server, pseudo);
+                    var loader = NavigationManager.getInstance().naviguerVers("/fxml/ChatView.fxml");
+                    ChatControler ctrl = loader.getController();
+                    ctrl.configurerSession(server, pseudo);
                 } catch (IOException e) {
                     e.printStackTrace();
                     errorLabel.setText("Erreur lors du chargement de l'application");

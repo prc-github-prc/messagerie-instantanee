@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -36,6 +37,7 @@ public class ChatControler {
     @FXML private VBox headerChatBox; // partie haute du layout de message
     @FXML private Label tagsLabel;  //laebl de tag
     @FXML private Label titreLabel; //label de titre.
+    @FXML private Button usernameLink;
 
     // InterfaceServeurForum au lieu de Server
     private InterfaceServeurForum serveur;
@@ -43,11 +45,33 @@ public class ChatControler {
     private Client clientRMI;
     private String pseudo;
 
-    @FXML
-    public void initialize(InterfaceServeurForum server, String pseudo) {
+    @FXML 
+    public void initialize(){
+        salonList.getItems().clear();
+        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
+            if (nouveauSalon != null && serveur != null) {
+                try {
+                    currentSalon = serveur.obtientSujet(nouveauSalon.getNom_discussion());
+                    
+                    Platform.runLater(() -> {
+                        titreLabel.setText(nouveauSalon.getNom_discussion());
+                        setChatVisible(true);
+                        if (tagsLabel != null) {
+                            tagsLabel.setText("#discussion");
+                        }
+                        System.out.println("Salon : " + nouveauSalon.getNom_discussion());
+                    });
+                } catch (RemoteException e) {
+                    System.err.println("Erreur lors du clic : " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void configurerSession(InterfaceServeurForum server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
-
+    salonList.getItems().clear();
         try {
             clientRMI = new Client(msg ->
                 Platform.runLater(() -> afficherBulle(msg, false))
@@ -56,35 +80,50 @@ public class ChatControler {
             e.printStackTrace();
         }
 
+        salonList.getItems().clear();
         try {
             List<Discussion> lst_salon = server.listerSalons();
-            for (Discussion discu : lst_salon) {
-                salonList.getItems().add(discu); //RECHECK chepa comment ça marche
+            if(lst_salon != null && !lst_salon.isEmpty()){
+                salonList.getItems().addAll(lst_salon);
+                Platform.runLater(() -> {
+                    if (usernameLink != null) {
+                        usernameLink.setText(pseudo); 
+                    }
+                    if (titreLabel != null) {
+                        titreLabel.setText("Bienvenue " +pseudo + " !");
+                    }
+                    if (tagsLabel != null) {
+                        tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
+                    }
+                    setChatVisible(false);
+                });
             }
+            else{
+                currentSalon = null;
+                titreLabel.setText("Aucun salon disponible");
+            }
+            
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
-        try{
-            currentSalon = serveur.obtientSujet(salonList.getItems().getFirst().getNom_discussion());
-        } catch(NoSuchElementException e){
-            currentSalon = null;
-            System.out.println("il n'y a pas de salon a selectionner");
-        } catch(RemoteException e ){
-            currentSalon = null;
-            System.out.println("erreur lors du chargement");
-        }
+        
 
-        // salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
-        //     if (nouveauSalon != null) {
-        //         Platform.runLater(() -> {
-        //             tagsLabel.setText("#discussion");
-        //             titreLabel.setText(nouveauSalon.getNom_discussion());
-        //             System.out.println("Affichage salon");
-        //             System.out.println("Création tag");
-        //         });
-        //     }
-        // });
+        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
+            if (nouveauSalon != null) {
+                try{
+                    currentSalon = serveur.obtientSujet(nouveauSalon.getNom_discussion());
+                    Platform.runLater(() -> {
+                        tagsLabel.setText("#discussion");
+                        titreLabel.setText(nouveauSalon.getNom_discussion());
+                    });
+                }
+                catch (RemoteException e) {
+                    System.out.println("Erreur lors de la sélection du salon : " + e.getMessage());
+                }
+                
+            }
+        });
     }
 
     private void afficherBulle(String msg, boolean estMoi) {
@@ -141,7 +180,7 @@ public class ChatControler {
 
     @FXML
     private void createNewTag(ActionEvent event) {
-        if (tagsLabel == null || titreLabel.getText().equals("# Sélectionnez un salon")) {
+        if (currentSalon == null) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
@@ -177,6 +216,7 @@ public class ChatControler {
     @FXML
     private void createNewSalon(ActionEvent event) {
         if (serveur == null) {
+            System.out.println(serveur);
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur serveur");
             alert.setHeaderText(null);
@@ -213,5 +253,16 @@ public class ChatControler {
                 }
             }
         }}); 
+    }
+
+    private void setChatVisible(boolean visible){
+        if (scrollPane != null) {
+            scrollPane.setVisible(visible);
+            scrollPane.setManaged(visible);
+        }
+        if (inputField != null && inputField.getParent() != null) {
+            inputField.getParent().setVisible(visible);
+            inputField.getParent().setManaged(visible);
+        }
     }
 }
