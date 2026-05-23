@@ -3,8 +3,6 @@ package messagerie_instantanee.interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import messagerie_instantanee.server.models.User;
-
 /**
  * Interface de sujet de discussion.
  */
@@ -17,7 +15,7 @@ public interface InterfaceSujetDiscussion extends Remote {
      * 
      * Inscrit un User à un salon (et la discussion associée).
      */
-    public void inscription(InterfaceAffichageClient c, User user) throws RemoteException;
+    public void inscription(InterfaceAffichageClient c) throws RemoteException;
 
     /**
      * 
@@ -27,7 +25,7 @@ public interface InterfaceSujetDiscussion extends Remote {
      * 
      * Désinscrit un User à un salon (et la discussion associée).
      */
-    public void desInscription(InterfaceAffichageClient c, User user) throws RemoteException;
+    public void desInscription(InterfaceAffichageClient c) throws RemoteException;
 
     /**
      * 

@@ -18,25 +18,10 @@ import messagerie_instantanee.server.models.User;
  * Représente un salon, lié à une unique discussion.
  */
 public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussion{
-    /**
-     * id de la discussion.
-     */
     private int id;
-    /**
-     * nom de la discussion.
-     */
     private String nom;
-    /**
-     * liste des participants à la discussion.
-     */
-    private List<User> participants;
-    /**
-     * liste des messages envoyés.
-     */
-    private List<Message> messages;
-    /**
-     * indique si la discussion est privée.
-     */
+    private List<InterfaceAffichageClient> lst_participants;
+    private List<Message> lst_messages;
     private Boolean estPrivee; // boolean si vrai afficher seulement pour les user dans la table ROLE sinon ne pas afficher 
 
     /**
@@ -46,15 +31,14 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * Crée un Salon à partir d'une discussion déjà existante.
      */
     public Salon(Discussion discussion) throws RemoteException{
-        super();
         this.id = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
-        this.participants = discussion.getParticipants();
-        this.messages = DiscussionDAO.findMessagesByIdDiscussion(id);
+        this.lst_participants = discussion.getParticipants();
+        this.lst_messages = DiscussionDAO.findMessagesByIdDiscussion(id);
         this.estPrivee = discussion.getPrive();
     }
 
-     /**
+    /**
      * @param nom
      * @param user
      * @throws RemoteException
@@ -64,10 +48,9 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     public Salon(String nom, User user, Boolean estPrivee) throws RemoteException {
         super();
         this.nom = nom;
-        this.participants = new ArrayList<>();
-        this.participants.add(user);
-        this.messages = new ArrayList<>();
-        this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, user, participants);
+        this.lst_participants = new ArrayList<>();
+        this.lst_participants.add(user);
+        this.id = DiscussionDAO.f(nom, estPrivee, user, lst_participants);
         this.estPrivee = estPrivee;
     }
 
@@ -81,10 +64,10 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * La fonction inscription récupère des données fournies par l'utilisateur et effectue une requête auprès du DAO.
      */
     @Override
-    public void inscription(InterfaceAffichageClient c, User user) throws RemoteException {
-        participants.add(user);
+    public void inscription(InterfaceAffichageClient user) throws RemoteException {
+        lst_participants.add(user);
         DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
-        c.affiche("Utilisateur ajouté(e).");
+        // RECHECK c.affiche("Utilisateur ajouté(e).");
     }
 
     /**
@@ -96,15 +79,10 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
     @Override
-    public void desInscription(InterfaceAffichageClient c, User user) throws RemoteException {
-        for (User u : participants) {
-            if (user.getId_user() == u.getId_user()) {
-                participants.remove(u);
-                break;
-            }
-        }
+    public void desInscription(InterfaceAffichageClient user) throws RemoteException {
+        lst_participants.remove(user);
         DiscussionDAO.RemoveUserToDiscussionById(user.getId_user(), id);
-        c.affiche("Utilisateur désinscrit(e).");
+        // c.affiche("Utilisateur désinscrit(e)."); RECHECK
     }
 
     /**
@@ -115,63 +93,34 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * La fonction diffuse distribue le message à tous les clients/utilisateurs membres de la discussion.
      */
     @Override
-    public void diffuse(String message, String username) throws RemoteException {
-        User user =UserDAO.findUserByUsername(username);
-        if(user !=null){
-            Message msg = new Message(-1, message, user.getId_user() ,id);
-            int id_msg = MessageDAO.addMessageToDiscussion(msg);
-            msg.set_ID(id_msg);
-            messages.add(msg);
-        }else{
+    public synchronized void diffuse(String message, String username) throws RemoteException {
+        User user = UserDAO.findUserByUsername(username);
+        // verifie que l'utilisateur existe
+        if(user == null){
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
+        // insryption en db
+        new Message(-1, message, user.getId_user() ,id);
+        
+        // duffusuon du message avec desinscription auto quand erreur
+        List<InterfaceAffichageClient> aSupprimer = new ArrayList<>();
+        for (InterfaceAffichageClient c : lst_participants) {
+            try {
+                c.affiche(message); 
+            } catch (RemoteException e) {
+                // client déconnecté, on le retire
+                aSupprimer.add(c);
+            }
+        }
+        lst_participants.removeAll(aSupprimer);
     }
 
     // ============================ getteurs ============================
-    /**
-     * 
-     * @return messages
-     */
-    public List<Message> RecupereArchive() {
-        return messages;
-    }
-    /**
-     * 
-     * @return id
-     */
-    public int getSalonId(){
-        return id;
-    }
+    public int getSalonId(){return id;}
 
-    /**
-     * 
-     * @return nom
-     */
-    public String getSalonNom(){
-        return nom;
-    }
+    public String getSalonNom(){return nom;}
 
-    /**
-     * 
-     * @return participants
-     */
-    public List<User> getLstInscrit(){
-        return participants;
-    }
-
-    /**
-     * 
-     * @return participants
-     */
-    public List<User> getParticipants() {
-        return participants;
-    }
-
-    /**
-     * 
-     * @return estPrivee
-     */
-    public Boolean getEstPrivee() {
-        return estPrivee;
-    }
+    public List<InterfaceAffichageClient> getParticipants() {return lst_participants;}
+    
+    public Boolean getEstPrivee() {return estPrivee;}
 }
