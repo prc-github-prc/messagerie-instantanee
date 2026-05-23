@@ -44,6 +44,7 @@ public class ChatControler {
     private Client clientRMI;
     private String pseudo;
 
+    // ====================== lance un event listener sur la liste des salon ======================
     @FXML 
     public void initialize(){
         salonList.getItems().clear();
@@ -67,10 +68,13 @@ public class ChatControler {
         });
     }
 
+    // ================================= Setup les parammetre du crontroller =================================
     public void configurerSession(InterfaceServeurForum server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
-    salonList.getItems().clear();
+        initialize();
+
+        // crée une instance du client et lui permet d'afficher des messages
         try {
             clientRMI = new Client(msg ->
                 Platform.runLater(() -> afficherBulle(msg, false)),
@@ -79,7 +83,7 @@ public class ChatControler {
             e.printStackTrace();
         }
 
-        salonList.getItems().clear();
+        // feed back utilisateur
         try {
             List<Discussion> lst_salon = server.listerSalons();
             if(lst_salon != null && !lst_salon.isEmpty()){
@@ -94,6 +98,7 @@ public class ChatControler {
                     if (tagsLabel != null) {
                         tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
                     }
+                    // permet d'ecrire un message une fois un salon selectionnee
                     setChatVisible(false);
                 });
             }
@@ -105,34 +110,17 @@ public class ChatControler {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
-        
-
-        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
-            if (nouveauSalon != null) {
-                try{
-                    currentSalon = serveur.obtientSujet(nouveauSalon.getNom_discussion());
-                    Platform.runLater(() -> {
-                        tagsLabel.setText("#discussion");
-                        titreLabel.setText(nouveauSalon.getNom_discussion());
-                    });
-                }
-                catch (RemoteException e) {
-                    System.out.println("Erreur lors de la sélection du salon : " + e.getMessage());
-                }
-                
-            }
-        });
     }
 
     // ==================================== mets en forme un message =====================================
     private void afficherBulle(String msg, boolean estMoi) {
+        Alert alert = new Alert(null);
+        alert.showAndWait();
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");
         message.setWrapText(true);
         message.setMaxWidth(300);
         VBox conteneur = new VBox(message);
-        // Bug 6 corrigé : alignement inversé (mes messages à droite, les autres à gauche)
         if (estMoi) {
             conteneur.setAlignment(Pos.CENTER_RIGHT);
         } else {
