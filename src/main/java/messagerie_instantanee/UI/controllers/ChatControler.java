@@ -52,6 +52,7 @@ public class ChatControler {
             if (nouveauSalon != null && serveur != null) {
                 try {
                     currentSalon = serveur.obtientSujet(nouveauSalon.getNom_discussion());
+                    //rejoidre(nouveauSalon.getNom_discussion())
                     
                     Platform.runLater(() -> {
                         titreLabel.setText(nouveauSalon.getNom_discussion());
@@ -72,7 +73,6 @@ public class ChatControler {
     public void configurerSession(InterfaceServeurForum server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
-        initialize();
 
         // crée une instance du client et lui permet d'afficher des messages
         try {
@@ -93,7 +93,7 @@ public class ChatControler {
                         usernameLink.setText(pseudo); 
                     }
                     if (titreLabel != null) {
-                        titreLabel.setText("Bienvenue " +pseudo + " !");
+                        titreLabel.setText("Bienvenue " + pseudo + " !");
                     }
                     if (tagsLabel != null) {
                         tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
@@ -107,6 +107,21 @@ public class ChatControler {
                 titreLabel.setText("Aucun salon disponible");
             }
             
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ====================== gere l'insription et la desinsciption a un salon ========================
+    private void rejoindre(String titre) {
+        try {//TODO finish me
+            if (currentSalon != null && clientRMI != null) {
+                currentSalon.desinscription(clientRMI);
+            }
+            currentSalon = serveur.obtientSujet(titre);
+            currentSalon.inscription(clientRMI);
+            salonLabel.setText("# " + titre);
+            messagesBox.getChildren().clear();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -139,20 +154,6 @@ public class ChatControler {
             currentSalon = serveur.obtientSujet(clicked.getNom_discussion());
         } catch (RemoteException e) {
             throw new RuntimeException("Impossible de récupérer le salon distant : " + e.getMessage(), e);
-        }
-    }
-
-    private void rejoindre(String titre) {
-        try {//TODO finish me
-            if (currentSalon != null && clientRMI != null) {
-                currentSalon.desinscription(clientRMI);
-            }
-            currentSalon = serveur.obtientSujet(titre);
-            currentSalon.inscription(clientRMI);
-            salonLabel.setText("# " + titre);
-            messagesBox.getChildren().clear();
-        } catch (RemoteException e) {
-            e.printStackTrace();
         }
     }
 

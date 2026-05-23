@@ -10,7 +10,6 @@ import java.util.Queue;
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
-import messagerie_instantanee.server.database.DAO.MessageDAO;
 import messagerie_instantanee.server.database.DAO.UserDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
@@ -19,14 +18,6 @@ import messagerie_instantanee.server.models.User;
 
 import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
 
-/**
- * Représente un salon, lié à une unique discussion.
- *
- * Séparation claire des types :
- *  - lst_participants : List<InterfaceAffichageClient> → clients RMI actuellement connectés
- *  - User                                             → modèle BDD (id, username, password)
- * Ces deux objets ne sont JAMAIS castés l'un vers l'autre.
- */
 public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussion {
     private int id;
     private String nom;
@@ -108,17 +99,21 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         }
         Message msg = new Message(-1, message, user.getId_user(), id);
 
+        // stock le message
+        try {
+            addMessageToDiscussion(msg);
+        } catch (SQLException e) {
+            System.out.println("[Salon] Impossible d'ajouter le message à la discussion : " + e.getMessage());
+        }
+        lst_messages.add(msg);
+
+        // distribue le message
         List<InterfaceAffichageClient> aSupprimer = new ArrayList<>();
         for (InterfaceAffichageClient client : lst_participants) {
             try {
-                addMessageToDiscussion(msg);
                 client.affiche(message);
-                lst_messages.add(msg);
             } catch (RemoteException e) {
                 aSupprimer.add(client);  // client déconnecté → on le retire
-            }
-            catch (SQLException e) {
-                System.out.println("[Salon] Impossible d'ajouter le message à la discussion : " + e.getMessage());
             }
         }
         lst_participants.removeAll(aSupprimer);
