@@ -1,6 +1,7 @@
 package messagerie_instantanee.server.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,14 @@ public class Discussion implements Serializable {
         this.nom_discussion = nom_discussion;
         this.participants = participants;
         this.est_prive = est_prive;
+        
+    }
+
+    public Discussion(int id_discussion, String nom_discussion, Boolean est_prive) {
+        this.id_discussion = id_discussion;
+        this.nom_discussion = nom_discussion;
+        this.est_prive = est_prive;
+        this.participants = new ArrayList<>(); 
     }
 
     public int getId_discussion() { return id_discussion; }
