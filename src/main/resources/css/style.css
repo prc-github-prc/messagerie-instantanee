@@ -345,3 +345,9 @@
     -fx-font-size: 16; 
     -fx-cursor: hand;
 }
+
+.chat-subtitle{
+    -fx-text-fill: #b9bbbe; 
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}

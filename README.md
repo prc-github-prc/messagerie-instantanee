@@ -1,4 +1,4 @@
-# Application de méssagerie instantanée
+# Application de messagerie instantanée
 
 > si vous ne posseder pas maven remplacer **mvn** par **./mvnw.cmd** si vous êtes sur windows ou **./mvnw** sur linux
 

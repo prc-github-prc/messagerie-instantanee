@@ -287,5 +287,9 @@ public class ChatControler {
             inputField.getParent().setVisible(visible);
             inputField.getParent().setManaged(visible);
         }
+        if (tagsLabel != null) {
+            tagsLabel.setVisible(true);
+            tagsLabel.setManaged(true);
+        }
     }
 }
