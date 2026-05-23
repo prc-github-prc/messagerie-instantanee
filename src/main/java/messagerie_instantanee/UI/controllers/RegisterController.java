@@ -21,6 +21,9 @@ public class RegisterController {
     @FXML private TextField serverField;
     @FXML private VBox sidebarMenu;
     @FXML private Label errorLabel; //zone d'erreur éventuelle.
+    @FXML private VBox signupPane;
+
+    private boolean isDarkTheme = true;
 
     // Affiche le formulaire de connexion
     @FXML
@@ -87,5 +90,18 @@ public class RegisterController {
 
         errorLabel.setText("Compte créé ! Retour à la connexion."); //TODO asser ça pop up si on a le temps
         showLogin(); // Retourne à la connexion après création
+    }
+
+    @FXML
+    private void handleToggleTheme() {
+         var root = signupPane.getScene().getRoot();
+        if (isDarkTheme) {
+            root.getStyleClass().remove("dark-theme");
+            root.getStyleClass().add("light-theme");
+        } else {
+            root.getStyleClass().remove("light-theme");
+            root.getStyleClass().add("dark-theme");
+        }
+        isDarkTheme = !isDarkTheme;
     }
 }

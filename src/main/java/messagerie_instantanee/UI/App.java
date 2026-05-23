@@ -31,6 +31,7 @@ public class App extends Application {
     Pane panelLogin = FXMLLoader.load(
         getClass().getResource("/fxml/LoginView.fxml")); //RECHECK post merge
     root.setCenter(panelLogin);
+    root.getStyleClass().add("dark-theme");
 
         // == Mise en page et scène =====================================
         StackPane wrapper = new StackPane(root);

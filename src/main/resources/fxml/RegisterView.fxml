@@ -11,6 +11,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -28,36 +29,31 @@
         <center>
             <StackPane pickOnBounds="false">
                 <children>
-                    <VBox fx:id="signupPane" alignment="CENTER" maxWidth="450" spacing="20"
-                    style="-fx-background-color: rgba(51, 51, 51); -fx-border-radius: 20;">
+                    <VBox fx:id="signupPane" alignment="CENTER" maxWidth="450" spacing="20" styleClass="login-box">
                     <padding>
                         <Insets bottom="50" left="50" right="50" top="50" />
                     </padding>
                         <children>
-                            <Label text="Création du compte" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;" />
+                            <Label text="Création du compte" style="-fx-font-size: 28; -fx-font-weight: bold;" />
                             
                             <VBox spacing="6" fillWidth="true">
-                                <Label text="username" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
-                                <TextField fx:id="pseudoField"
-                                    style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                <Label text="username" styleClass="input-label" style="-fx-font-size: 14;" />
+                                <TextField fx:id="pseudoField" styleClass="login-input" style="-fx-padding: 12; -fx-background-radius: 8;" />
                             </VBox>
                             
                             <VBox spacing="6" fillWidth="true">
-                                <Label text="mot de passe" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
-                                <PasswordField fx:id="passwordField"
-                                    style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                <Label text="mot de passe" styleClass="input-label" style="-fx-font-size: 14;" />
+                                <PasswordField fx:id="passwordField" styleClass="login-input" style="-fx-padding: 12; -fx-background-radius: 8;" />
                             </VBox>
                             
                             <VBox spacing="6" fillWidth="true">
-                                <Label text="confirmation mot de passe" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
-                                <PasswordField fx:id="confirmPasswordField"
-                                    style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                <Label text="confirmation mot de passe" styleClass="input-label" style="-fx-font-size: 14;" />
+                                <PasswordField fx:id="confirmPasswordField" styleClass="login-input" style="-fx-padding: 12; -fx-background-radius: 8;" />
                             </VBox>
 
                             <VBox spacing="8" fillWidth="true">
-                                <Label text="serveur" style="-fx-text-fill: #ccc; -fx-font-size: 14;" />
-                                <TextField fx:id="serverField"
-                                    style="-fx-background-color: #222; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 8;" />
+                                <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;" />
+                                <TextField fx:id="serverField" styleClass="login-input" style="-fx-padding: 12; -fx-background-radius: 8" />
                             </VBox>
 
                             <Label fx:id="errorLabel" wrapText="true" textAlignment="CENTER"
@@ -68,6 +64,11 @@
                             <Hyperlink text="Déjà un compte ? Connectez-vous" onAction="#showLogin" 
                                     style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;" />
 
+                            <Button onAction="#handleToggleTheme" styleClass="icon-button-clean">
+                                <graphic>
+                                    <FontIcon iconLiteral="fas-fill-drip" iconSize="20" iconColor="white"/>
+                                </graphic>
+                            </Button>
                             <Label styleClass="error"/>
                         </children>
                     </VBox>
