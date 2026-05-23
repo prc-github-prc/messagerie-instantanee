@@ -17,7 +17,7 @@ import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
-import messagerie_instantanee.server.database.DAO.DiscussionDAO.updateDiscussion;
+
 
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
@@ -88,11 +88,13 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
      * serveur.close gère le stockage en BDD des données courantes.
      */
     public void close() {
-        try {
-            map_salons.values().stream()
-                .forEach((Salon salon) -> DiscussionDAO.updateDiscussion(salon.getSalonNom(), salon.getEstPrivee(), salon.getAdmin(), salon.getUser()));
-        } catch (SQLException e) {
-            System.out.println("[Server] Erreur lors de la fermeture du serveur : " + e.getMessage());
-        }
+        map_salons.values().stream()
+            .forEach((Salon salon) -> {
+                try {
+                    DiscussionDAO.updateDiscussion(salon.getSalonNom(), salon.getEstPrivee(), salon.getAdmin(), salon.getUser());
+                } catch (SQLException e) {
+                    System.out.println("[Server] Erreur lors de la fermeture du serveur : " + e.getMessage());
+                }
+            });
     }
 }
