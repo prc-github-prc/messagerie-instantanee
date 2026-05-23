@@ -61,12 +61,13 @@ public class TagDAO {
      * @param id_discussion
      * @param nom_tag
      */
-    public static void insertTag(String nom_tag, int id_discussion){
+    public static void insertTag(String nom_tag, int id_discussion) throws SQLException{
         try{
             executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT IGNORE"); //TODO a test
-            executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +")");
+            executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +") ON CONFLICT ROLLBACK");
         } catch (SQLException e) {
             System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage());
+            throw e;
         } 
     }
 
@@ -75,11 +76,12 @@ public class TagDAO {
      * @param id_discussion
      * @param nom_tag
      */
-    public static void deleteTagDiscussion(String nom_tag, int id_discussion){
+    public static void deleteTagDiscussion(String nom_tag, int id_discussion) throws SQLException{
         try {
-            executeSQLQuerry("DELETE FROM Tags WHERE nom_tag = "+ nom_tag + "AND id_discussion = " + id_discussion);
+            executeSQLQuerry("DELETE FROM Tags WHERE nom_tag = "+ nom_tag + "AND id_discussion = " + id_discussion +" ON CONFLICT ROLLBACK");
         } catch (SQLException e) {
             System.out.println("[TagDAO] Impossible de supprimer le lien dans Tags : " + e.getMessage());
+            throw e;
         }
     }    
 }
