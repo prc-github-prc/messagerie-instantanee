@@ -48,7 +48,7 @@ public class UserDAO {
     public static void insertUser(String username, String password) throws SQLException {
         try {
             executeSQLQuerry(
-                "INSERT INTO User(username, password_hash) VALUES ('" + username + "', '" + password + "')"
+                "INSERT INTO User(username, password_hash) VALUES ('" + username + "', '" + password + "' ON CONFLICT ROLLBACK)"
             );
         } catch (SQLException e) {
             System.out.println("[UserDAO] erreur insertion : " + e.getMessage());
