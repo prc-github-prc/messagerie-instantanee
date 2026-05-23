@@ -15,6 +15,9 @@ import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
 
+
+import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
+
 /**
  * Représente un salon, lié à une unique discussion.
  *
@@ -102,17 +105,32 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         if (user == null) {
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        new Message(-1, message, user.getId_user(), id);
+        Message msg = new Message(-1, message, user.getId_user(), id);
 
         List<InterfaceAffichageClient> aSupprimer = new ArrayList<>();
-        for (InterfaceAffichageClient c : lst_participants) {
+        for (InterfaceAffichageClient client : lst_participants) {
             try {
-                c.affiche(message);
+                addMessageToDiscussion(msg);
+                client.affiche(message);
+                lst_messages.add(msg);
             } catch (RemoteException e) {
-                aSupprimer.add(c);  // client déconnecté → on le retire
+                aSupprimer.add(client);  // client déconnecté → on le retire
+            }
+            catch (SQLException e) {
+                System.out.println("[Salon] Impossible d'ajouter le message à la discussion : " + e.getMessage());
             }
         }
         lst_participants.removeAll(aSupprimer);
+    }
+
+    public Message[] getArchive() {
+        Message[] archive = new Message[20];
+        for(int i = lst_messages.size() - 1; i >= lst_messages.size() - 20 && i >= 0; i--){
+            if(lst_messages.get(i) != null){
+                archive[lst_messages.size() - 1 - i] = lst_messages.get(i);
+            }
+        }
+        return archive;
     }
 
     // ============================ getters ============================
