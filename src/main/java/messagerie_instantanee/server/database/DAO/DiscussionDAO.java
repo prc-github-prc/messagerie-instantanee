@@ -102,7 +102,7 @@ public class DiscussionDAO {
      * @param users
      */
     public static void insertDiscussion(String titre,Boolean est_prive,User user, List<User> users){
-        try { //TODO verifier que le créateur n'est pas inserer deux fois (il est aussi un participant)
+        try {
             ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +")");
             int clé=0;
             while(rs.next()){
@@ -113,7 +113,9 @@ public class DiscussionDAO {
             if(!users.isEmpty()){
                 user_discussion+=",";
                 for(User u : users){
-                    user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                     if(u.getId_user() != user.getId_user()){ //évite d'insérer le créateur deux fois
+                        user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                    }
                 }
             }
             excuteInsertSQL(user_discussion);
@@ -131,7 +133,7 @@ public class DiscussionDAO {
      * @return la clé
      */
     public static int insertDiscussionReturnId(String titre,Boolean est_prive,User user, List<User> users){
-        try { //TODO verifier que le créateur n'est pas inserer deux fois (il est aussi un participant)
+        try {
             ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +")");
             int clé=0;
             while(rs.next()){
@@ -142,7 +144,9 @@ public class DiscussionDAO {
             if(!users.isEmpty()){
                 user_discussion+=",";
                 for(User u : users){
-                    user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                    if(u.getId_user() != user.getId_user()){ //évite d'insérer le créateur deux fois
+                        user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                    }
                 }
             }
             excuteInsertSQL(user_discussion);
