@@ -2,7 +2,6 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -158,7 +157,7 @@ public class ChatControler {
     private void rejoindre(String titre) {
         try {//TODO finish me
             if (currentSalon != null && clientRMI != null) {
-                currentSalon.desInscription(clientRMI);
+                currentSalon.desinscription(clientRMI);
             }
             currentSalon = serveur.obtientSujet(titre);
             currentSalon.inscription(clientRMI);

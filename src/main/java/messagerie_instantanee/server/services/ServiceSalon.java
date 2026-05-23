@@ -1,18 +1,14 @@
 package messagerie_instantanee.server.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import messagerie_instantanee.interfaces.InterfaceAffichageClient;
-import messagerie_instantanee.server.models.User;
-
+/**
+ * ServiceSalon — utilitaires liés aux salons.
+ * 
+ * Note : l'ancienne méthode InterfacToUserMinusOwner() a été supprimée.
+ * Elle castait InterfaceAffichageClient → User, ce qui était invalide car
+ * User n'implémente pas InterfaceAffichageClient.
+ * Depuis le refactoring, rsToUser() retourne directement List<User>
+ * et les DAO travaillent exclusivement avec User.
+ */
 public class ServiceSalon {
-    
-    public static List<User> InterfacToUserMinusOwner(List<InterfaceAffichageClient> lst_participant, InterfaceAffichageClient owner){
-        List<User> new_list= new ArrayList<>();
-        for(InterfaceAffichageClient client : lst_participant){
-            if(client != owner){new_list.add((User) client);}
-        }
-        return new_list;
-    }
+    // Ajoutez ici les futurs utilitaires salon si nécessaire.
 }

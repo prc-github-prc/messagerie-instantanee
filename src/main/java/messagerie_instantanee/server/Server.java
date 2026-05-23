@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
@@ -31,11 +30,11 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     public Server() throws RemoteException {
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
-        
+
         if (convs != null) {
             for (Discussion conv : convs) {
                 map_salons.put(conv.getNom_discussion(), new Salon(conv));
-                System.out.println(conv.getNom_discussion());//TODO  à enlever après test
+                System.out.println(conv.getNom_discussion()); // TODO à enlever après test
             }
         }
     }
@@ -57,8 +56,8 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
 
     @Override
     public Boolean checkId(String pseudo, String rawPassword) throws RemoteException {
-        User user = (User) findUserByUsername(pseudo);
-        // Utilisateur introuvable → false (pas de NPE)
+        // findUserByUsername retourne désormais directement un User, plus besoin de cast
+        User user = findUserByUsername(pseudo);
         if (user == null) return false;
         return rawPassword.equals(user.getPassword());
     }
@@ -73,20 +72,21 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }
     }
 
-    /* cree une discussion et cree un salon */
-    public synchronized Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
-        // initialise les attribut de la discussion dans le bon type
-        ArrayList<InterfaceAffichageClient> users = new ArrayList<>(); 
-        InterfaceAffichageClient owner = findUserByUsername(username);
-        // L'enregistre dans la map du serveur
-        map_salons.put(nom_Salon, new Salon(nom_Salon, owner, est_privee)) ;
+    /**
+     * Crée une discussion en BDD et enregistre le salon dans la map du serveur.
+     * owner est un User BDD, pas un stub RMI : le client s'inscrira via inscription() à la connexion.
+     */
+    @Override
+    public synchronized Discussion creationSalon(String nom_Salon, String username, Boolean est_privee) throws RemoteException {
+        User owner = findUserByUsername(username);
+        map_salons.put(nom_Salon, new Salon(nom_Salon, owner, est_privee));
         return salonToDiscussion(map_salons.get(nom_Salon));
     }
 
     /**
-     * serveur.close gere le stockage en base de donnée des donnée courante
+     * serveur.close gère le stockage en BDD des données courantes.
      */
-    public void close(){
-        //TODO finish me
+    public void close() {
+        // TODO finish me
     }
 }

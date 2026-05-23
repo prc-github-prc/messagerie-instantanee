@@ -31,7 +31,7 @@ public class Client extends UnicastRemoteObject implements InterfaceAffichageCli
     }
 
     @Override
-    public int getId_user() {
+    public int getId_user() throws RemoteException {
         return findUserByUsername(pseudo).getId_user();
     }
 }

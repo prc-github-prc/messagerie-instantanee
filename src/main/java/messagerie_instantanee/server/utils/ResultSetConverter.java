@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
@@ -16,15 +15,12 @@ import messagerie_instantanee.server.models.User;
  * transforme les résultats de requêtes sql en modèles exploitables.
  */
 public class ResultSetConverter {
+
     /**
-     * 
-     * @param User_data
-     * @return
-     * @throws SQLException
-     * 
-     * Transforme le résultat d'une requête SQL en liste d'utilisateurs.
+     * Transforme le résultat d'une requête SQL en liste de User (modèle BDD).
+     * Aucun cast vers InterfaceAffichageClient : User et le client RMI sont deux objets distincts.
      */
-    public static List<User> rsToUser(ResultSet User_data) throws SQLException{
+    public static List<User> rsToUser(ResultSet User_data) throws SQLException {
         List<User> lst_User = new ArrayList<>();
         while (User_data.next()) {
             int id_user = User_data.getInt("id_user");
@@ -36,33 +32,28 @@ public class ResultSetConverter {
     }
 
     /**
-     * 
-     * @param Discussion_data
-     * @return
-     * @throws SQLException
-     * 
      * Transforme le résultat d'une requête SQL en liste de discussions.
      */
-    public static List<Discussion> rsToDiscussion(ResultSet Discussion_data) throws SQLException{
+    public static List<Discussion> rsToDiscussion(ResultSet Discussion_data) throws SQLException {
         List<Discussion> lst_Discussion = new ArrayList<>();
         while (Discussion_data.next()) {
             int id_Discussion = Discussion_data.getInt("id_Discussion");
             String nom_discussion = Discussion_data.getString("nom_discussion");
             Boolean est_privee = Discussion_data.getBoolean("est_prive");
-            lst_Discussion.add(new Discussion(id_Discussion, nom_discussion, DiscussionDAO.findUserByIDDiscussion(id_Discussion), est_privee));
+            lst_Discussion.add(new Discussion(
+                id_Discussion,
+                nom_discussion,
+                DiscussionDAO.findUserByIDDiscussion(id_Discussion),
+                est_privee
+            ));
         }
         return lst_Discussion;
     }
-    
+
     /**
-     * 
-     * @param message_data
-     * @return
-     * @throws SQLException
-     * 
      * Transforme le résultat d'une requête SQL en liste de messages.
      */
-    public static List<Message> rsToMessage(ResultSet message_data) throws SQLException{
+    public static List<Message> rsToMessage(ResultSet message_data) throws SQLException {
         List<Message> lst_message = new ArrayList<>();
         while (message_data.next()) {
             int id_message = message_data.getInt("id_message");
@@ -75,14 +66,9 @@ public class ResultSetConverter {
     }
 
     /**
-     * 
-     * @param tag_data
-     * @return
-     * @throws SQLException
-     * 
      * Transforme le résultat d'une requête SQL en liste de tags.
      */
-    public static List<Tag> rsToTag(ResultSet tag_data) throws SQLException{
+    public static List<Tag> rsToTag(ResultSet tag_data) throws SQLException {
         List<Tag> lst_tag = new ArrayList<>();
         while (tag_data.next()) {
             String nom_tag = tag_data.getString("nom_tag");
