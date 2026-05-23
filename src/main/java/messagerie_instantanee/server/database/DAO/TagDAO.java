@@ -63,7 +63,7 @@ public class TagDAO {
      */
     public static void insertTag(String nom_tag, int id_discussion){
         try{
-            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT DO NOTHING"); //TODO a test
+            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT IGNORE"); //TODO a test
             executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +")");
         } catch (SQLException e) {
             System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage());
