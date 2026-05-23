@@ -10,11 +10,13 @@ import java.util.Queue;
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import messagerie_instantanee.server.database.DAO.MessageDAO;
+import messagerie_instantanee.server.database.DAO.RoleDAO;
 import messagerie_instantanee.server.database.DAO.UserDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
-
+import messagerie_instantanee.server.utils.Enum.Role;
 
 import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
 
@@ -127,6 +129,24 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
             }
         }
         return archive;
+    }
+
+    public List<User> getAdmin() {
+        try {
+            return RoleDAO.findUserByRole(id, Role.Admin);
+        } catch (Exception e) {
+            System.out.println("[Salon] Impossible de trouver l'admin du salon : " + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<User> getUser() {
+        try {
+            return RoleDAO.findUserByRole(id, Role.User);
+        } catch (Exception e) {
+            System.out.println("[Salon] Impossible de trouver les utilisateurs du salon : " + e.getMessage());
+            return null;
+        }
     }
 
     // ============================ getters ============================

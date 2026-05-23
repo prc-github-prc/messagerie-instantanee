@@ -89,12 +89,12 @@ public class DiscussionDAO {
      */
     public static void insertDiscussion(String titre,Boolean est_prive,User user, List<User> users) throws SQLException{
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +") ON CONFLICT ROLLBACK");
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +") ON CONFLICT ROLLBACK");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
             }
-            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1) ON CONFLICT ROLLBACK";
+            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1)";
             
             if(!users.isEmpty()){
                 user_discussion+=",";
@@ -126,7 +126,7 @@ public class DiscussionDAO {
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
             }
-            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1) ON CONFLICT ROLLBACK";
+            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1)";
             
             if(!users.isEmpty()){
                 user_discussion+=",";
@@ -170,6 +170,41 @@ public class DiscussionDAO {
             executeSQLQuerry("DELETE FROM Role WHERE id_discussion =" + id_discussion + "AND id_user=" + id_user);
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * 
+     * @param titre
+     * @param user
+     * @param users
+     */
+    public static void updateDiscussion(String titre,Boolean est_prive,List<User> admin, List<User> users) throws SQLException{
+        try {
+            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +") ON CONFLICT REPLACE"); // est sencé remplacer la ligne de la BDD si le nom de discussion existe déjà
+            int clé=0;
+            while(rs.next()){
+                clé=rs.getInt("id_discussion");
+            }
+            String user_discussion = "INSERT INTO Roles Values ";
+
+            if(!admin.isEmpty()){
+                for(User u : admin){
+                    user_discussion += "("+ u.getId_user()+","+ clé+","+ "1)";
+                    }
+                }
+            
+            if(!users.isEmpty()){
+                user_discussion+=",";
+                for(User u : users){
+                    user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
+                    }
+                }
+            excuteInsertSQL(user_discussion+" ON CONFLICT REPLACE");
+
+        } catch (SQLException e) {
+            System.out.println("[DiscutionDAO] La discussion n'a pas pu être update : " + e.getMessage() + " c'est peut être le on conflict replace qui ne fonctionne pas comme prévu");
             throw e;
         }
     }
