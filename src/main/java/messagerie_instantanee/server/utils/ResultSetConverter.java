@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
@@ -23,13 +24,13 @@ public class ResultSetConverter {
      * 
      * Transforme le résultat d'une requête SQL en liste d'utilisateurs.
      */
-    public static List<User> rsToUser(ResultSet User_data) throws SQLException{
-        List<User> lst_User = new ArrayList<>();
+    public static List<InterfaceAffichageClient> rsToUser(ResultSet User_data) throws SQLException{
+        List<InterfaceAffichageClient> lst_User = new ArrayList<>();
         while (User_data.next()) {
             int id_user = User_data.getInt("id_user");
             String username = User_data.getString("username");
             String password_hash = User_data.getString("password_hash");
-            lst_User.add(new User(id_user, username, password_hash));
+            lst_User.add((InterfaceAffichageClient) new User(id_user, username, password_hash));
         }
         return lst_User;
     }

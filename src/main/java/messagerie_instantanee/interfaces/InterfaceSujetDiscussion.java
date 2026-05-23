@@ -18,22 +18,20 @@ public interface InterfaceSujetDiscussion extends Remote {
     public void inscription(InterfaceAffichageClient c) throws RemoteException;
 
     /**
+     * Désinscrit un User à un salon (et la discussion associée).
      * 
      * @param c
      * @param user
      * @throws RemoteException
-     * 
-     * Désinscrit un User à un salon (et la discussion associée).
      */
     public void desInscription(InterfaceAffichageClient c) throws RemoteException;
 
     /**
+     * Diffuse un message à tous les participants.
      * 
      * @param Message
      * @param username
      * @throws RemoteException
-     * 
-     * Diffuse un message à tous les participants.
      */
     public void diffuse(String Message, String username) throws RemoteException;
 }

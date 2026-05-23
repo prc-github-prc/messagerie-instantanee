@@ -74,8 +74,8 @@ public class ChatControler {
     salonList.getItems().clear();
         try {
             clientRMI = new Client(msg ->
-                Platform.runLater(() -> afficherBulle(msg, false))
-            );
+                Platform.runLater(() -> afficherBulle(msg, false)),
+            pseudo);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

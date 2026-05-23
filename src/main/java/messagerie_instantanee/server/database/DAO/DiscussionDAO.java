@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
@@ -43,7 +44,7 @@ public class DiscussionDAO {
      * @param id_discussion
      * @return
      */
-    public static List<User> findUserByIDDiscussion(int id_discussion) {
+    public static List<InterfaceAffichageClient> findUserByIDDiscussion(int id_discussion) {
         try{
             ResultSet discussion_users = executeSQLQuerry("SELECT * FROM Roles NATURAL JOIN USER WHERE id_discussion = " + id_discussion + ";");
             return rsToUser(discussion_users);
@@ -101,7 +102,7 @@ public class DiscussionDAO {
      * @param users
      */
     public static void insertDiscussion(String titre,Boolean est_prive,User user, List<User> users){
-        try {
+        try { //TODO verifier que le créateur n'est pas inserer deux fois (il est aussi un participant)
             ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ("+ titre+","+ est_prive +")");
             int clé=0;
             while(rs.next()){
@@ -130,7 +131,7 @@ public class DiscussionDAO {
      * @return la clé
      */
     public static int insertDiscussionReturnId(String titre,Boolean est_prive,User user, List<User> users){
-        try {
+        try { //TODO verifier que le créateur n'est pas inserer deux fois (il est aussi un participant)
             ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +")");
             int clé=0;
             while(rs.next()){

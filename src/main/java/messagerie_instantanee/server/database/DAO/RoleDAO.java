@@ -13,6 +13,7 @@ import messagerie_instantanee.server.utils.Enum.Role;
 
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
+import static messagerie_instantanee.server.services.ServiceSalon.InterfacToUserMinusOwner;
 
 
 /**
@@ -33,7 +34,7 @@ public class RoleDAO {
         };
         try{
             ResultSet User_data = executeSQLQuerry("SELECT * FROM USER WHERE id_user = (SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion + "AND role = " + id_role+")");
-            return rsToUser(User_data);
+            return InterfacToUserMinusOwner(rsToUser(User_data), null);
         } catch (SQLException e) {
             System.out.println("[RoleDAO] connexion impossible a la base de donnée" + e.getMessage()); 
             return null; 
@@ -53,8 +54,8 @@ public class RoleDAO {
             HashMap<Role, List<User>> roleByDiScussion = new HashMap<>();
             ResultSet User_data = executeSQLQuerry("SELECT * FROM USER WHERE id_user = (SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion + "AND role = 0)");
             ResultSet Admin_data = executeSQLQuerry("SELECT * FROM USER WHERE id_user = (SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion + "AND role = 1)");
-            roleByDiScussion.put(Role.User, rsToUser(User_data));
-            roleByDiScussion.put(Role.Admin,rsToUser(Admin_data));
+            roleByDiScussion.put(Role.User, InterfacToUserMinusOwner(rsToUser(User_data), null));
+            roleByDiScussion.put(Role.Admin, InterfacToUserMinusOwner(rsToUser(Admin_data), null));
             return roleByDiScussion;
         } catch (SQLException e) {
             System.out.println("[RoleDAO] connexion impossible a la base de donnée" + e.getMessage()); 

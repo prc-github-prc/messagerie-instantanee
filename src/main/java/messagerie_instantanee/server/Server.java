@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
@@ -57,7 +58,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
 
     @Override
     public Boolean checkId(String pseudo, String rawPassword) throws RemoteException {
-        User user = findUserByUsername(pseudo);
+        User user = (User) findUserByUsername(pseudo);
         // Utilisateur introuvable → false (pas de NPE)
         if (user == null) return false;
         return rawPassword.equals(user.getPassword());
@@ -76,15 +77,11 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     /* cree une discussion et cree un salon */
     public synchronized Discussion creationSalon(String nom_Salon,String username,Boolean est_privee) throws RemoteException{
         // initialise les attribut de la discussion dans le bon type
-        ArrayList<User> users = new ArrayList<>(); 
-        User host = findUserByUsername(username);
-        int id = insertDiscussionReturnId(nom_Salon,est_privee, host,users);
-        users.add(host); //ajoute le creataur a la discussion
-        //créer une instance de discussion
-        Discussion new_discussion = new Discussion(id, nom_Salon, users, est_privee);
+        ArrayList<InterfaceAffichageClient> users = new ArrayList<>(); 
+        InterfaceAffichageClient owner = findUserByUsername(username);
         // L'enregistre dans la map du serveur
-        map_salons.put(nom_Salon, new Salon(new_discussion)) ;
-        return new_discussion;
+        map_salons.put(nom_Salon, new Salon(nom_Salon, owner, est_privee)) ;
+        return salonToDiscussion(map_salons.get(nom_Salon));
     }
 
     /**

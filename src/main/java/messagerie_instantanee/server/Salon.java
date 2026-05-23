@@ -13,6 +13,7 @@ import messagerie_instantanee.server.database.DAO.UserDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
+import static messagerie_instantanee.server.services.ServiceSalon.InterfacToUserMinusOwner;
 
 /**
  * Représente un salon, lié à une unique discussion.
@@ -45,13 +46,13 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * 
      * Crée un Salon ainsi qu'une nouvelle discussion.
      */
-    public Salon(String nom, User user, Boolean estPrivee) throws RemoteException {
+    public Salon(String nom, InterfaceAffichageClient user, Boolean estPrivee) throws RemoteException {
         super();
         this.nom = nom;
         this.lst_participants = new ArrayList<>();
         this.lst_participants.add(user);
-        this.id = DiscussionDAO.f(nom, estPrivee, user, lst_participants);
-        this.estPrivee = estPrivee;
+        this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, (User) user, InterfacToUserMinusOwner(lst_participants, user)); 
+        this.estPrivee = estPrivee;                                               //cette solution est bricoler de fou je regearderai plus tard
     }
 
     /**
@@ -64,7 +65,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * La fonction inscription récupère des données fournies par l'utilisateur et effectue une requête auprès du DAO.
      */
     @Override
-    public void inscription(InterfaceAffichageClient user) throws RemoteException {
+    public synchronized void inscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.add(user);
         DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
         // RECHECK c.affiche("Utilisateur ajouté(e).");
@@ -79,7 +80,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * La fonction desInscription supprime le compte de l'utilisateur effectuant la requête.
      */
     @Override
-    public void desInscription(InterfaceAffichageClient user) throws RemoteException {
+    public synchronized void desInscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.remove(user);
         DiscussionDAO.RemoveUserToDiscussionById(user.getId_user(), id);
         // c.affiche("Utilisateur désinscrit(e)."); RECHECK
@@ -94,12 +95,12 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      */
     @Override
     public synchronized void diffuse(String message, String username) throws RemoteException {
-        User user = UserDAO.findUserByUsername(username);
+        User user = (User) UserDAO.findUserByUsername(username);
         // verifie que l'utilisateur existe
         if(user == null){
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        // insryption en db
+        // ecriture en db
         new Message(-1, message, user.getId_user() ,id);
         
         // duffusuon du message avec desinscription auto quand erreur

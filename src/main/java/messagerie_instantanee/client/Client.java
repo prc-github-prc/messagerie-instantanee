@@ -2,6 +2,8 @@ package messagerie_instantanee.client;
 
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 
+import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -12,15 +14,10 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class Client extends UnicastRemoteObject implements InterfaceAffichageClient {
 
-    // la gestion du cookie est faitee par le controller 
-    //
-
-    /**
-     * onMessage.
-     */
     private final java.util.function.Consumer<String> onMessage;
+    String pseudo;
 
-    public Client(java.util.function.Consumer<String> onMessage) throws RemoteException {
+    public Client(java.util.function.Consumer<String> onMessage, String pseudo) throws RemoteException {
         this.onMessage = onMessage;
     }
 
@@ -31,5 +28,10 @@ public class Client extends UnicastRemoteObject implements InterfaceAffichageCli
     @Override
     public void affiche(String message) throws RemoteException {
         onMessage.accept(message);
+    }
+
+    @Override
+    public int getId_user() {
+        return findUserByUsername(pseudo).getId_user();
     }
 }
