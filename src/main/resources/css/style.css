@@ -4,12 +4,77 @@
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
+/* --- BARRE DE TITRE CUSTOM --- */
+.title-bar {
+    -fx-background-color: #1a1b1e;
+    -fx-border-color: transparent transparent #2f2f4a transparent;
+    -fx-border-width: 1px;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-pref-height: 32px;
+}
+
+.title-bar-text {
+    -fx-text-fill: #cdd6f4;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.title-bar-icon {
+    -fx-icon-color: #640CBB;
+}
+
+.title-bar-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-min-width: 46px;
+    -fx-max-width: 46px;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.title-bar-btn .ikonli-font-icon {
+    -fx-icon-color: #cdd6f4;
+}
+
+.title-bar-btn:hover {
+    -fx-background-color: #2f2f4a;
+}
+
+.title-bar-btn:pressed {
+    -fx-background-color: #3a3a5c;
+}
+
+/* Bouton Fermer : survol rouge */
+.title-bar-btn-close:hover {
+    -fx-background-color: #c0392b;
+}
+.title-bar-btn-close:pressed {
+    -fx-background-color: #96281b;
+}
+
+/* Adaptation thème clair */
+.light-theme .title-bar {
+    -fx-background-color: #e8e8f0;
+    -fx-border-color: transparent transparent #c0c0d0 transparent;
+}
+.light-theme .title-bar-text {
+    -fx-text-fill: #333344;
+}
+.light-theme .title-bar-btn .ikonli-font-icon {
+    -fx-icon-color: #333344;
+}
+.light-theme .title-bar-btn:hover {
+    -fx-background-color: #d0d0e0;
+}
+
 /* --- BARRE LATÉRALE --- */
 .sidebar {
     -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
-    /*-fx-border-width: 1px;*/
-    -fx-background-radius:25px;
+    -fx-background-radius: 0 25px 25px 0;
 }
 .sidebar-title {
     -fx-text-fill: #ffffff;
@@ -32,6 +97,14 @@
     -fx-background-color: transparent;
 }
 
+/* La Sidebar à droite */
+.sidebar-right {
+    -fx-background-color: #252024;
+    -fx-border-color: transparent transparent transparent #1e1f22;
+    -fx-border-width: 1px;
+    -fx-background-radius: 25px 0 0 25px;
+}
+
 /* --- ZONE DE CHAT & MESSAGES --- */
 .chat-area {
     -fx-background-color: #640CBB;
@@ -46,14 +119,17 @@
     -fx-font-weight: bold;
     -fx-font-size: 16px;
 }
+.chat-subtitle {
+    -fx-text-fill: #b9bbbe;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
 .chat-scroll {
     -fx-background-color: transparent;
 }
 .chat-scroll .viewport {
     -fx-background-color: transparent;
 }
-
-/* Conteneur des bulles ou blocs de messages */
 .messages-container {
     -fx-background-color: transparent;
 }
@@ -61,7 +137,7 @@
 /* --- ENTRÉE TEXTE ET BOUTONS --- */
 .chat-input {
     -fx-background-color: #3a3b3c;
-    -fx-background-radius: 25px; 
+    -fx-background-radius: 25px;
     -fx-text-fill: #ffffff;
     -fx-padding: 12px 20px;
 }
@@ -78,14 +154,10 @@
     -fx-padding: 10px 20px;
     -fx-cursor: hand;
 }
-.btn-primary:hover {
-    -fx-background-color: #4752c4;
-}
-.btn-primary:pressed {
-    -fx-background-color: #3c45a5;
-}
+.btn-primary:hover  { -fx-background-color: #4752c4; }
+.btn-primary:pressed{ -fx-background-color: #3c45a5; }
 
-/* Personnalisation esthétique des barres de défilement (ScrollBars) */
+/* --- SCROLLBARS --- */
 .scroll-pane .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-width: 8px;
@@ -95,320 +167,168 @@
     -fx-background-radius: 4px;
 }
 
+/* --- LISTE DES SALONS --- */
 .sidebar-list {
-    -fx-background-color: #252024; -fx-control-inner-background: #252024; -fx-background-insets: 0;    
+    -fx-background-color: #252024;
+    -fx-control-inner-background: #252024;
+    -fx-background-insets: 0;
 }
-
+.sidebar-list .list-cell {
+    -fx-text-fill: #e0e0e0;
+    -fx-background-color: #262626;
+    -fx-background-radius: 20px;
+    -fx-background-insets: 4px 10px 4px 10px;
+    -fx-padding: 8px 16px;
+}
 .sidebar-list .list-cell:selected {
-    -fx-background-color: #710057; 
-    -fx-text-fill: #ffffff;       
-    -fx-font-weight: bold;         
+    -fx-background-color: #710057;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
 }
-
 .sidebar-list .list-cell:hover {
-    -fx-background-color: #710057; 
+    -fx-background-color: #710057;
     -fx-text-fill: #ffffff;
     -fx-background-radius: 20px;
 }
 
-.sidebar-list .list-cell {
-    -fx-text-fill: #e0e0e0;         
-    -fx-background-color: #262626;  
-    -fx-background-radius: 20px;    
-    -fx-background-insets: 4px 10px 4px 10px; 
-    -fx-padding: 8px 16px;          
-}
-
-
+/* --- BOUTONS SIDEBAR --- */
 .sidebar-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: #b3b3b3;          
-    -fx-alignment: center-left;    
+    -fx-text-fill: #b3b3b3;
+    -fx-alignment: center-left;
     -fx-padding: 8px 16px;
-    -fx-background-radius: 20px;     
+    -fx-background-radius: 20px;
     -fx-font-size: 13px;
-    -fx-cursor: hand;                
+    -fx-cursor: hand;
 }
+.sidebar-btn:hover  { -fx-background-color: #262626; -fx-text-fill: #6200ee; }
+.sidebar-btn:armed  { -fx-background-color: #3700b3; -fx-text-fill: #ffffff; }
 
-.sidebar-btn:hover {
-    -fx-background-color: #262626;  
-    -fx-text-fill: #6200ee;          
-}
-
-.sidebar-btn:armed {
-    -fx-background-color: #3700b3;
-    -fx-text-fill: #ffffff;
-}
-
-
+/* --- BULLE MESSAGE --- */
 .bulle-message {
-    -fx-background-color: #424640;    
-    -fx-text-fill: white;             
-    -fx-background-radius: 15px;      
-    -fx-padding: 8px 14px 8px 14px;   
-    -fx-font-size: 14px;              
+    -fx-background-color: #424640;
+    -fx-text-fill: white;
+    -fx-background-radius: 15px;
+    -fx-padding: 8px 14px;
+    -fx-font-size: 14px;
 }
 
-
-
+/* --- BOUTON ENVOI --- */
 .envoi-btn-container {
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-cursor: hand;
-    -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.25), 4, 0, 0, 4);
-    -fx-transition-duration: 0.2s;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 4, 0, 0, 4);
 }
+.envoi-btn-container:hover  { -fx-scale-x: 1.05; -fx-scale-y: 1.05; }
+.envoi-btn-container:armed  { -fx-scale-x: 0.95; -fx-scale-y: 0.95; }
 
-
-.envoi-btn-container:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-effect: dropshadow(three-pass-box, rgba(251, 17, 255, 0.4), 8, 0, 0, 2);
-}
-
-
-.envoi-btn-container:armed {
-    -fx-scale-x: 0.95;
-    -fx-scale-y: 0.95;
-}
-
-
+/* --- BOUTON PARAMÈTRES --- */
 .settings-btn-container {
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-cursor: hand;
-    -fx-alignment: center;
-    -fx-transition-duration: 0.2s;
 }
-
-
 .settings-icon-wrapper {
-    -fx-min-width: 32px;
-    -fx-max-width: 32px;
-    -fx-min-height: 32px;
-    -fx-max-height: 32px;
-    -fx-transition-duration: 0.4s;
+    -fx-min-width: 32px; -fx-max-width: 32px;
+    -fx-min-height: 32px; -fx-max-height: 32px;
 }
 
-
-.settings-btn-container:hover .settings-icon-wrapper {
-    -fx-rotate: 15;
-}
-
-.settings-btn-container:hover SVGPath {
-    -fx-stroke: #ffffff; 
-}
-
-
-.settings-btn-container:armed {
-    -fx-scale-x: 0.92;
-    -fx-scale-y: 0.92;
-}
-
+/* --- PROFIL --- */
 .profile-name-link {
-    -fx-background-color: transparent; 
+    -fx-background-color: transparent;
     -fx-background-radius: 0;
-    -fx-padding: 0;                    
-    -fx-text-fill: #FFFFFF;           
-    -fx-alignment: center-left;       
+    -fx-padding: 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-alignment: center-left;
 }
+.profile-name-link:hover { -fx-text-fill: #EAD3D3; -fx-cursor: hand; }
 
-.profile-name-link:hover {
-    -fx-text-fill: #EAD3D3;          
-    -fx-cursor: hand;                  
-}
-
+/* --- BOUTON RECHERCHE --- */
 .search-btn {
-    -fx-background-color: transparent; 
-    -fx-border-color: transparent;    
-    -fx-padding: 4px;                 
-    -fx-cursor: hand;                  
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 4px;
+    -fx-cursor: hand;
 }
+.search-btn:hover { -fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 4px; }
 
-.search-btn:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.1); /* Léger flash blanc transparent */
-    -fx-background-radius: 4px;
-}
-
-.server-badge {
-    -fx-background-color: #173675;   /* Fond gris foncé */
-    -fx-text-fill: #EDE3E3;          /* Couleur du texte */
-    -fx-background-radius: 10px;     /* Coins arrondis */
-    
-    /* Aligne le texte parfaitement au centre du badge */
-    -fx-alignment: center;           
-    
-    /* Dimensions et marges internes pour créer l'encadrement */
-     Milford-min-width: 150px;
-    -fx-padding: 8px 20px;           
-    -fx-font-weight: bold;           /* Optionnel: pour qu'il ressorte bien */
-}
-
-.login-card {
-    -fx-background-color: rgba(43, 45, 49);
-    -fx-background-radius: 0px !important;
-    -fx-border-radius: 0px !important;
-    -fx-border-color: rgba(255, 255, 255, 0.1);
-    -fx-border-width: 1px;
-    
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 15, 0, 0, 10);
-}
-
-.icon-button-clean {
-    -fx-background-color: transparent; /* Supprime le rectangle gris de base */
-    -fx-padding: 5px;
-    -fx-cursor: hand;                  /* Curseur main au survol */
-    -fx-transition-duration: 0.2s;
-}
-
-.icon-button-clean:hover {
-    -fx-opacity: 0.8;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
-
-/* Le bouton icône en haut à droite */
+/* --- BOUTONS ICÔNES (TopBar) --- */
 .icon-button-clean {
     -fx-background-color: transparent;
     -fx-padding: 5px;
     -fx-cursor: hand;
 }
-.icon-button-clean:hover {
-    -fx-opacity: 0.8;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
+.icon-button-clean:hover { -fx-opacity: 0.8; -fx-scale-x: 1.1; -fx-scale-y: 1.1; }
 
-/* Styles pour la Sidebar importés de ton autre vue */
-.sidebar {
-    -fx-background-color: #252024;
-    -fx-border-color: transparent #1e1f22 transparent transparent;
-    -fx-border-width: 1px;
-    -fx-background-radius: 0 25px 25px 0; /* Coins arrondis uniquement à droite */
-}
-.sidebar-title {
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-}
-.section-title {
-    -fx-text-fill: #949ba4;
-    -fx-font-weight: bold;
-    -fx-font-size: 11px;
-}
-/* La Sidebar à droite */
-.sidebar-right {
-    -fx-background-color: #252024;
-    -fx-border-color: transparent transparent transparent #1e1f22; /* Bordure fine à gauche */
-    -fx-border-width: 1px;
-    -fx-background-radius: 25px 0 0 25px; /* Coins arrondis uniquement à GAUCHE maintenant */
-}
-
-.sidebar-title {
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: bold;
-    -fx-font-size: 14px;
-}
-
-.btn-connect:hover {
-    -fx-background-color: #640CBB;           
-}
-
-.btn-connect{
-    -fx-background-color: #444; 
-    -fx-text-fill: white; 
-    -fx-padding: 12; 
-    -fx-background-radius: 20; 
-    -fx-font-size: 16; 
+/* --- BOUTON CONNEXION --- */
+.btn-connect {
+    -fx-background-color: #444;
+    -fx-text-fill: white;
+    -fx-padding: 12;
+    -fx-background-radius: 20;
+    -fx-font-size: 16;
     -fx-cursor: hand;
 }
+.btn-connect:hover { -fx-background-color: #640CBB; }
 
-.chat-subtitle{
-    -fx-text-fill: #b9bbbe; 
-    -fx-font-size: 14px;
-    -fx-font-style: italic;
+/* --- BARRE DE MENUS --- */
+.app-menubar {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: transparent transparent #3a3a5c transparent;
+    -fx-border-width: 1px;
 }
-
-.dark-theme .login-box {
-    -fx-background-color: rgba(51, 51, 51, 0.95);
+.app-menubar .menu {
+    -fx-background-color: transparent;
 }
-.dark-theme .login-header {
-    -fx-text-fill: white;
+.app-menubar .menu:hover,
+.app-menubar .menu:showing {
+    -fx-background-color: #2f2f4a;
+    -fx-background-radius: 4px;
 }
-.dark-theme .input-label {
-    -fx-text-fill: #ccc;
+.app-menubar .menu .label,
+.app-menubar .menu-item .label {
+    -fx-text-fill: #cdd6f4;
+    -fx-font-size: 13px;
 }
-.dark-theme .login-input {
-    -fx-background-color: rgba(51, 51, 51, 0.95);
-    -fx-text-fill: white;
+.app-menubar .context-menu {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #3a3a5c;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 4);
 }
-.dark-theme .login-link {
-    -fx-text-fill: #bbb;
+.app-menubar .menu-item:hover {
+    -fx-background-color: #2f55d4;
+    -fx-background-radius: 4px;
 }
-.dark-theme .theme-icon {
-    -icon-color: white;
-}
-
-.dark-theme .bg-top {
-    -fx-background-color: #640CBB; 
-    -fx-min-height: 250px; 
-    -fx-min-width: 500px;
-}
-
-.dark-theme .bg-bottom {
-    -fx-background-color: #1a1b1e;
-    -fx-height: 250px; 
-    -fx-min-width: 500px;
+.app-menubar .check-menu-item:checked .label {
+    -fx-text-fill: #89b4fa;
 }
 
-.dark-theme .login-box {
-    -fx-background-color: #222;
-}
+/* ═══════════════════════════════ THÈME SOMBRE ═══════════════════════════════ */
+.dark-theme .login-box          { -fx-background-color: rgba(51,51,51,0.95); }
+.dark-theme .login-box .label   { -fx-text-fill: #cccccc; }
+.dark-theme .login-header       { -fx-text-fill: #ffffff; }
+.dark-theme .input-label        { -fx-text-fill: #ccc; }
+.dark-theme .login-input        { -fx-background-color: rgba(51,51,51,0.95); -fx-text-fill: white; }
+.dark-theme .login-link         { -fx-text-fill: #bbb; }
 
-.dark-theme .login-box .label {
-    -fx-text-fill: #cccccc;
-}
+.dark-theme .bg-top    { -fx-background-color: #640CBB; -fx-min-height: 250px; -fx-min-width: 500px; }
+.dark-theme .bg-bottom { -fx-background-color: #1a1b1e; -fx-min-height: 250px; -fx-min-width: 500px; }
 
-.dark-theme .login-header {
-    -fx-text-fill: #ffffff;
-}
+/* ═══════════════════════════════ THÈME CLAIR ════════════════════════════════ */
+.light-theme .login-box         { -fx-background-color: #C7C292; }
+.light-theme .login-box .label  { -fx-text-fill: black; }
+.light-theme .login-header      { -fx-text-fill: #C7C292; }
+.light-theme .input-label       { -fx-text-fill: #3a3821; }
+.light-theme .login-input       { -fx-background-color: #928AD0; }
+.light-theme .login-link        { -fx-text-fill: #444444; }
 
-/* Thème clair */
-.light-theme .login-box {
-    -fx-background-color: #C7C292;
-}
-.light-theme .login-header {
-    -fx-text-fill: #C7C292;
-}
+.light-theme .bg-top    { -fx-background-color: #188750; -fx-min-height: 250px; -fx-min-width: 500px; }
+.light-theme .bg-bottom { -fx-background-color: #928AD0; -fx-min-height: 250px; -fx-min-width: 500px; }
 
-.light-theme .login-input {
-    -fx-background-color: #928AD0;
-}
-.light-theme .login-link {
-    -fx-text-fill: #444444;
-}
-.light-theme .theme-icon {
-    -icon-color: #333333; 
-}
-
-.light-theme .bg-top {
-    -fx-background-color: #188750; 
-    -fx-min-height: 250px; 
-    -fx-min-width: 500px;
-}
-
-.light-theme .bg-bottom {
-    -fx-background-color: #928AD0; 
-    -fx-height: 250px; 
-    -fx-min-width: 500px;
-}
-
-.light-theme .input-label {
-    -fx-text-fill: #3a3821;     
-}
-
-
-.light-theme .login-box .label {
-    -fx-text-fill: black;
-}
+.light-theme .app-menubar                      { -fx-background-color: #e8e8f0; }
+.light-theme .app-menubar .menu .label,
+.light-theme .app-menubar .menu-item .label    { -fx-text-fill: #333344; }
+.light-theme .app-menubar .context-menu        { -fx-background-color: #f0f0f8; -fx-border-color: #c0c0d0; }

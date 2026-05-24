@@ -7,42 +7,52 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import messagerie_instantanee.client.Client;
 
 /**
  * Point d'entrée de l'application JavaFX.
+ * La fenêtre est UNDECORATED (pas de barre Windows native) :
+ * TitleBar.fxml fournit une barre custom qui suit le thème CSS.
  */
 public class App extends Application {
 
-    // Référence gardée pour pouvoir l'unexport à la fermeture
     private static Client clientRMI;
 
-    /**
-     * Permet à ChatController de transmettre le clientRMI à App
-     * pour qu'il soit proprement unexport à la fermeture.
-     */
     public static void setClientRMI(Client client) {
         clientRMI = client;
     }
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        // ── Supprime la barre Windows native ───────────────────────────
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        // ── Structure racine ────────────────────────────────────────────
+        //   BorderPane
+        //   ├── top    → TitleBar.fxml  (barre custom persistante)
+        //   └── center → contenu courant (AuthLayout, ChatView…)
         BorderPane root = new BorderPane();
-
-        NavigationManager.init(root);
-
-        Pane panelLogin = FXMLLoader.load(
-        getClass().getResource("/fxml/AuthLayout.fxml"));
-        root.setCenter(panelLogin);
         root.getStyleClass().add("dark-theme");
 
-        // ============ Scène ========================
-        StackPane wrapper = new StackPane(root);
-        wrapper.setStyle("-fx-background-color: transparent;");
+        // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
+        Pane titleBar = FXMLLoader.load(
+            getClass().getResource("/fxml/TitleBar.fxml"));
+        root.setTop(titleBar);
 
-        Scene scene = new Scene(wrapper);
+        // Initialise le NavigationManager (utilise root.center pour les vues)
+        NavigationManager.init(root);
+
+        // Charge la première vue (AuthLayout)
+        FXMLLoader authLoader = new FXMLLoader(
+            getClass().getResource("/fxml/AuthLayout.fxml"));
+        Pane authPanel = authLoader.load();
+        root.setCenter(authPanel);
+
+        // ── Scène ───────────────────────────────────────────────────────
+        Scene scene = new Scene(root);
         scene.getStylesheets().add(
             getClass().getResource("/css/style.css").toExternalForm());
 
@@ -52,10 +62,6 @@ public class App extends Application {
         stage.show();
     }
 
-    /**
-     * Appelé automatiquement par JavaFX à la fermeture de la fenêtre.
-     * Libère proprement les ressources RMI côté client.
-     */
     @Override
     public void stop() {
         if (clientRMI != null) {
@@ -63,7 +69,7 @@ public class App extends Application {
                 UnicastRemoteObject.unexportObject(clientRMI, true);
                 System.out.println("[App] Client RMI unexport → port libéré.");
             } catch (Exception e) {
-                System.err.println("[App] Erreur à la fermeture du client RMI : " + e.getMessage());
+                System.err.println("[App] Erreur à la fermeture : " + e.getMessage());
             }
         }
         System.exit(0);

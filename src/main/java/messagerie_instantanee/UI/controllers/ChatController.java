@@ -1,6 +1,7 @@
 package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
@@ -25,75 +26,72 @@ import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 
-/**
- * Représente un chatcontroler.
- */
 public class ChatController {
 
-    @FXML private ListView<Discussion> salonList; //la liste des salon
-    @FXML private VBox messagesBox;
-    @FXML private ScrollPane scrollPane;
-    @FXML private TextField inputField;
-    @FXML private VBox headerChatBox;
-    @FXML private Label tagsLabel;
-    @FXML private Label titreLabel;
-    @FXML private Button usernameLink;
+    @FXML private ListView<Discussion> salonList;
+    @FXML private VBox                 messagesBox;
+    @FXML private ScrollPane           scrollPane;
+    @FXML private TextField            inputField;
+    @FXML private Label                tagsLabel;
+    @FXML private Label                titreLabel;
+    @FXML private Button               usernameLink;
 
-    private InterfaceServeurForum serveur;
+    // Injection automatique du controller MenuBar (fx:id="menuBar" → menuBarController)
+    @FXML private MenuBarController menuBarController;
+
+    private InterfaceServeurForum    serveur;
     private InterfaceSujetDiscussion currentSalon;
-    private Client clientRMI;
-    private String pseudo;
+    private Client                   clientRMI;
+    private String                   pseudo;
 
-    // ====================== lance un event listener sur la liste des salon ======================
+    // ------------------------------------------------------------------ lifecycle
+
     @FXML
     public void initialize() {
-        salonList.getItems().clear();
-        salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
-            if (nouveauSalon != null && serveur != null) {
-                try {
-                    rejoindre(nouveauSalon.getNom_discussion());
+        menuBarController.setParent(this);   // donne au MenuBar une ref vers ChatController
 
-                    Platform.runLater(() -> {
-                        setChatVisible(true);
-                        if (tagsLabel != null) {
-                            tagsLabel.setText("#discussion");
-                        }
-                        System.out.println("Salon : " + nouveauSalon.getNom_discussion());
-                    });
-                } catch (RemoteException e) {
-                    System.err.println("Erreur lors du clic : " + e.getMessage());
+        salonList.getItems().clear();
+        salonList.getSelectionModel().selectedItemProperty().addListener(
+            (obs, ancien, nouveau) -> {
+                if (nouveau != null && serveur != null) {
+                    try {
+                        rejoindre(nouveau.getNom_discussion());
+                        Platform.runLater(() -> {
+                            setChatVisible(true);
+                            if (tagsLabel != null) tagsLabel.setText("#discussion");
+                        });
+                    } catch (RemoteException e) {
+                        System.err.println("Erreur lors du clic : " + e.getMessage());
+                    }
                 }
             }
-        });
+        );
     }
 
-    // ================================= Setup les parametres du controller =================================
+    // ------------------------------------------------------------------ session
+
     public void configurerSession(InterfaceServeurForum server, String pseudo) {
-        this.pseudo = pseudo;
+        this.pseudo  = pseudo;
         this.serveur = server;
 
-        // crée une instance du client et lui permet d'afficher des messages
         try {
-            clientRMI = new Client(msg ->
-                Platform.runLater(() -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
-            pseudo);
-            // transmet le client à App pour qu'il soit unexport proprement à la fermeture
-            // (sans ça, le thread RMI interne du client reste vivant → terminal bloqué)
+            clientRMI = new Client(
+                msg -> Platform.runLater(
+                    () -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
+                pseudo);
             App.setClientRMI(clientRMI);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
-        // feed back utilisateur
         try {
-            List<Discussion> lst_salon = server.listerSalons();
-            if (lst_salon != null && !lst_salon.isEmpty()) {
-                salonList.getItems().addAll(lst_salon);
+            List<Discussion> lst = server.listerSalons();
+            if (lst != null && !lst.isEmpty()) {
+                salonList.getItems().addAll(lst);
                 Platform.runLater(() -> {
                     if (usernameLink != null) usernameLink.setText(pseudo);
-                    if (titreLabel != null) titreLabel.setText("Bienvenue " + pseudo + " !");
-                    if (tagsLabel != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
-                    // permet d'ecrire un message une fois un salon selectionnee
+                    if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
+                    if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
                     setChatVisible(false);
                 });
             } else {
@@ -105,171 +103,184 @@ public class ChatController {
         }
     }
 
-    // ====================== gere l'inscription et la desinscription à un salon =======================
-    private void rejoindre(String titre) throws RemoteException{
-        // désinscrit du salon précédent si on en avait un
+    // ------------------------------------------------------------------ déconnexion (appelée par MenuBarController)
+
+    /**
+     * Désinscrit le client RMI du salon courant et libère les ressources.
+     * La navigation vers AuthLayout est ensuite faite par MenuBarController.
+     */
+    public void deconnecter() {
+        try {
+            if (currentSalon != null && clientRMI != null) {
+                currentSalon.desinscription(clientRMI);
+            }
+            if (clientRMI != null) {
+                UnicastRemoteObject.unexportObject(clientRMI, true);
+                clientRMI = null;
+            }
+        } catch (Exception e) {
+            System.err.println("[ChatController] Erreur déconnexion : " + e.getMessage());
+        }
+        currentSalon = null;
+        serveur      = null;
+    }
+
+    // ------------------------------------------------------------------ salon
+
+    private void rejoindre(String titre) throws RemoteException {
         if (currentSalon != null && clientRMI != null) {
             currentSalon.desinscription(clientRMI);
         }
         currentSalon = serveur.obtientSujet(titre);
-        // inscrit au nouveau salon une seule fois ici
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + titre);
         messagesBox.getChildren().clear();
-        utils_laodMessages(currentSalon.getArchive());
+        utils_loadMessages(currentSalon.getArchive());
     }
 
-    // affiche un lot de message
-    private void utils_laodMessages(Stack<Message> queue_message){
-        while (!queue_message.isEmpty()) {
-            Message message = queue_message.pop();
-            afficherBulle(message.getContenu(), message.getAuthorName().equals(pseudo));
+    private void utils_loadMessages(Stack<Message> messages) {
+        while (!messages.isEmpty()) {
+            Message m = messages.pop();
+            afficherBulle(m.getContenu(), m.getAuthorName().equals(pseudo));
         }
     }
 
-    // ==================================== met en forme un message =====================================
-    private void afficherBulle(String msg, boolean estMoi) {
-        Label message = new Label(msg);
-        message.getStyleClass().add("bulle-message");
-        message.setWrapText(true);
-        message.setMaxWidth(300);
-        VBox conteneur = new VBox(message);
-        if (estMoi) {
-            conteneur.setAlignment(Pos.CENTER_RIGHT);
-        } else {
-            conteneur.setAlignment(Pos.CENTER_LEFT);
-        }
-        messagesBox.getChildren().add(conteneur);
-    }
+    // ------------------------------------------------------------------ rafraîchir (appelé par MenuBarController)
 
-    // getCurrentSalon() supprimée : le listener selectedItemProperty dans initialize()
-    // appelle déjà rejoindre() qui fait obtientSujet() + inscription() + chargement des messages.
-    // Garder cette méthode écrasait currentSalon avec un stub non-inscrit → plus aucun message reçu.
-    // Penser à retirer son onMouseClicked dans le FXML également.
-
-    // ====================================== envoie un message ==================================
-    @FXML
-    public void actionEnvoi() { //FIXME bug quand salon vien d'etre créer
-        String texte = inputField.getText().trim();
-
-        if (texte.isEmpty()) return;
-
-        if (currentSalon == null) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Aucun salon sélectionné");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner un salon avant d'envoyer un message.");
-            alert.showAndWait();
-            return;
-        }
-
-        if (clientRMI == null) {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Client non initialisé");
-            alert.setHeaderText(null);
-            alert.setContentText("Pas de client RMI.");
-            alert.showAndWait();
-            return;
-        }
-
+    /** Recharge la liste des salons depuis le serveur. */
+    public void rafraichirSalons() {
+        if (serveur == null) return;
         try {
-            currentSalon.diffuse(texte, pseudo);
-            inputField.clear();
+            List<Discussion> lst = serveur.listerSalons();
+            salonList.getItems().setAll(lst);
         } catch (RemoteException e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur d'envoi");
-            alert.setHeaderText(null);
-            alert.setContentText("Un problème est arrivé lors de la diffusion : " + e.getMessage());
-            alert.showAndWait();
+            System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
     }
 
+    // ------------------------------------------------------------------ création (appelée par MenuBarController ET par les boutons FXML)
+
+    /** Ouverture du dialog depuis la MenuBar (pas d'ActionEvent). */
+    public void createNewSalonFromMenu() {
+        ouvrirDialogNouveauSalon();
+    }
+
+    /** Ouverture du dialog depuis la MenuBar (pas d'ActionEvent). */
+    public void createNewTagFromMenu() {
+        ouvrirDialogNouveauTag();
+    }
+
+    /** Bouton sidebar "+ Créer un salon". */
+    @FXML
+    private void createNewSalon(ActionEvent event) {
+        ouvrirDialogNouveauSalon();
+    }
+
+    /** Bouton sidebar "+ Ajouter un tag". */
     @FXML
     private void createNewTag(ActionEvent event) {
+        ouvrirDialogNouveauTag();
+    }
+
+    private void ouvrirDialogNouveauSalon() {
+        if (serveur == null) {
+            showAlert(AlertType.ERROR, "Erreur serveur",
+                "Impossible de créer un salon : le serveur n'est pas initialisé.");
+            return;
+        }
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Nouveau Salon");
+        dialog.setContentText("Nom du salon :");
+        dialog.showAndWait().ifPresent(raw -> {
+            String nom = raw.trim();
+            if (nom.isEmpty()) return;
+            boolean existe = salonList.getItems().stream()
+                .anyMatch(d -> nom.equals(d.getNom_discussion()));
+            if (existe) {
+                showAlert(AlertType.WARNING, "Erreur", "Ce salon existe déjà.");
+                return;
+            }
+            try {
+                Discussion nouveau = serveur.creationSalon(nom, pseudo, false);
+                salonList.getItems().add(nouveau);
+                salonList.getSelectionModel().select(nouveau);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+    }
+
+    private void ouvrirDialogNouveauTag() {
         if (currentSalon == null) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner un salon avant d'ajouter un tag.");
-            alert.showAndWait();
+            showAlert(AlertType.INFORMATION, "Information",
+                "Veuillez sélectionner un salon avant d'ajouter un tag.");
             return;
         }
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau tag");
         dialog.setContentText("Nom du tag :");
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(tag -> {
-            String tagNettoye = tag.trim();
-            if (!tagNettoye.isEmpty()) {
-                if (!tagNettoye.startsWith("#")) tagNettoye = "#" + tagNettoye;
-                String tagsActuels = tagsLabel.getText();
-                if (tagsActuels == null || tagsActuels.isEmpty()) {
-                    tagsLabel.setText(tagNettoye);
-                } else {
-                    tagsLabel.setText(tagsActuels + " " + tagNettoye);
-                }
-            }
+        dialog.showAndWait().ifPresent(tag -> {
+            String t = tag.trim();
+            if (t.isEmpty()) return;
+            if (!t.startsWith("#")) t = "#" + t;
+            String actuel = tagsLabel.getText();
+            tagsLabel.setText((actuel == null || actuel.isEmpty()) ? t : actuel + " " + t);
         });
     }
 
-    @FXML
-    private void doNothings() {
-        // placeholder boutons non reliés
-    }
+    // ------------------------------------------------------------------ envoi message
 
-    // ====================== crée un nouveaux salon (et le selctione auto) ====================
     @FXML
-    private void createNewSalon(ActionEvent event) {
-        if (serveur == null) {
-            System.out.println(serveur); // REMOVE ME print de debug
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur serveur");
-            alert.setHeaderText(null);
-            alert.setContentText("Impossible de créer un salon : le serveur n'est pas initialisé.");
-            alert.showAndWait();
+    public void actionEnvoi() {
+        String texte = inputField.getText().trim();
+        if (texte.isEmpty()) return;
+
+        if (currentSalon == null) {
+            showAlert(AlertType.WARNING, "Aucun salon sélectionné",
+                "Veuillez sélectionner un salon avant d'envoyer un message.");
             return;
         }
+        if (clientRMI == null) {
+            showAlert(AlertType.WARNING, "Client non initialisé", "Pas de client RMI.");
+            return;
+        }
+        try {
+            currentSalon.diffuse(texte, pseudo);
+            inputField.clear();
+        } catch (RemoteException e) {
+            showAlert(AlertType.ERROR, "Erreur d'envoi",
+                "Problème lors de la diffusion : " + e.getMessage());
+        }
+    }
 
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouveau Salon");
-        dialog.setContentText("Nom du salon :");
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(raw_nomSalon -> {
-            String nom_Salon = raw_nomSalon.trim();
-            if (!nom_Salon.isEmpty()) {
-                boolean existe = salonList.getItems().stream()
-                    .anyMatch(d -> nom_Salon.equals(d.getNom_discussion()));
-                if (existe) {
-                    Alert alert = new Alert(AlertType.WARNING);
-                    alert.setTitle("Erreur");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Ce salon existe déjà.");
-                    alert.showAndWait();
-                } else {
-                    try {
-                        Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
-                        salonList.getItems().add(nouveauSalon);
-                        salonList.getSelectionModel().select(nouveauSalon);
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-        });
+    // ------------------------------------------------------------------ affichage
+
+    private void afficherBulle(String msg, boolean estMoi) {
+        Label label = new Label(msg);
+        label.getStyleClass().add("bulle-message");
+        label.setWrapText(true);
+        label.setMaxWidth(300);
+        VBox conteneur = new VBox(label);
+        conteneur.setAlignment(estMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+        messagesBox.getChildren().add(conteneur);
     }
 
     private void setChatVisible(boolean visible) {
-        if (scrollPane != null) {
-            scrollPane.setVisible(visible);
-            scrollPane.setManaged(visible);
-        }
+        if (scrollPane != null) { scrollPane.setVisible(visible); scrollPane.setManaged(visible); }
         if (inputField != null && inputField.getParent() != null) {
             inputField.getParent().setVisible(visible);
             inputField.getParent().setManaged(visible);
         }
-        if (tagsLabel != null) {
-            tagsLabel.setVisible(true);
-            tagsLabel.setManaged(true);
-        }
+        if (tagsLabel != null) { tagsLabel.setVisible(true); tagsLabel.setManaged(true); }
     }
+
+    private void showAlert(AlertType type, String titre, String contenu) {
+        Alert alert = new Alert(type);
+        alert.setTitle(titre);
+        alert.setHeaderText(null);
+        alert.setContentText(contenu);
+        alert.showAndWait();
+    }
+
+    @FXML private void doNothings() { /* placeholder */ }
 }

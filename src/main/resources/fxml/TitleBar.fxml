@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="messagerie_instantanee.UI.controllers.TitleBarController"
+      fx:id="titleBar"
+      styleClass="title-bar"
+      alignment="CENTER_LEFT"
+      prefHeight="32"
+      onMousePressed="#handleMousePressed"
+      onMouseDragged="#handleMouseDragged">
+
+    <children>
+
+        <!-- Icône de l'app -->
+        <FontIcon iconLiteral="fas-comments"
+                  iconSize="14"
+                  styleClass="title-bar-icon">
+            <HBox.margin><Insets left="12" right="8"/></HBox.margin>
+        </FontIcon>
+
+        <!-- Titre -->
+        <Label fx:id="titleLabel"
+               text="Messagerie Instantanée"
+               styleClass="title-bar-text"
+               onMousePressed="#handleMousePressed"
+               onMouseDragged="#handleMouseDragged"/>
+
+        <!--
+            Zone flexible : pickOnBounds="true" force JavaFX à détecter les clics
+            même sur une région vide (sans contenu rendu).
+            Les handlers sont répétés ici pour que le drag fonctionne
+            même quand on clique sur cette zone et non sur le label.
+        -->
+        <Region HBox.hgrow="ALWAYS"
+                pickOnBounds="true"
+                onMousePressed="#handleMousePressed"
+                onMouseDragged="#handleMouseDragged"/>
+
+        <!-- Bouton Réduire -->
+        <Button fx:id="minimizeBtn"
+                onAction="#handleMinimize"
+                styleClass="title-bar-btn">
+            <graphic>
+                <FontIcon iconLiteral="fas-minus" iconSize="11"/>
+            </graphic>
+        </Button>
+
+        <!-- Bouton Agrandir / Restaurer -->
+        <Button fx:id="maximizeBtn"
+                onAction="#handleMaximize"
+                styleClass="title-bar-btn">
+            <graphic>
+                <FontIcon fx:id="maximizeIcon" iconLiteral="fas-expand" iconSize="11"/>
+            </graphic>
+        </Button>
+
+        <!-- Bouton Fermer -->
+        <Button fx:id="closeBtn"
+                onAction="#handleClose"
+                styleClass="title-bar-btn title-bar-btn-close">
+            <graphic>
+                <FontIcon iconLiteral="fas-times" iconSize="11"/>
+            </graphic>
+        </Button>
+
+    </children>
+</HBox>
