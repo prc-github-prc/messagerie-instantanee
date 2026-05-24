@@ -1,24 +1,14 @@
 package messagerie_instantanee.server.models;
 
+import static messagerie_instantanee.server.database.DAO.UserDAO.findUserById;
+
 /**
  * Représente un message.
  */
 public class Message {
-    /**
-     * id du message.
-     */
     private int id_message;
-    /**
-     * contenu du message.
-     */
     private String contenu;
-    /**
-     * id de l'auteur du message.
-     */
     private int id_author;
-    /**
-     * id de la discussion.
-     */
     private int id_discussion;
     
     /**
@@ -61,6 +51,10 @@ public class Message {
      */
     public int getId_author() {
         return id_author;
+    }
+
+    public String getAuthorName(){
+        return findUserById(id_author).getUsername();
     }
 
     /**

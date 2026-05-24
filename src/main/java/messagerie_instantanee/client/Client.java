@@ -1,6 +1,7 @@
 package messagerie_instantanee.client;
 
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
+import messagerie_instantanee.server.models.Message;
 
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 
@@ -14,10 +15,10 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class Client extends UnicastRemoteObject implements InterfaceAffichageClient {
 
-    private final java.util.function.Consumer<String> onMessage;
+    private final java.util.function.Consumer<Message> onMessage;
     String pseudo;
 
-    public Client(java.util.function.Consumer<String> onMessage, String pseudo) throws RemoteException {
+    public Client(java.util.function.Consumer<Message> onMessage, String pseudo) throws RemoteException {
         this.onMessage = onMessage;
         this.pseudo = pseudo; // CORRIGÉ : pseudo n'était jamais assigné → getId_user() plantait en NPE
     }
@@ -27,7 +28,7 @@ public class Client extends UnicastRemoteObject implements InterfaceAffichageCli
      * On délègue au Consumer qui appellera Platform.runLater() dans le contrôleur.
      */
     @Override
-    public void affiche(String message) throws RemoteException {
+    public void affiche(Message message) throws RemoteException {
         onMessage.accept(message);
     }
 

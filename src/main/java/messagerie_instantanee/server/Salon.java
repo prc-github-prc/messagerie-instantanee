@@ -65,12 +65,6 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     @Override
     public synchronized void inscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.add(user);
-        try {
-            DiscussionDAO.addUserToDiscussionById(user.getId_user(), id_discussion);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -79,12 +73,6 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     @Override
     public synchronized void desinscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.remove(user);
-        try {
-            DiscussionDAO.RemoveUserFromDiscussionById(user.getId_user(), id_discussion);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -97,21 +85,21 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         if (user == null) {
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        Message msg = new Message(-1, message, user.getId_user(), id_discussion);
+        Message new_message = new Message(-1, message, user.getId_user(), id_discussion);
 
         // stock le message
         try {
-            addMessageToDiscussion(msg);
+            addMessageToDiscussion(new_message);
         } catch (SQLException e) {
             System.out.println("[Salon] Impossible d'ajouter le message à la discussion : " + e.getMessage());
         }
-        lst_messages.add(msg);
+        lst_messages.add(new_message);
 
         // distribue le message
         List<InterfaceAffichageClient> aSupprimer = new ArrayList<>();
         for (InterfaceAffichageClient client : lst_participants) {
             try {
-                client.affiche(message);
+                client.affiche(new_message);
             } catch (RemoteException e) {
                 aSupprimer.add(client);  // client déconnecté → on le retire
             }
