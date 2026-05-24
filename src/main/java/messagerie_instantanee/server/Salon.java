@@ -107,7 +107,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         lst_participants.removeAll(aSupprimer);
     }
 
-    public Queue<Message> getArchive() {
+    public Queue<Message> getArchive() throws RemoteException{
         Queue<Message> archive = new java.util.LinkedList<>();
         for(int i = lst_messages.size() - 1; i >= lst_messages.size() - 20 && i >= 0; i--){
             if(lst_messages.get(i) != null){

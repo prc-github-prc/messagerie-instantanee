@@ -3,6 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.models.Discussion;
+import messagerie_instantanee.server.models.Message;
 
 /**
  * Représente un chatcontroler.
@@ -111,6 +113,15 @@ public class ChatControler {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + titre);
         messagesBox.getChildren().clear();
+        utils_laodMessages(currentSalon.getArchive());
+    }
+
+    // affiche un lot de message
+    private void utils_laodMessages(Queue<Message> queue_message){
+        while (!queue_message.isEmpty()) {
+            Message message = queue_message.remove();
+            afficherBulle(message.getContenu(), message.getAuthorName() == pseudo);
+        }
     }
 
     // ==================================== met en forme un message =====================================
