@@ -48,10 +48,9 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * @param estPrivee visibilité du salon
      */
     public Salon(String nom, User owner, Boolean estPrivee) throws RemoteException {
-        super();
         this.nom = nom;
         this.lst_participants = new ArrayList<>();
-        List<User> autresParticipants = new ArrayList<>();  // personne d'autre à la création
+        List<User> autresParticipants = new ArrayList<>();  // pad d'inscrit a la creation
         try {
             this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
         } catch (SQLException e) {

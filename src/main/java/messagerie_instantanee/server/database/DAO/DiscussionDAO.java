@@ -2,6 +2,7 @@ package messagerie_instantanee.server.database.DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -68,7 +69,7 @@ public class DiscussionDAO {
 
     public static List<Message> findMessagesByIdDiscussion(int id_discussion) {
         try {
-            ResultSet data_discussions = excuteInsertSQL("SELECT * FROM Message WHERE id_discussion =" + id_discussion);
+            ResultSet data_discussions = executeSQLQuerry("SELECT * FROM Message WHERE id_discussion =" + id_discussion);
             return rsToMessage(data_discussions);
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] connexion impossible a la base de donnée" + e.getMessage());
@@ -89,7 +90,7 @@ public class DiscussionDAO {
      */
     public static void insertDiscussion(String titre,Boolean est_prive,User user, List<User> users) throws SQLException{
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +") ON CONFLICT ROLLBACK");
+            ResultSet rs=excuteInsertSQL("INSERT OR ROLLBACK INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +")");
             int clé=0;
             while(rs.next()){
                 clé=rs.getInt("id_discussion");
@@ -119,28 +120,39 @@ public class DiscussionDAO {
      * @param users
      * @return la clé
      */
-    public static int insertDiscussionReturnId(String titre,Boolean est_prive,User user, List<User> users) throws SQLException{
+    public static int insertDiscussionReturnId(String titre, Boolean est_prive, User owner, List<User> users) throws SQLException {
         try {
-            ResultSet rs=excuteInsertSQL("INSERT INTO Discussion(nom_discussion, est_prive) VALUES ('"+ titre+"',"+ est_prive +") ON CONFLICT ROLLBACK");
-            int clé=0;
-            while(rs.next()){
-                clé=rs.getInt("id_discussion");
+            ResultSet rs = excuteInsertSQL(
+                "INSERT OR ROLLBACK INTO Discussion(nom_discussion, est_prive) VALUES ('"
+                + titre + "', " + est_prive + ")"
+            );
+
+            int clé = 0;
+            if (rs.next()) {
+                clé = rs.getInt(1); // getInt(1) plus fiable que getInt("id_discussion") sur getGeneratedKeys()
             }
-            String user_discussion = "INSERT INTO Roles Values ("+ user.getId_user()+","+ clé+","+ "1)";
-            
-            if(!users.isEmpty()){
-                user_discussion+=",";
-                for(User u : users){
-                    if(u.getId_user() != user.getId_user()){ //évite d'insérer le créateur deux fois
-                        user_discussion += "("+ u.getId_user()+","+ clé+","+ "0)";
-                    }
+
+            if (clé == 0) {
+                throw new SQLException("Aucune clé générée pour la nouvelle discussion.");
+            }
+
+            // Construire la liste des valeurs pour Roles
+            List<String> valeurs = new ArrayList<>();
+            valeurs.add("(" + owner.getId_user() + "," + clé + ",1)");
+
+            for (User u : users) {
+                if (u.getId_user() != owner.getId_user()) {
+                    valeurs.add("(" + u.getId_user() + "," + clé + ",0)");
                 }
             }
+
+            String user_discussion = "INSERT INTO Roles VALUES " + String.join(",", valeurs);
             excuteInsertSQL(user_discussion);
+
             return clé;
 
         } catch (SQLException e) {
-            System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
+            System.out.println("[DiscussionDAO] La discussion n'a pas pu être créée : " + e.getMessage());
             throw e;
         }
     }
@@ -152,7 +164,7 @@ public class DiscussionDAO {
      */
     public static void addUserToDiscussionById(int id_user ,int id_discussion) throws SQLException{
         try {
-            excuteInsertSQL("INSERT INTO Role VALUES ("+ id_user+","+ id_discussion +"0) ON CONFLICT ROLLBACK");
+            excuteInsertSQL("INSERT OR ROLLBACK INTO Roles VALUES ("+ id_user+","+ id_discussion +", 0)");
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
             throw e;
@@ -167,7 +179,7 @@ public class DiscussionDAO {
      */
     public static void RemoveUserFromDiscussionById(int id_user ,int id_discussion) throws SQLException{
         try {
-            executeSQLQuerry("DELETE FROM Role WHERE id_discussion =" + id_discussion + "AND id_user=" + id_user);
+            executeSQLQuerry("DELETE FROM Roles WHERE id_discussion =" + id_discussion + "AND id_user=" + id_user);
         } catch (SQLException e) {
             System.out.println("[DiscutionDAO] La discussion n'a pas pu être crée : " + e.getMessage());
             throw e;

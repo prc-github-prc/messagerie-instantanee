@@ -44,9 +44,11 @@ public class ChatControler {
     private Client clientRMI;
     private String pseudo;
 
+    //FIXME mauvause gestion des inscription et desinscription
+
     // ====================== lance un event listener sur la liste des salon ======================
     @FXML 
-    public void initialize(){
+    public void initialize(){ // la fonction semble s'appeler toute seul
         salonList.getItems().clear();
         salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null && serveur != null) {
@@ -257,7 +259,7 @@ public class ChatControler {
                     Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
                     salonList.getItems().add(nouveauSalon);
                     salonList.getSelectionModel().select(nouveauSalon);
-                    currentSalon = serveur.obtientSujet(nom_Salon);
+                    currentSalon = serveur.obtientSujet(nom_Salon); //TODO probablement remplacer par 
                 } catch (Exception e){
                     //TODO mettre l'erreur display quand y'en aura un
                     System.out.println(e.getMessage());

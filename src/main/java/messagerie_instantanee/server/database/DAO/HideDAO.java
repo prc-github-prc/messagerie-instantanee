@@ -41,7 +41,7 @@ public class HideDAO {
      */
     public static void addHideDiscussionByIdDiscussion(int id_discussion, int id_user) throws SQLException{
         try {
-            excuteInsertSQL("INSERT INTO Hide VALUES ("+id_user+","+id_discussion+") ON CONFLICT ROLLBACK");
+            excuteInsertSQL("INSERT OR ROLLBACK INTO Hide VALUES ("+id_user+","+id_discussion+")");
         } catch (SQLException e) {
             System.out.println("[HideDAO] Impossible créer le lien dans hide : " + e.getMessage());
             throw e;
@@ -55,7 +55,7 @@ public class HideDAO {
      */
     public static void deleteHideDiscussionByIdDiscussion(int id_discussion, int id_user) throws SQLException{
         try {
-            excuteInsertSQL("DELETE FROM Hide  WHERE id_user="+id_user+"AND id_discussion="+id_discussion+" ON CONFLICT ROLLBACK");
+            excuteInsertSQL("DELETE OR ROLLBACK FROM Hide  WHERE id_user="+id_user+"AND id_discussion="+id_discussion+" ON CONFLICT ");
         } catch (SQLException e) {
             System.out.println("[HideDAO] Impossible de supprimer le lien dans hide : " + e.getMessage());
             throw e;

@@ -8,13 +8,8 @@ import java.util.Scanner;
  * Permet de lancer le serveur de messagerie.
  */
 public class LancerServeur {
-    /**
-     * port.
-     */
+    
     public static final int PORT = 8090;
-    /**
-     * nom du serveur.
-     */
     public static final String NOM = "messagerie";
 
     public static void main(String[] args) {
