@@ -50,7 +50,7 @@ public class MessageDAO {
             // CORRIGÉ : virgules manquantes entre les valeurs
             // CORRIGÉ : ON CONFLICT ROLLBACK déplacé hors des VALUES -> INSERT OR ROLLBACK INTO
             ResultSet rs = excuteInsertSQL(
-                "INSERT OR ROLLBACK INTO Messages(contenu, datage, horo, id_user, id_discussion) VALUES ('"
+                "INSERT OR ROLLBACK INTO Messages(contenu, datage, horo, id_author, id_discussion) VALUES ('"
                 + message.getContenu() + "', '"
                 + Date.valueOf(LocalDate.now()) + "', '"
                 + Time.valueOf(LocalTime.now()) + "', "

@@ -19,6 +19,7 @@ public class Client extends UnicastRemoteObject implements InterfaceAffichageCli
 
     public Client(java.util.function.Consumer<String> onMessage, String pseudo) throws RemoteException {
         this.onMessage = onMessage;
+        this.pseudo = pseudo; // CORRIGÉ : pseudo n'était jamais assigné → getId_user() plantait en NPE
     }
 
     /**

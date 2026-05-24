@@ -21,7 +21,7 @@ import messagerie_instantanee.server.utils.Enum.Role;
 import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
 
 public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussion {
-    private int id;
+    private int id_discussion;
     private String nom;
     private List<InterfaceAffichageClient> lst_participants;
     private List<Message> lst_messages;
@@ -33,10 +33,10 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
      * quand ils se reconnecteront.
      */
     public Salon(Discussion discussion) throws RemoteException {
-        this.id = discussion.getId_discussion();
+        this.id_discussion = discussion.getId_discussion();
         this.nom = discussion.getNom_discussion();
         this.lst_participants = new ArrayList<>();   // clients connectés, pas de données BDD ici
-        this.lst_messages = DiscussionDAO.findMessagesByIdDiscussion(id);
+        this.lst_messages = DiscussionDAO.findMessagesByIdDiscussion(id_discussion);
         this.estPrivee = discussion.getPrive();
     }
 
@@ -52,7 +52,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         this.lst_participants = new ArrayList<>();
         List<User> autresParticipants = new ArrayList<>();  // pad d'inscrit a la creation
         try {
-            this.id = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
+            this.id_discussion = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     public synchronized void inscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.add(user);
         try {
-            DiscussionDAO.addUserToDiscussionById(user.getId_user(), id);
+            DiscussionDAO.addUserToDiscussionById(user.getId_user(), id_discussion);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     public synchronized void desinscription(InterfaceAffichageClient user) throws RemoteException {
         lst_participants.remove(user);
         try {
-            DiscussionDAO.RemoveUserFromDiscussionById(user.getId_user(), id);
+            DiscussionDAO.RemoveUserFromDiscussionById(user.getId_user(), id_discussion);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -98,7 +98,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         if (user == null) {
             throw new RuntimeException("Impossible de diffuser le message: utilisateur introuvable");
         }
-        Message msg = new Message(-1, message, user.getId_user(), id);
+        Message msg = new Message(-1, message, user.getId_user(), id_discussion);
 
         // stock le message
         try {
@@ -132,7 +132,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
 
     public List<User> getAdmin() {
         try {
-            return RoleDAO.findUserByRole(id, Role.Admin);
+            return RoleDAO.findUserByRole(id_discussion, Role.Admin);
         } catch (Exception e) {
             System.out.println("[Salon] Impossible de trouver l'admin du salon : " + e.getMessage());
             return null;
@@ -141,7 +141,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
 
     public List<User> getUser() {
         try {
-            return RoleDAO.findUserByRole(id, Role.User);
+            return RoleDAO.findUserByRole(id_discussion, Role.User);
         } catch (Exception e) {
             System.out.println("[Salon] Impossible de trouver les utilisateurs du salon : " + e.getMessage());
             return null;
@@ -149,7 +149,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     }
 
     // ============================ getters ============================
-    public int getSalonId() { return id; }
+    public int getSalonId() { return id_discussion; }
     public String getSalonNom() { return nom; }
     public List<InterfaceAffichageClient> getParticipants() { return lst_participants; }
     public Boolean getEstPrivee() { return estPrivee; }

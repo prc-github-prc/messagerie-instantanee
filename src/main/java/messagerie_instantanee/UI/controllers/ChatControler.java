@@ -28,34 +28,30 @@ import messagerie_instantanee.server.models.Discussion;
  */
 public class ChatControler {
 
-    @FXML private ListView<Discussion> salonList;
-    @FXML private Label salonLabel;  //la liste des salon
-    @FXML private VBox messagesBox;  
-    @FXML private ScrollPane scrollPane;  //le layout des message
-    @FXML private TextField inputField; //entrée de l'utilisateur
-    @FXML private VBox headerChatBox; // partie haute du layout de message
-    @FXML private Label tagsLabel;  //laebl de tag
-    @FXML private Label titreLabel; //label de titre.
+    @FXML private ListView<Discussion> salonList; //la liste des salon
+    @FXML private Label salonLabel;
+    @FXML private VBox messagesBox;
+    @FXML private ScrollPane scrollPane;
+    @FXML private TextField inputField;
+    @FXML private VBox headerChatBox;
+    @FXML private Label tagsLabel;
+    @FXML private Label titreLabel;
     @FXML private Button usernameLink;
 
-    // InterfaceServeurForum au lieu de Server
     private InterfaceServeurForum serveur;
     private InterfaceSujetDiscussion currentSalon;
     private Client clientRMI;
     private String pseudo;
 
-    //FIXME mauvause gestion des inscription et desinscription
-
     // ====================== lance un event listener sur la liste des salon ======================
-    @FXML 
-    public void initialize(){ // la fonction semble s'appeler toute seul
+    @FXML
+    public void initialize() {
         salonList.getItems().clear();
         salonList.getSelectionModel().selectedItemProperty().addListener((observable, ancienSalon, nouveauSalon) -> {
             if (nouveauSalon != null && serveur != null) {
                 try {
-                    currentSalon = serveur.obtientSujet(nouveauSalon.getNom_discussion());
-                    //rejoidre(nouveauSalon.getNom_discussion())
-                    
+                    rejoindre(nouveauSalon.getNom_discussion());
+
                     Platform.runLater(() -> {
                         titreLabel.setText(nouveauSalon.getNom_discussion());
                         setChatVisible(true);
@@ -71,7 +67,7 @@ public class ChatControler {
         });
     }
 
-    // ================================= Setup les parammetre du crontroller =================================
+    // ================================= Setup les parametres du controller =================================
     public void configurerSession(InterfaceServeurForum server, String pseudo) {
         this.pseudo = pseudo;
         this.serveur = server;
@@ -88,51 +84,39 @@ public class ChatControler {
         // feed back utilisateur
         try {
             List<Discussion> lst_salon = server.listerSalons();
-            if(lst_salon != null && !lst_salon.isEmpty()){
+            if (lst_salon != null && !lst_salon.isEmpty()) {
                 salonList.getItems().addAll(lst_salon);
                 Platform.runLater(() -> {
-                    if (usernameLink != null) {
-                        usernameLink.setText(pseudo); 
-                    }
-                    if (titreLabel != null) {
-                        titreLabel.setText("Bienvenue " + pseudo + " !");
-                    }
-                    if (tagsLabel != null) {
-                        tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
-                    }
+                    if (usernameLink != null) usernameLink.setText(pseudo);
+                    if (titreLabel != null) titreLabel.setText("Bienvenue " + pseudo + " !");
+                    if (tagsLabel != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
                     // permet d'ecrire un message une fois un salon selectionnee
                     setChatVisible(false);
                 });
-            }
-            else{
+            } else {
                 currentSalon = null;
                 titreLabel.setText("Aucun salon disponible");
             }
-            
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    // ====================== gere l'insription et la desinsciption a un salon ========================
-    private void rejoindre(String titre) {
-        try {//TODO finish me
-            if (currentSalon != null && clientRMI != null) {
-                currentSalon.desinscription(clientRMI);
-            }
-            currentSalon = serveur.obtientSujet(titre);
-            currentSalon.inscription(clientRMI);
-            salonLabel.setText("# " + titre);
-            messagesBox.getChildren().clear();
-        } catch (RemoteException e) {
-            e.printStackTrace();
+    // ====================== gere l'inscription et la desinscription à un salon =======================
+    private void rejoindre(String titre) throws RemoteException{
+        // désinscrit du salon précédent si on en avait un
+        if (currentSalon != null && clientRMI != null) {
+            currentSalon.desinscription(clientRMI);
         }
+        currentSalon = serveur.obtientSujet(titre);
+        // inscrit au nouveau salon une seule fois ici
+        currentSalon.inscription(clientRMI);
+        salonLabel.setText("# " + titre);
+        messagesBox.getChildren().clear();
     }
 
-    // ==================================== mets en forme un message =====================================
+    // ==================================== met en forme un message =====================================
     private void afficherBulle(String msg, boolean estMoi) {
-        Alert alert = new Alert(null);
-        alert.showAndWait();
         Label message = new Label(msg);
         message.getStyleClass().add("bulle-message");
         message.setWrapText(true);
@@ -147,11 +131,9 @@ public class ChatControler {
     }
 
     @FXML
-    public void getCurrentSalon(MouseEvent event){
+    public void getCurrentSalon(MouseEvent event) {
         Discussion clicked = salonList.getSelectionModel().getSelectedItem();
-        if (clicked == null) {
-            return;
-        }
+        if (clicked == null) return;
         try {
             currentSalon = serveur.obtientSujet(clicked.getNom_discussion());
         } catch (RemoteException e) {
@@ -159,14 +141,12 @@ public class ChatControler {
         }
     }
 
-    // ====================================== envoy un message ==================================
+    // ====================================== envoie un message ==================================
     @FXML
     public void actionEnvoi() {
         String texte = inputField.getText().trim();
 
-        if (texte.isEmpty()) {
-            return;
-        }
+        if (texte.isEmpty()) return;
 
         if (currentSalon == null) {
             Alert alert = new Alert(AlertType.WARNING);
@@ -177,9 +157,19 @@ public class ChatControler {
             return;
         }
 
+        if (clientRMI == null) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Client non initialisé");
+            alert.setHeaderText(null);
+            alert.setContentText("Pas de client RMI.");
+            alert.showAndWait();
+            return;
+        }
+
         try {
             currentSalon.diffuse(texte, pseudo);
             inputField.clear();
+            afficherBulle(texte, true); // affiche le message côté envoyeur
         } catch (RemoteException e) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur d'envoi");
@@ -195,20 +185,18 @@ public class ChatControler {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText(null);
-            alert.setContentText("Veuillez sélectionner un salon avant d'ajouter un tag ");
+            alert.setContentText("Veuillez sélectionner un salon avant d'ajouter un tag.");
             alert.showAndWait();
-            return; 
+            return;
         }
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau tag");
         dialog.setContentText("Nom du tag :");
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(tag -> {   
+        result.ifPresent(tag -> {
             String tagNettoye = tag.trim();
             if (!tagNettoye.isEmpty()) {
-                if (!tagNettoye.startsWith("#")) {
-                    tagNettoye = "#" + tagNettoye;
-                }
+                if (!tagNettoye.startsWith("#")) tagNettoye = "#" + tagNettoye;
                 String tagsActuels = tagsLabel.getText();
                 if (tagsActuels == null || tagsActuels.isEmpty()) {
                     tagsLabel.setText(tagNettoye);
@@ -216,20 +204,19 @@ public class ChatControler {
                     tagsLabel.setText(tagsActuels + " " + tagNettoye);
                 }
             }
-        }); 
+        });
     }
 
-    // ======================== evite les erreur de compilation des bouton pas relier ==========================
     @FXML
-    private void doNothings(){
-        return;
+    private void doNothings() {
+        // placeholder boutons non reliés
     }
 
     // ====================== crée un nouveaux salon (et le selctione auto) ====================
     @FXML
     private void createNewSalon(ActionEvent event) {
         if (serveur == null) {
-            System.out.println(serveur);
+            System.out.println(serveur); // REMOVE ME print de debug
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur serveur");
             alert.setHeaderText(null);
@@ -242,33 +229,32 @@ public class ChatControler {
         dialog.setTitle("Nouveau Salon");
         dialog.setContentText("Nom du salon :");
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(nomSalon -> {   
-        String nom_Salon = nomSalon.trim();
-        
-        if (!nom_Salon.isEmpty()) {
-            boolean existe = salonList.getItems().stream()
-                .anyMatch(d -> nom_Salon.equals(d.getNom_discussion()));//TODO Est qu'on envlève la verification de nom car dans ce qu'on a def c'est possible d'avoir 2 salon avec le même nom
-            if (existe) {
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setTitle("Erreur");
-                alert.setHeaderText(null);
-                alert.setContentText("Ce salon existe déjà ");
-                alert.showAndWait();
-            } else {
-                try{
-                    Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
-                    salonList.getItems().add(nouveauSalon);
-                    salonList.getSelectionModel().select(nouveauSalon);
-                    currentSalon = serveur.obtientSujet(nom_Salon); //TODO probablement remplacer par 
-                } catch (Exception e){
-                    //TODO mettre l'erreur display quand y'en aura un
-                    System.out.println(e.getMessage());
+        result.ifPresent(nomSalon -> {
+            String nom_Salon = nomSalon.trim();
+            if (!nom_Salon.isEmpty()) {
+                boolean existe = salonList.getItems().stream()
+                    .anyMatch(d -> nom_Salon.equals(d.getNom_discussion()));
+                if (existe) {
+                    Alert alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Ce salon existe déjà.");
+                    alert.showAndWait();
+                } else {
+                    try {
+                        Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
+                        salonList.getItems().add(nouveauSalon);
+                        salonList.getSelectionModel().select(nouveauSalon);
+                        // rejoindre() est appelé automatiquement par le listener de salonList
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
-        }}); 
+        });
     }
 
-    private void setChatVisible(boolean visible){
+    private void setChatVisible(boolean visible) {
         if (scrollPane != null) {
             scrollPane.setVisible(visible);
             scrollPane.setManaged(visible);
