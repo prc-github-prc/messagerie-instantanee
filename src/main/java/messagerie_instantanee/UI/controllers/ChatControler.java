@@ -73,7 +73,7 @@ public class ChatControler {
         // crée une instance du client et lui permet d'afficher des messages
         try {
             clientRMI = new Client(msg ->
-                Platform.runLater(() -> afficherBulle(msg.getContenu(), false)),
+                Platform.runLater(() -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
             pseudo);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -167,7 +167,6 @@ public class ChatControler {
         try {
             currentSalon.diffuse(texte, pseudo);
             inputField.clear();
-            afficherBulle(texte, true);
         } catch (RemoteException e) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Erreur d'envoi");

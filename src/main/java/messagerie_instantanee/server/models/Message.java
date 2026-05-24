@@ -1,11 +1,16 @@
 package messagerie_instantanee.server.models;
 
+import java.io.Serializable;
+
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserById;
 
 /**
  * Représente un message.
  */
-public class Message {
+public class Message implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private int id_message;
     private String contenu;
     private int id_author;
@@ -29,41 +34,15 @@ public class Message {
         this.id_discussion = id_discussion;
     }
 
-    /**
-     * 
-     * @return id_message
-     */
-    public int getId_message() {
-        return id_message;
-    }
-
-    /**
-     * 
-     * @return contenu
-     */
-    public String getContenu() {
-        return contenu;
-    }
-
-    /**
-     * 
-     * @return id_author
-     */
-    public int getId_author() {
-        return id_author;
-    }
+    public int getId_message() {return id_message;}
+    public String getContenu() {return contenu;}
+    public int getId_author() {return id_author;}
+    public int getId_discussion() {return id_discussion;}
 
     public String getAuthorName(){
         return findUserById(id_author).getUsername();
     }
 
-    /**
-     * 
-     * @return id_discussion
-     */
-    public int getId_discussion() {
-        return id_discussion;
-    }
 
     /*=============Setter========================================= */
     /**
