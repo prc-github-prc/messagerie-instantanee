@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import messagerie_instantanee.UI.App;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -77,6 +78,9 @@ public class ChatControler {
             clientRMI = new Client(msg ->
                 Platform.runLater(() -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
             pseudo);
+            // transmet le client à App pour qu'il soit unexport proprement à la fermeture
+            // (sans ça, le thread RMI interne du client reste vivant → terminal bloqué)
+            App.setClientRMI(clientRMI);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -120,7 +124,8 @@ public class ChatControler {
     private void utils_laodMessages(Queue<Message> queue_message){
         while (!queue_message.isEmpty()) {
             Message message = queue_message.remove();
-            afficherBulle(message.getContenu(), message.getAuthorName() == pseudo);
+            // CORRIGÉ : == → .equals() (même bug que dans le consumer, == compare les références)
+            afficherBulle(message.getContenu(), message.getAuthorName().equals(pseudo));
         }
     }
 
