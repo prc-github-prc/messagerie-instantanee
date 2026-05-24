@@ -20,7 +20,7 @@
     stylesheets="@../css/style.css" 
     xmlns="http://javafx.com/javafx" 
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="messagerie_instantanee.UI.controllers.ChatControler">  
+    fx:controller="messagerie_instantanee.UI.controllers.ChatController">  
 
     <!-- ==================== Layout du coté gauche (liste discussion, compte, creation) ==================== -->
     <left>

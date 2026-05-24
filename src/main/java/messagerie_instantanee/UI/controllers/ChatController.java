@@ -28,7 +28,7 @@ import messagerie_instantanee.server.models.Message;
 /**
  * Représente un chatcontroler.
  */
-public class ChatControler {
+public class ChatController {
 
     @FXML private ListView<Discussion> salonList; //la liste des salon
     @FXML private VBox messagesBox;

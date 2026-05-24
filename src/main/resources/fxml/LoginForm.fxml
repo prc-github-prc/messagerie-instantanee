@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    LoginForm.fxml — Formulaire de connexion (contenu uniquement, sans squelette)
+    Chargé dynamiquement dans le contentArea de AuthLayout.fxml.
+
+    Le errorLabel a été supprimé : les erreurs passent désormais par
+    AuthLayoutController.showError(String) → NotificationController.
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="messagerie_instantanee.UI.controllers.LoginController"
+      fx:id="loginPane"
+      alignment="CENTER"
+      maxWidth="450"
+      spacing="25"
+      styleClass="login-box">
+
+    <padding>
+        <Insets bottom="50" left="50" right="50" top="50"/>
+    </padding>
+
+    <children>
+        <!-- Titre -->
+        <Label text="Connexion au compte"
+               style="-fx-font-size: 28; -fx-font-weight: bold;"/>
+
+        <!-- Champ username -->
+        <VBox spacing="8" fillWidth="true">
+            <Label text="username" styleClass="input-label" style="-fx-font-size: 14;"/>
+            <TextField fx:id="pseudoField"
+                       styleClass="login-input"
+                       style="-fx-padding: 12; -fx-background-radius: 8;"/>
+        </VBox>
+
+        <!-- Champ mot de passe -->
+        <VBox spacing="8" fillWidth="true">
+            <Label text="mot de passe" styleClass="input-label" style="-fx-font-size: 14;"/>
+            <PasswordField fx:id="passwordField"
+                           styleClass="login-input"
+                           style="-fx-padding: 12; -fx-background-radius: 8;"/>
+        </VBox>
+
+        <!-- Champ serveur -->
+        <VBox spacing="8" fillWidth="true">
+            <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;"/>
+            <TextField fx:id="serverField"
+                       text="localhost"
+                       styleClass="login-input"
+                       style="-fx-padding: 12; -fx-background-radius: 8;"/>
+        </VBox>
+
+        <!-- Bouton de connexion -->
+        <Button text="Se connecter"
+                onAction="#handleLogin"
+                prefWidth="250"
+                styleClass="btn-connect"/>
+
+        <!-- Lien vers l'inscription -->
+        <Hyperlink text="Vous n'avez pas de compte ? Inscrivez-vous !"
+                   onAction="#showRegister"
+                   styleClass="login-link"
+                   style="-fx-underline: false; -fx-font-size: 13;"/>
+    </children>
+
+</VBox>

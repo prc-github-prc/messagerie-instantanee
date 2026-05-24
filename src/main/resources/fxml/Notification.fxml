@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!--
+    Notification.fxml — Toast de notification flottant (erreurs, succès, info)
+    Inclus dans AuthLayout.fxml via <fx:include>, positionné en TOP_RIGHT du StackPane.
+    Masqué par défaut (visible="false" managed="false").
+
+    Controller : messagerie_instantanee.UI.controllers.NotificationController
+    API publique :
+        showError(String message)   → fond rouge
+        showSuccess(String message) → fond vert
+        showInfo(String message)    → fond bleu
+        hide()                      → masque la notification
+-->
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="messagerie_instantanee.UI.controllers.NotificationController"
+      fx:id="notificationBox"
+      visible="false"
+      managed="false"
+      alignment="CENTER_LEFT"
+      spacing="12"
+      minWidth="280"
+      maxWidth="380"
+      style="-fx-background-color: #e74c3c;
+             -fx-background-radius: 10px;
+             -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 12, 0, 0, 4);">
+    <padding>
+        <Insets top="14" right="10" bottom="14" left="16"/>
+    </padding>
+    <children>
+
+        <!-- Icône (change selon le type) -->
+        <FontIcon fx:id="notifIcon"
+                  iconLiteral="fas-exclamation-circle"
+                  iconSize="18"
+                  iconColor="white"/>
+
+        <!-- Message (occupe tout l'espace restant) -->
+        <Label fx:id="notifLabel"
+               wrapText="true"
+               maxWidth="260"
+               style="-fx-text-fill: white;
+                      -fx-font-size: 13px;
+                      -fx-font-weight: bold;"
+               HBox.hgrow="ALWAYS"/>
+
+        <!-- Bouton fermer -->
+        <Button onAction="#hide"
+                styleClass="icon-button-clean"
+                style="-fx-padding: 2px 4px;">
+            <graphic>
+                <FontIcon iconLiteral="fas-times"
+                          iconSize="14"
+                          iconColor="rgba(255,255,255,0.85)"/>
+            </graphic>
+        </Button>
+
+    </children>
+</HBox>

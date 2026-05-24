@@ -6,6 +6,8 @@ module messagerie_instantanee {
     requires java.sql;
     requires java.rmi;
     requires com.google.gson;
+    requires javafx.graphics;
+    requires org.kordamp.ikonli.javafx;
 
     // UI
     opens messagerie_instantanee.UI.controllers to javafx.fxml;

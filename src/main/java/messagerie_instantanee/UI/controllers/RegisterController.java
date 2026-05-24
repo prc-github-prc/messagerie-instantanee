@@ -5,103 +5,82 @@ import java.rmi.Naming;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 
 /**
- * Controller d'inscription.
+ * Controller de RegisterForm.fxml.
+ *
+ * Ne gère plus :
+ *   - l'affichage des erreurs (→ parent.showError / parent.showSuccess)
+ *   - le thème (→ TopBarController)
+ *   - la sidebar (→ TopBarController)
+ *
+ * Requiert un appel à setParent() après le chargement FXML (fait par AuthLayoutController).
  */
 public class RegisterController {
-    @FXML private TextField pseudoField;
+
+    @FXML private TextField     pseudoField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField serverField;
-    @FXML private VBox sidebarMenu;
-    @FXML private Label errorLabel; //zone d'erreur éventuelle.
-    @FXML private VBox signupPane;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private TextField     serverField;
 
-    private boolean isDarkTheme = true;
+    private AuthLayoutController parent;
 
-    // Affiche le formulaire de connexion
+    // ------------------------------------------------------------------ init
+
+    /** Injecté par AuthLayoutController après le chargement du FXML. */
+    public void setParent(AuthLayoutController parent) {
+        this.parent = parent;
+    }
+
+    // ------------------------------------------------------------------ actions FXML
+
+    /** Lien "Déjà un compte ?" → affiche LoginForm dans le squelette. */
     @FXML
     private void showLogin() {
-        try{
-            NavigationManager.getInstance()
-                .naviguerVers("/fxml/LoginView.fxml");
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorLabel.setText("Erreur lors du chargement de l'application");
-        }
+        parent.showLogin();
     }
 
-    /**
-     * 
-     * @param event
-     */
-    @FXML
-    private void handleToggleSidebar(ActionEvent event) {
-        if (sidebarMenu != null) {
-            boolean estVisible = sidebarMenu.isVisible();
-            sidebarMenu.setVisible(!estVisible);
-            sidebarMenu.setManaged(!estVisible);
-        }
-    }
-
-    /**
-     * 
-     * @param event
-     */
+    /** Valide les champs et tente la création de compte via RMI. */
     @FXML
     private void handleCreateAccount(ActionEvent event) {
-        String pseudo = pseudoField.getText().trim();
-        String serveur = serverField.getText().trim();
-        String password = passwordField.getText().trim();
+        String pseudo    = pseudoField.getText().trim();
+        String serveur   = serverField.getText().trim();
+        String password  = passwordField.getText().trim();
+        String confirm   = confirmPasswordField.getText().trim();
 
-        // =========== validation du contenue des champ ===========
-        if (pseudo.isEmpty() || serveur.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Veuillez remplir tous les champs");
+        // -------- validation basique --------
+        if (pseudo.isEmpty() || serveur.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+            parent.showError("Veuillez remplir tous les champs");
             return;
         }
 
-        // ========= verification que le serveur existe ===========
+        if (!password.equals(confirm)) {
+            parent.showError("Les mots de passe ne correspondent pas");
+            return;
+        }
+
+        // -------- connexion RMI + création --------
         try {
             InterfaceServeurForum server = (InterfaceServeurForum)
                 Naming.lookup("//" + serveur + ":8090/messagerie");
 
-            // ============== verifie pseudo + pwd =============
-            try{
-                if (server.creationUser(pseudo, password)){
-                    System.out.println("[Register Controller] compte crée");
+            try {
+                if (server.creationUser(pseudo, password)) {
+                    parent.showSuccess("Compte créé ! Vous pouvez vous connecter.");
+                    parent.showLogin();
                 } else {
-                    errorLabel.setText("Vous ne pouvez pas crée de compte");
-                    return;
+                    parent.showError("Impossible de créer ce compte");
                 }
-            } catch(IllegalSelectorException e){
-                errorLabel.setText("Ce nom d'utilisateur est deja utiliser");
-                return;
+            } catch (IllegalSelectorException e) {
+                parent.showError("Ce nom d'utilisateur est déjà utilisé");
             }
+
         } catch (Exception e) {
-            errorLabel.setText("Connexion impossible : " + e.getMessage());
-            return;
+            parent.showError("Connexion impossible : " + e.getMessage());
+            e.printStackTrace();
         }
-
-        errorLabel.setText("Compte créé ! Retour à la connexion."); //TODO asser ça pop up si on a le temps
-        showLogin(); // Retourne à la connexion après création
-    }
-
-    @FXML
-    private void handleToggleTheme() {
-         var root = signupPane.getScene().getRoot();
-        if (isDarkTheme) {
-            root.getStyleClass().remove("dark-theme");
-            root.getStyleClass().add("light-theme");
-        } else {
-            root.getStyleClass().remove("light-theme");
-            root.getStyleClass().add("dark-theme");
-        }
-        isDarkTheme = !isDarkTheme;
     }
 }
