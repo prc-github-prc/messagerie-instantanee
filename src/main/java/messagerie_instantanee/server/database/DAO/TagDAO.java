@@ -8,10 +8,10 @@ import java.util.NoSuchElementException;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Tag;
 
+import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToDiscussion;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToTag;
-
 
 /**
  * DAO pour les Tags.
@@ -19,69 +19,64 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToTag;
 public class TagDAO {
 
     /*===================================Méthodes de recherche=======================================*/
-    /**
-     * 
-     * @param nom_tag
-     * @return
-     */
-    public static List<Discussion> findDiscussionListByNomTag(String nom_tag){
-        try{
-            ResultSet discussion_data = executeSQLQuerry("SELECT * FROM Discussion d NATURAL JOIN Tags t WHERE t.nom_tag = " + nom_tag);
+
+    public static List<Discussion> findDiscussionListByNomTag(String nom_tag) {
+        try {
+            // CORRIGÉ : quotes manquantes autour de nom_tag (valeur texte)
+            ResultSet discussion_data = executeSQLQuerry(
+                "SELECT * FROM Discussion d NATURAL JOIN Tags t WHERE t.nom_tag = '" + nom_tag + "'"
+            );
             return rsToDiscussion(discussion_data);
         } catch (SQLException e) {
-            System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage()); 
-            return null; 
-        } catch (NoSuchElementException e){
-            System.out.println("[TagDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
+            System.out.println("[TagDAO] connexion impossible a la base de donnée : " + e.getMessage());
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("[TagDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
     }
-    /**
-     * 
-     * @param id_discussion
-     * @return
-     */
-    public static List<Tag> findTagByIdDiscussion(int id_discussion){
-        try{
-            ResultSet tag_data = executeSQLQuerry("SELECT * FROM Tag t NATURAL JOIN Tags ts NATURAL JOIN Discussion d WHERE d.id_discussion = " + id_discussion);
+
+    public static List<Tag> findTagByIdDiscussion(int id_discussion) {
+        try {
+            ResultSet tag_data = executeSQLQuerry(
+                "SELECT * FROM Tag t NATURAL JOIN Tags ts NATURAL JOIN Discussion d WHERE d.id_discussion = " + id_discussion
+            );
             return rsToTag(tag_data);
         } catch (SQLException e) {
-            System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage()); 
-            return null; 
-        } catch (NoSuchElementException e){
-            System.out.println("[TagDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
+            System.out.println("[TagDAO] connexion impossible a la base de donnée : " + e.getMessage());
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("[TagDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
     }
 
     /*===================================Méthodes d'insertion=======================================*/
 
-    /**
-     * 
-     * @param id_discussion
-     * @param nom_tag
-     */
-    public static void insertTag(String nom_tag, int id_discussion) throws SQLException{
-        try{
-            executeSQLQuerry("INSERT INTO Tag VALUES ("+ nom_tag +") ON CONFLICT IGNORE"); //TODO a test
-            executeSQLQuerry("INSERT INTO Tags VALUES ("+ nom_tag +","+ id_discussion +") ON CONFLICT ROLLBACK");
-        } catch (SQLException e) {
-            System.out.println("[TagDAO] connexion impossible a la base de donnée" + e.getMessage());
-            throw e;
-        } 
-    }
-
-    /**
-     * 
-     * @param id_discussion
-     * @param nom_tag
-     */
-    public static void deleteTagDiscussion(String nom_tag, int id_discussion) throws SQLException{
+    public static void insertTag(String nom_tag, int id_discussion) throws SQLException {
         try {
-            executeSQLQuerry("DELETE FROM Tags WHERE nom_tag = "+ nom_tag + "AND id_discussion = " + id_discussion +" ON CONFLICT ROLLBACK");
+            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour INSERT)
+            // CORRIGÉ : INSERT OR IGNORE INTO / INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
+            // CORRIGÉ : quotes autour de nom_tag (valeur texte)
+            excuteInsertSQL("INSERT OR IGNORE INTO Tag VALUES ('" + nom_tag + "')");
+            excuteInsertSQL("INSERT OR ROLLBACK INTO Tags VALUES ('" + nom_tag + "'," + id_discussion + ")");
         } catch (SQLException e) {
-            System.out.println("[TagDAO] Impossible de supprimer le lien dans Tags : " + e.getMessage());
+            System.out.println("[TagDAO] Impossible d'insérer le tag : " + e.getMessage());
             throw e;
         }
-    }    
+    }
+
+    public static void deleteTagDiscussion(String nom_tag, int id_discussion) throws SQLException {
+        try {
+            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour DELETE)
+            // CORRIGÉ : ON CONFLICT ROLLBACK n'est pas valide sur un DELETE
+            // CORRIGÉ : quotes autour de nom_tag + espace avant AND
+            excuteInsertSQL(
+                "DELETE FROM Tags WHERE nom_tag = '" + nom_tag + "' AND id_discussion = " + id_discussion
+            );
+        } catch (SQLException e) {
+            System.out.println("[TagDAO] Impossible de supprimer le tag : " + e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -15,58 +15,70 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 /**
  * DAO pour les messages.
  */
 public class MessageDAO {
+
     /*===================================Méthodes de recherche=======================================*/
-    /**
-     * 
-     * @param id_message
-     * @return
-     */
-    public static Message findMessageById(int id_message){
-        try{
-            ResultSet user_data = executeSQLQuerry("SELECT * FROM Messages WHERE id_message = " + id_message);
+
+    public static Message findMessageById(int id_message) {
+        try {
+            // CORRIGÉ : table "Messages" -> "Message"
+            ResultSet user_data = executeSQLQuerry(
+                "SELECT * FROM Message WHERE id_message = " + id_message
+            );
             return rsToMessage(user_data).getFirst();
         } catch (SQLException e) {
-            System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage()); 
-            return null; 
-        } catch (NoSuchElementException e){
-            System.out.println("[MessageDAO] ce resultats ne contient aucune valeur : " + e.getMessage());
+            System.out.println("[MessageDAO] connexion impossible a la base de donnée : " + e.getMessage());
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("[MessageDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
             return null;
         }
     }
+
     /*===================================Méthodes d'insertion=======================================*/
-    /**
-     * 
-     * @param message
-     * @return cle du message
-     */
-    public static int addMessageToDiscussion(Message message) throws SQLException{
-        try{
-            ResultSet rs = excuteInsertSQL("INSERT INTO Message(contenu, datage, horo, id_user, id_discussion ) VALUES ("+ message.getContenu() + Date.valueOf(LocalDate.now()) + Time.valueOf(LocalTime.now()) + ","+ message.getId_author()+","+ message.getId_discussion() +"ON CONFLICT ROLLBACK)");
-            int clé=0;
-            while(rs.next()){
-                clé=rs.getInt("id_discussion");
-            }
-            return clé;
-        } catch (SQLException e) {
-            System.out.println("[MessageDAO] connexion impossible a la base de donnée" + e.getMessage());
-            throw e;
-        } 
-    }
 
     /**
-     * 
      * @param message
+     * @return id du message inséré
      */
-    public static void deleteMessageFromDiscussion(Message message) throws SQLException{
+    public static int addMessageToDiscussion(Message message) throws SQLException {
         try {
-            executeSQLQuerry("DELETE FROM Message WHERE id_message = "+ message.getId_message()+"");
+            // CORRIGÉ : quotes autour des valeurs texte/date/heure
+            // CORRIGÉ : virgules manquantes entre les valeurs
+            // CORRIGÉ : ON CONFLICT ROLLBACK déplacé hors des VALUES -> INSERT OR ROLLBACK INTO
+            ResultSet rs = excuteInsertSQL(
+                "INSERT OR ROLLBACK INTO Message(contenu, datage, horo, id_user, id_discussion) VALUES ('"
+                + message.getContenu() + "', '"
+                + Date.valueOf(LocalDate.now()) + "', '"
+                + Time.valueOf(LocalTime.now()) + "', "
+                + message.getId_author() + ", "
+                + message.getId_discussion() + ")"
+            );
+
+            int clé = 0;
+            // CORRIGÉ : getInt(1) au lieu de getInt("id_discussion") sur getGeneratedKeys()
+            if (rs.next()) {
+                clé = rs.getInt(1);
+            }
+            return clé;
+
         } catch (SQLException e) {
-            System.out.println("[MessageDAO] Impossible de supprimer le lien dans message : " + e.getMessage());
+            System.out.println("[MessageDAO] Impossible d'insérer le message : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public static void deleteMessageFromDiscussion(Message message) throws SQLException {
+        try {
+            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery ne fonctionne pas pour DELETE)
+            excuteInsertSQL(
+                "DELETE FROM Message WHERE id_message = " + message.getId_message()
+            );
+        } catch (SQLException e) {
+            System.out.println("[MessageDAO] Impossible de supprimer le message : " + e.getMessage());
             throw e;
         }
     }

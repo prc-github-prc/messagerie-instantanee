@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 import messagerie_instantanee.server.models.User;
+import static messagerie_instantanee.server.utils.ExecSqlQuerry.excuteInsertSQL;
 import static messagerie_instantanee.server.utils.ExecSqlQuerry.executeSQLQuerry;
 import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 
@@ -15,7 +16,9 @@ public class UserDAO {
 
     public static User findUserById(int id_user) {
         try {
-            ResultSet userData = executeSQLQuerry("SELECT * FROM User WHERE id_User = " + id_user);
+            ResultSet userData = executeSQLQuerry(
+                "SELECT * FROM User WHERE id_user = " + id_user
+            );
             return rsToUser(userData).getFirst();
         } catch (SQLException e) {
             System.out.println("[UserDAO] connexion impossible a la base de donnée : " + e.getMessage());
@@ -47,12 +50,17 @@ public class UserDAO {
 
     public static void insertUser(String username, String password) throws SQLException {
         try {
-            executeSQLQuerry(
-                "INSERT INTO User(username, password_hash) VALUES ('" + username + "', '" + password + "' ON CONFLICT ROLLBACK)"
+            // CORRIGÉ : parenthèse fermante mal placée (était après password, avant ON CONFLICT)
+            // CORRIGÉ : INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
+            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour INSERT)
+            excuteInsertSQL(
+                "INSERT OR ROLLBACK INTO User(username, password_hash) VALUES ('"
+                + username + "', '" + password + "')"
             );
         } catch (SQLException e) {
             System.out.println("[UserDAO] erreur insertion : " + e.getMessage());
-            throw new SQLException();
+            // CORRIGÉ : throw new SQLException() -> throw e (pour conserver le message d'origine)
+            throw e;
         }
     }
 }
