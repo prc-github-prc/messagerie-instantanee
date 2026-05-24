@@ -77,7 +77,7 @@ public class DiscussionDAO {
             return rsToMessage(data_messages);
         } catch (SQLException e) {
             System.out.println("[DiscussionDAO] connexion impossible a la base de donnée : " + e.getMessage());
-            return null;
+            return new ArrayList<Message>();
         } catch (NoSuchElementException e) {
             System.out.println("[DiscussionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
             return new ArrayList<Message>();

@@ -44,7 +44,7 @@ public class MessageDAO {
      * @param message
      * @return id du message inséré
      */
-    public static int addMessageToDiscussion(Message message) throws SQLException {
+    public static void addMessageToDiscussion(Message message) throws SQLException {
         try {
             ResultSet rs = excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO Messages(contenu, datage, horo, id_author, id_discussion) VALUES ('"
@@ -54,14 +54,6 @@ public class MessageDAO {
                 + message.getId_author() + ", "
                 + message.getId_discussion() + ")"
             );
-
-            int clé = 0;
-            // CORRIGÉ : getInt(1) au lieu de getInt("id_discussion") sur getGeneratedKeys()
-            if (rs.next()) {
-                clé = rs.getInt(1);
-            }
-            return clé;
-
         } catch (SQLException e) {
             System.out.println("[MessageDAO] Impossible d'insérer le message : " + e.getMessage());
             throw e;

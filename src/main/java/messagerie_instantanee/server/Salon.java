@@ -50,6 +50,7 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         this.nom = nom;
         this.lst_participants = new ArrayList<>();
         List<User> autresParticipants = new ArrayList<>();  // pad d'inscrit a la creation
+        this.lst_messages = new ArrayList<>();
         try {
             this.id_discussion = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
         } catch (SQLException e) {
@@ -109,7 +110,9 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
 
     public Stack<Message> getArchive() throws RemoteException{
         Stack<Message> archive = new Stack<>();
-        for(int i = lst_messages.size() - 1; i >= lst_messages.size() - 20 && i >= 0; i--){
+        // lst_message null
+        int lst_message_size = lst_messages.size();
+        for(int i = lst_message_size - 1; i >= lst_message_size - 20 && i >= 0; i--){
             if(lst_messages.get(i) != null){
                 archive.add(lst_messages.get(i));
             }

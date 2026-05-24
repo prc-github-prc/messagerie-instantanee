@@ -17,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.UI.App;
 import messagerie_instantanee.client.Client;
@@ -143,20 +142,14 @@ public class ChatControler {
         messagesBox.getChildren().add(conteneur);
     }
 
-    @FXML
-    public void getCurrentSalon(MouseEvent event) {
-        Discussion clicked = salonList.getSelectionModel().getSelectedItem();
-        if (clicked == null) return;
-        try {
-            currentSalon = serveur.obtientSujet(clicked.getNom_discussion());
-        } catch (RemoteException e) {
-            throw new RuntimeException("Impossible de récupérer le salon distant : " + e.getMessage(), e);
-        }
-    }
+    // getCurrentSalon() supprimée : le listener selectedItemProperty dans initialize()
+    // appelle déjà rejoindre() qui fait obtientSujet() + inscription() + chargement des messages.
+    // Garder cette méthode écrasait currentSalon avec un stub non-inscrit → plus aucun message reçu.
+    // Penser à retirer son onMouseClicked dans le FXML également.
 
     // ====================================== envoie un message ==================================
     @FXML
-    public void actionEnvoi() {
+    public void actionEnvoi() { //FIXME bug quand salon vien d'etre créer
         String texte = inputField.getText().trim();
 
         if (texte.isEmpty()) return;
@@ -241,8 +234,8 @@ public class ChatControler {
         dialog.setTitle("Nouveau Salon");
         dialog.setContentText("Nom du salon :");
         Optional<String> result = dialog.showAndWait();
-        result.ifPresent(nomSalon -> {
-            String nom_Salon = nomSalon.trim();
+        result.ifPresent(raw_nomSalon -> {
+            String nom_Salon = raw_nomSalon.trim();
             if (!nom_Salon.isEmpty()) {
                 boolean existe = salonList.getItems().stream()
                     .anyMatch(d -> nom_Salon.equals(d.getNom_discussion()));
@@ -257,7 +250,6 @@ public class ChatControler {
                         Discussion nouveauSalon = serveur.creationSalon(nom_Salon, pseudo, false);
                         salonList.getItems().add(nouveauSalon);
                         salonList.getSelectionModel().select(nouveauSalon);
-                        // rejoindre() est appelé automatiquement par le listener de salonList
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
