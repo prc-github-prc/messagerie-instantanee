@@ -10,7 +10,6 @@ import java.util.Queue;
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
-import messagerie_instantanee.server.database.DAO.MessageDAO;
 import messagerie_instantanee.server.database.DAO.RoleDAO;
 import messagerie_instantanee.server.database.DAO.UserDAO;
 import messagerie_instantanee.server.models.Discussion;

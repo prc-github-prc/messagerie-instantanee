@@ -29,7 +29,6 @@ import messagerie_instantanee.server.models.Discussion;
 public class ChatControler {
 
     @FXML private ListView<Discussion> salonList; //la liste des salon
-    @FXML private Label salonLabel;
     @FXML private VBox messagesBox;
     @FXML private ScrollPane scrollPane;
     @FXML private TextField inputField;
@@ -53,7 +52,6 @@ public class ChatControler {
                     rejoindre(nouveauSalon.getNom_discussion());
 
                     Platform.runLater(() -> {
-                        titreLabel.setText(nouveauSalon.getNom_discussion());
                         setChatVisible(true);
                         if (tagsLabel != null) {
                             tagsLabel.setText("#discussion");
@@ -111,7 +109,7 @@ public class ChatControler {
         currentSalon = serveur.obtientSujet(titre);
         // inscrit au nouveau salon une seule fois ici
         currentSalon.inscription(clientRMI);
-        salonLabel.setText("# " + titre);
+        titreLabel.setText("# " + titre);
         messagesBox.getChildren().clear();
     }
 
