@@ -3,39 +3,16 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
 
-<!--
-    AuthLayout.fxml — Squelette partagé des vues Login et Register
-
-    Structure :
-        StackPane (racine)
-        ├── VBox (fond dégradé, non-interactif)
-        ├── BorderPane
-        │   ├── right  → sidebarMenu (serveurs, masqué par défaut)
-        │   └── center → contentArea (swap Login / Register)
-        ├── fx:include TopBar.fxml       — ancré TOP_RIGHT
-        └── fx:include Notification.fxml — ancré TOP_RIGHT, sous la topbar
-
-    Controller : messagerie_instantanee.UI.controllers.AuthLayoutController
-    Méthodes :
-        - initialize()      → injecte refs parent, charge LoginForm par défaut
-        - showLogin()       → charge LoginForm.fxml dans contentArea
-        - showRegister()    → charge RegisterForm.fxml dans contentArea
-        - toggleSidebar()   → affiche / masque sidebarMenu
-        - showError(String) → délègue à notificationController.showError(msg)
-        - showSuccess(String)
--->
-
 <StackPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="messagerie_instantanee.UI.controllers.AuthLayoutController"
-            styleClass="login-root">
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="messagerie_instantanee.UI.controllers.AuthLayoutController"
+           styleClass="login-root">
 
-    <!-- ===================== Fond dégradé (non-interactif) ===================== -->
+    <!-- Fond dégradé (non-interactif) -->
     <VBox mouseTransparent="true">
         <children>
             <Region VBox.vgrow="ALWAYS" styleClass="bg-top"    prefHeight="2000.0"/>
@@ -43,16 +20,16 @@
         </children>
     </VBox>
 
-    <!-- ===================== Layout principal ===================== -->
+    <!-- Layout principal -->
     <BorderPane pickOnBounds="false">
 
         <!-- Sidebar droite masquée par défaut -->
         <right>
             <VBox fx:id="sidebarMenu"
-                    prefWidth="300.0"
-                    styleClass="sidebar-right"
-                    visible="false"
-                    managed="false">
+                  prefWidth="300.0"
+                  styleClass="sidebar-right"
+                  visible="false"
+                  managed="false">
                 <padding>
                     <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
                 </padding>
@@ -69,18 +46,21 @@
 
     </BorderPane>
 
-    <!-- ===================== TopBar (thème + serveur) — TOP RIGHT ===================== -->
+    <!--
+        TopBar et Notification : fx:include SANS éléments enfants.
+        Le StackPane.alignment est un attribut XML valide sur fx:include.
+        La marge de la notification est appliquée programmatiquement
+        dans AuthLayoutController.initialize() via StackPane.setMargin().
+    -->
+
+    <!-- TopBar — ancré TOP_RIGHT -->
     <fx:include fx:id="topBar"
                 source="TopBar.fxml"
                 StackPane.alignment="TOP_RIGHT"/>
 
-    <!-- ===================== Notification flottante — TOP RIGHT (sous la topbar) ===================== -->
+    <!-- Notification flottante — TOP_RIGHT, décalée sous la TopBar par le controller -->
     <fx:include fx:id="notification"
                 source="Notification.fxml"
-                StackPane.alignment="TOP_RIGHT">
-        <StackPane.margin>
-            <Insets top="75" right="20"/>
-        </StackPane.margin>
-    </fx:include>
+                StackPane.alignment="TOP_RIGHT"/>
 
 </StackPane>

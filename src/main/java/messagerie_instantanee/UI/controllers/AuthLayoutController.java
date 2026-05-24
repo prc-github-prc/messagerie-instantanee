@@ -4,64 +4,61 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
  * Controller du squelette d'authentification (AuthLayout.fxml).
- * Il est le point central entre TopBar, Notification, LoginForm et RegisterForm.
- *
- * Responsabilités :
- *   - charger LoginForm.fxml par défaut au démarrage
- *   - swapper entre LoginForm et RegisterForm dans contentArea
- *   - afficher/masquer la sidebar des serveurs
- *   - exposer showError / showSuccess / showInfo pour les formulaires enfants
  */
 public class AuthLayoutController {
 
     @FXML private StackPane contentArea;
     @FXML private VBox      sidebarMenu;
 
-    // Injections automatiques des controllers inclus via fx:include
-    @FXML private TopBarController      topBarController;       // fx:id="topBar"
-    @FXML private NotificationController notificationController; // fx:id="notification"
+    // Injection automatique des controllers enfants (fx:id="topBar" → topBarController)
+    @FXML private TopBarController       topBarController;
+    @FXML private NotificationController notificationController;
+
+    // Injection du noeud racine de Notification.fxml (HBox) pour pouvoir lui appliquer une marge
+    @FXML private HBox notification;
 
     // ------------------------------------------------------------------ lifecycle
 
     @FXML
-    public void initialize() throws Exception{
-        topBarController.setParent(this);   // donne au TopBar une ref vers ce controller
-        showLogin();                         // formulaire affiché par défaut
-        throw new Exception();
+    public void initialize(){
+        // Décale la notification sous la TopBar (impossible en FXML sur fx:include)
+        StackPane.setMargin(notification, new Insets(75, 20, 0, 0));
+        
+        topBarController.setParent(this);
+        showLogin();
     }
 
     // ------------------------------------------------------------------ navigation
 
-    /** Charge LoginForm.fxml dans la zone centrale. */
     public void showLogin() {
-        swapContent("/fxml/LoginForm.fxml", ctrl -> {
-            if (ctrl instanceof LoginController lc) lc.setParent(this);
-        });
+        swapContent("/fxml/LoginForm.fxml");
     }
 
-    /** Charge RegisterForm.fxml dans la zone centrale. */
     public void showRegister() {
-        swapContent("/fxml/RegisterForm.fxml", ctrl -> {
-            if (ctrl instanceof RegisterController rc) rc.setParent(this);
-        });
+        swapContent("/fxml/RegisterForm.fxml");
     }
 
-    /**
-     * Utilitaire générique : charge un FXML et l'insère dans contentArea.
-     * @param fxmlPath chemin absolu depuis le classpath
-     * @param setup    lambda appelé avec le controller enfant juste après le chargement
-     */
-    private void swapContent(String fxmlPath, java.util.function.Consumer<Object> setup) {
+    private void swapContent(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Node form = loader.load();
-            setup.accept(loader.getController());
+
+            // Injection de la référence parent dans le controller enfant
+            Object ctrl = loader.getController();
+            if (ctrl instanceof LoginController) {
+                ((LoginController) ctrl).setParent(this);
+            } else if (ctrl instanceof RegisterController) {
+                ((RegisterController) ctrl).setParent(this);
+            }
+
             contentArea.getChildren().setAll(form);
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,7 +68,6 @@ public class AuthLayoutController {
 
     // ------------------------------------------------------------------ sidebar
 
-    /** Affiche ou masque le panneau latéral des serveurs. */
     public void toggleSidebar() {
         boolean estVisible = sidebarMenu.isVisible();
         sidebarMenu.setVisible(!estVisible);

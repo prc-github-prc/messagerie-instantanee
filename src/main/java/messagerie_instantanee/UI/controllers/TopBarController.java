@@ -16,14 +16,14 @@ public class TopBarController {
     private boolean isDarkTheme = true;
     private AuthLayoutController parent;
 
-    // ------------------------------------------------------------------ init
+    // ======================  init  ======================
 
     /** Appelé par AuthLayoutController.initialize() après l'injection FXML. */
     public void setParent(AuthLayoutController parent) {
         this.parent = parent;
     }
 
-    // ------------------------------------------------------------------ actions FXML
+    // ====================== actions FXML ======================
 
     /** Bascule entre le thème sombre et le thème clair sur toute la scène. */
     @FXML

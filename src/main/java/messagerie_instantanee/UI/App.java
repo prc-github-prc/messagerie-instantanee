@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import messagerie_instantanee.client.Client;
@@ -30,20 +31,14 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
 
-        // ── Initialise le NavigationManager AVANT le premier FXML ──────
-        // (les controllers peuvent déjà l'utiliser dans initialize())
         NavigationManager.init(root);
 
-        // ── Charge le squelette d'authentification ─────────────────────
-        // On utilise un FXMLLoader INSTANCE (pas la méthode statique)
-        // pour que JavaFX instancie bien le controller et appelle initialize().
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource("/fxml/AuthLayout.fxml"));
-        BorderPane authPanel = loader.load();   // ← initialize() est appelé ici
-        root.setCenter(authPanel);
+        Pane panelLogin = FXMLLoader.load(
+        getClass().getResource("/fxml/AuthLayout.fxml"));
+        root.setCenter(panelLogin);
         root.getStyleClass().add("dark-theme");
 
-        // ── Scène ───────────────────────────────────────────────────────
+        // ============ Scène ========================
         StackPane wrapper = new StackPane(root);
         wrapper.setStyle("-fx-background-color: transparent;");
 
