@@ -3,7 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
+import java.util.Stack;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -121,10 +121,9 @@ public class ChatControler {
     }
 
     // affiche un lot de message
-    private void utils_laodMessages(Queue<Message> queue_message){
+    private void utils_laodMessages(Stack<Message> queue_message){
         while (!queue_message.isEmpty()) {
-            Message message = queue_message.remove();
-            // CORRIGÉ : == → .equals() (même bug que dans le consumer, == compare les références)
+            Message message = queue_message.pop();
             afficherBulle(message.getContenu(), message.getAuthorName().equals(pseudo));
         }
     }
