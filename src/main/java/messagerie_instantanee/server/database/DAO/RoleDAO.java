@@ -19,18 +19,17 @@ import static messagerie_instantanee.server.utils.ResultSetConverter.rsToUser;
 public class RoleDAO {
 
     public static List<User> findUserByRole(int id_discussion, Role role) {
-        // CORRIGÉ : Admin=1 et User=0 (cohérent avec DiscussionDAO où le créateur=1)
+        // Admin=1 et User=0 (cohérent avec DiscussionDAO où le créateur=1)
         int id_role = switch (role) {
             case Admin -> 1;
             case User  -> 0;
         };
         try {
-            // CORRIGÉ : = -> IN pour gérer plusieurs résultats dans la sous-requête
-            // CORRIGÉ : espace manquant avant AND
+            // CORRIGÉ : "role" → "roles" (nom réel de la colonne dans table_init.sql)
             ResultSet user_data = executeSQLQuerry(
                 "SELECT * FROM User WHERE id_user IN "
                 + "(SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion
-                + " AND role = " + id_role + ")"
+                + " AND roles = " + id_role + ")"
             );
             return rsToUser(user_data);
         } catch (SQLException e) {
@@ -46,17 +45,16 @@ public class RoleDAO {
         try {
             HashMap<Role, List<User>> roleByDiscussion = new HashMap<>();
 
-            // CORRIGÉ : = -> IN pour gérer plusieurs résultats dans la sous-requête
-            // CORRIGÉ : espace manquant avant AND
+            // CORRIGÉ : "role" → "roles" (nom réel de la colonne dans table_init.sql)
             ResultSet user_data = executeSQLQuerry(
                 "SELECT * FROM User WHERE id_user IN "
                 + "(SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion
-                + " AND role = 0)"
+                + " AND roles = 0)"
             );
             ResultSet admin_data = executeSQLQuerry(
                 "SELECT * FROM User WHERE id_user IN "
                 + "(SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion
-                + " AND role = 1)"
+                + " AND roles = 1)"
             );
 
             roleByDiscussion.put(Role.User, rsToUser(user_data));

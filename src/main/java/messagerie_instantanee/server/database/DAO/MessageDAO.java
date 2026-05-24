@@ -46,9 +46,6 @@ public class MessageDAO {
      */
     public static int addMessageToDiscussion(Message message) throws SQLException {
         try {
-            // CORRIGÉ : quotes autour des valeurs texte/date/heure
-            // CORRIGÉ : virgules manquantes entre les valeurs
-            // CORRIGÉ : ON CONFLICT ROLLBACK déplacé hors des VALUES -> INSERT OR ROLLBACK INTO
             ResultSet rs = excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO Messages(contenu, datage, horo, id_author, id_discussion) VALUES ('"
                 + message.getContenu() + "', '"

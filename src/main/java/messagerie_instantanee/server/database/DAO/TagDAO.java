@@ -55,9 +55,6 @@ public class TagDAO {
 
     public static void insertTag(String nom_tag, int id_discussion) throws SQLException {
         try {
-            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour INSERT)
-            // CORRIGÉ : INSERT OR IGNORE INTO / INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
-            // CORRIGÉ : quotes autour de nom_tag (valeur texte)
             excuteInsertSQL("INSERT OR IGNORE INTO Tag VALUES ('" + nom_tag + "')");
             excuteInsertSQL("INSERT OR ROLLBACK INTO Tags VALUES ('" + nom_tag + "'," + id_discussion + ")");
         } catch (SQLException e) {
@@ -68,9 +65,6 @@ public class TagDAO {
 
     public static void deleteTagDiscussion(String nom_tag, int id_discussion) throws SQLException {
         try {
-            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour DELETE)
-            // CORRIGÉ : ON CONFLICT ROLLBACK n'est pas valide sur un DELETE
-            // CORRIGÉ : quotes autour de nom_tag + espace avant AND
             excuteInsertSQL(
                 "DELETE FROM Tags WHERE nom_tag = '" + nom_tag + "' AND id_discussion = " + id_discussion
             );

@@ -47,9 +47,6 @@ public class HideDAO {
 
     public static void deleteHideDiscussionByIdDiscussion(int id_discussion, int id_user) throws SQLException {
         try {
-            // CORRIGÉ : DELETE OR ROLLBACK n'existe pas en SQLite
-            // CORRIGÉ : ON CONFLICT n'est pas valide sur un DELETE
-            // CORRIGÉ : espace manquant avant AND
             excuteInsertSQL(
                 "DELETE FROM Hide WHERE id_user = " + id_user + " AND id_discussion = " + id_discussion
             );

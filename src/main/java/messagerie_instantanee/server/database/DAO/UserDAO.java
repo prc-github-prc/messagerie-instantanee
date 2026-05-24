@@ -50,9 +50,6 @@ public class UserDAO {
 
     public static void insertUser(String username, String password) throws SQLException {
         try {
-            // CORRIGÉ : parenthèse fermante mal placée (était après password, avant ON CONFLICT)
-            // CORRIGÉ : INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
-            // CORRIGÉ : executeSQLQuerry -> excuteInsertSQL (executeQuery invalide pour INSERT)
             excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO User(username, password_hash) VALUES ('"
                 + username + "', '" + password + "')"

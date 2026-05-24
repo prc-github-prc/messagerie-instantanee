@@ -69,7 +69,6 @@ public class DiscussionDAO {
         }
     }
 
-    // CORRIGÉ : utilisait excuteInsertSQL au lieu de executeSQLQuerry
     public static List<Message> findMessagesByIdDiscussion(int id_discussion) {
         try {
             ResultSet data_messages = executeSQLQuerry(
@@ -89,14 +88,12 @@ public class DiscussionDAO {
 
     public static void insertDiscussion(String titre, Boolean est_prive, User user, List<User> users) throws SQLException {
         try {
-            // CORRIGÉ : INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
             ResultSet rs = excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO Discussion(nom_discussion, est_prive) VALUES ('"
                 + titre + "', " + est_prive + ")"
             );
 
             int clé = 0;
-            // CORRIGÉ : getInt(1) au lieu de getInt("id_discussion") sur getGeneratedKeys()
             if (rs.next()) {
                 clé = rs.getInt(1);
             }
@@ -104,7 +101,6 @@ public class DiscussionDAO {
                 throw new SQLException("[DiscussionDAO] Aucune clé générée pour la nouvelle discussion.");
             }
 
-            // CORRIGÉ : construction propre de la liste de valeurs, sans virgule orpheline
             List<String> valeurs = new ArrayList<>();
             valeurs.add("(" + user.getId_user() + "," + clé + ",1)");
 
@@ -114,7 +110,8 @@ public class DiscussionDAO {
                 }
             }
 
-            String user_discussion = "INSERT INTO Roles VALUES " + String.join(",", valeurs);
+            //INSERT INTO Roles(id_user, id_discussion, roles) pour être explicite sur les colonnes
+            String user_discussion = "INSERT INTO Roles(id_user, id_discussion, roles) VALUES " + String.join(",", valeurs);
             excuteInsertSQL(user_discussion);
 
         } catch (SQLException e) {
@@ -128,14 +125,12 @@ public class DiscussionDAO {
      */
     public static int insertDiscussionReturnId(String titre, Boolean est_prive, User user, List<User> users) throws SQLException {
         try {
-            // CORRIGÉ : INSERT OR ROLLBACK INTO (syntaxe SQLite valide)
             ResultSet rs = excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO Discussion(nom_discussion, est_prive) VALUES ('"
                 + titre + "', " + est_prive + ")"
             );
 
             int clé = 0;
-            // CORRIGÉ : getInt(1) au lieu de getInt("id_discussion") sur getGeneratedKeys()
             if (rs.next()) {
                 clé = rs.getInt(1);
             }
@@ -143,7 +138,6 @@ public class DiscussionDAO {
                 throw new SQLException("[DiscussionDAO] Aucune clé générée pour la nouvelle discussion.");
             }
 
-            // CORRIGÉ : construction propre de la liste de valeurs, sans virgule orpheline
             List<String> valeurs = new ArrayList<>();
             valeurs.add("(" + user.getId_user() + "," + clé + ",1)");
 
@@ -153,7 +147,8 @@ public class DiscussionDAO {
                 }
             }
 
-            String user_discussion = "INSERT INTO Roles VALUES " + String.join(",", valeurs);
+            //INSERT INTO Roles(id_user, id_discussion, roles) pour être explicite sur les colonnes
+            String user_discussion = "INSERT INTO Roles(id_user, id_discussion, roles) VALUES " + String.join(",", valeurs);
             excuteInsertSQL(user_discussion);
 
             return clé;
@@ -170,9 +165,9 @@ public class DiscussionDAO {
      */
     public static void addUserToDiscussionById(int id_user, int id_discussion) throws SQLException {
         try {
-            // CORRIGÉ : table Role -> Roles, virgule manquante, syntaxe INSERT OR ROLLBACK INTO
+            // INSERT INTO Roles(id_user, id_discussion, roles) pour être explicite sur les colonnes
             excuteInsertSQL(
-                "INSERT OR ROLLBACK INTO Roles VALUES (" + id_user + "," + id_discussion + ",0)"
+                "INSERT OR ROLLBACK INTO Roles(id_user, id_discussion, roles) VALUES (" + id_user + "," + id_discussion + ",0)"
             );
         } catch (SQLException e) {
             System.out.println("[DiscussionDAO] Impossible d'ajouter l'utilisateur à la discussion : " + e.getMessage());
@@ -186,7 +181,6 @@ public class DiscussionDAO {
      */
     public static void RemoveUserFromDiscussionById(int id_user, int id_discussion) throws SQLException {
         try {
-            // CORRIGÉ : table Role -> Roles, espace manquant avant AND, excuteInsertSQL pour DELETE
             excuteInsertSQL(
                 "DELETE FROM Roles WHERE id_discussion = " + id_discussion + " AND id_user = " + id_user
             );
@@ -198,32 +192,48 @@ public class DiscussionDAO {
 
     public static void updateDiscussion(String titre, Boolean est_prive, List<User> admin, List<User> users) throws SQLException {
         try {
-            // CORRIGÉ : INSERT OR REPLACE INTO + quotes autour de titre
-            ResultSet rs = excuteInsertSQL(
-                "INSERT OR REPLACE INTO Discussion(nom_discussion, est_prive) VALUES ('"
-                + titre + "', " + est_prive + ")"
+            //  INSERT OR REPLACE insérait une NOUVELLE ligne à chaque appel car id_discussion
+            // (PK auto-increment) n'était pas fourni → pas de conflit détecté par SQLite → duplication.
+            // On utilise UPDATE sur la ligne existante à la place.
+
+            // 1. Met à jour est_prive sur la ligne existante
+            excuteInsertSQL(
+                "UPDATE Discussion SET est_prive = " + est_prive
+                + " WHERE nom_discussion = '" + titre + "'"
             );
 
+            // 2. Récupère l'id_discussion existant (nécessaire pour mettre à jour Roles)
+            ResultSet rs = executeSQLQuerry(
+                "SELECT id_discussion FROM Discussion WHERE nom_discussion = '" + titre + "'"
+            );
             int clé = 0;
             if (rs.next()) {
-                clé = rs.getInt(1);
+                clé = rs.getInt("id_discussion");
             }
             if (clé == 0) {
-                throw new SQLException("[DiscussionDAO] Aucune clé générée lors de la mise à jour.");
+                throw new SQLException("[DiscussionDAO] Discussion introuvable pour la mise à jour : " + titre);
             }
 
-            // CORRIGÉ : construction propre avec String.join pour éviter les virgules orphelines
+            // 3. Resynchronise les Roles : supprime les anciens, réinsère les actuels
+            excuteInsertSQL("DELETE FROM Roles WHERE id_discussion = " + clé);
+
             List<String> valeurs = new ArrayList<>();
-            for (User u : admin) {
-                valeurs.add("(" + u.getId_user() + "," + clé + ",1)");
+
+            // CORRIGÉ : défense contre null — getAdmin()/getUser() retournent null si RoleDAO échoue
+            if (admin != null) {
+                for (User u : admin) {
+                    valeurs.add("(" + u.getId_user() + "," + clé + ",1)");
+                }
             }
-            for (User u : users) {
-                valeurs.add("(" + u.getId_user() + "," + clé + ",0)");
+            if (users != null) {
+                for (User u : users) {
+                    valeurs.add("(" + u.getId_user() + "," + clé + ",0)");
+                }
             }
 
             if (!valeurs.isEmpty()) {
-                String user_discussion = "INSERT OR REPLACE INTO Roles VALUES " + String.join(",", valeurs);
-                excuteInsertSQL(user_discussion);
+                // CORRIGÉ : INSERT INTO Roles(id_user, id_discussion, roles) pour être explicite sur les colonnes
+                excuteInsertSQL("INSERT INTO Roles(id_user, id_discussion, roles) VALUES " + String.join(",", valeurs));
             }
 
         } catch (SQLException e) {
