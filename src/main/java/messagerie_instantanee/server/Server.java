@@ -87,7 +87,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     /**
      * serveur.close gère le stockage en BDD des données courantes.
      */
-    public void close() {
+    public void close() { //RECHECK duplication de coucou
         map_salons.values().stream()
             .forEach((Salon salon) -> {
                 try {

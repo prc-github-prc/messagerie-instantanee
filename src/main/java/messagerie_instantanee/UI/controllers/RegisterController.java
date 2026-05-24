@@ -74,7 +74,7 @@ public class RegisterController {
             // ============== verifie pseudo + pwd =============
             try{
                 if (server.creationUser(pseudo, password)){
-                    System.out.println("compte crée");
+                    System.out.println("[Register Controller] compte crée");
                 } else {
                     errorLabel.setText("Vous ne pouvez pas crée de compte");
                     return;

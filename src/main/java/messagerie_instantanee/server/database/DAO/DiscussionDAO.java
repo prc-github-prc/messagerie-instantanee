@@ -73,7 +73,7 @@ public class DiscussionDAO {
     public static List<Message> findMessagesByIdDiscussion(int id_discussion) {
         try {
             ResultSet data_messages = executeSQLQuerry(
-                "SELECT * FROM Message WHERE id_discussion = " + id_discussion
+                "SELECT * FROM Messages WHERE id_discussion = " + id_discussion
             );
             return rsToMessage(data_messages);
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class DiscussionDAO {
             return null;
         } catch (NoSuchElementException e) {
             System.out.println("[DiscussionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
-            return null;
+            return new ArrayList<Message>();
         }
     }
 

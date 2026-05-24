@@ -4,21 +4,21 @@ CREATE TABLE IF NOT EXISTS User (
     password_hash   VARCHAR(500)
 );
 
+CREATE TABLE IF NOT EXISTS Discussion(
+    id_discussion   INTEGER PRIMARY KEY AUTOINCREMENT,
+    nom_discussion  VARCHAR(50),
+    est_prive       BOOLEAN
+);
+
 CREATE TABLE IF NOT EXISTS Messages (
     id_message      INTEGER PRIMARY KEY AUTOINCREMENT,
     contenu         VARCHAR(250),
     datage          DATE,
     horo            TIME,
-    id_user         INTEGER NOT NULL,
+    id_author       INTEGER NOT NULL,
     id_discussion   INTEGER NOT NULL,
     FOREIGN KEY (id_discussion) REFERENCES Discussion(id_discussion),
-    FOREIGN KEY (id_user) REFERENCES User(id_user)
-);
-
-CREATE TABLE IF NOT EXISTS Discussion(
-    id_discussion   INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom_discussion  VARCHAR(50),
-    est_prive       BOOLEAN
+    FOREIGN KEY (id_author) REFERENCES User(id_user)
 );
 
 CREATE TABLE IF NOT EXISTS Hide(
