@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.Stack;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -36,13 +39,13 @@ public class ChatController {
     @FXML private VBox                 messagesBox;
     @FXML private ScrollPane           scrollPane;
     @FXML private TextField            inputField;
+    @FXML private TextField            searchField;   // barre de recherche
     @FXML private Label                tagsLabel;
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
     @FXML private Button inscrireBtn;
 
 
-    // Injection automatique du controller MenuBar (fx:id="menuBar" → menuBarController)
     @FXML private MenuBarController menuBarController;
 
     private InterfaceServeurForum    serveur;
@@ -54,13 +57,32 @@ public class ChatController {
     private Discussion discussionActuelle; 
 
 
+    // Liste source (tous les salons) + vue filtrée branchée sur la ListView
+    private final ObservableList<Discussion> tousLesSalons = FXCollections.observableArrayList();
+    private FilteredList<Discussion>         salonsFiltres;
+
     // ------------------------------------------------------------------ lifecycle
 
     @FXML
     public void initialize() {
-        menuBarController.setParent(this);   // donne au MenuBar une ref vers ChatController
+        menuBarController.setParent(this);
 
-        salonList.getItems().clear();
+        // 1. Crée la FilteredList à partir de la liste source
+        salonsFiltres = new FilteredList<>(tousLesSalons, s -> true); // prédicat initial : tout afficher
+
+        // 2. Branche la liste filtrée sur la ListView (à la place de getItems())
+        salonList.setItems(salonsFiltres);
+
+        // 3. Écoute les changements dans le champ de recherche
+        searchField.textProperty().addListener((obs, ancien, nouveau) -> {
+            String recherche = nouveau == null ? "" : nouveau.trim().toLowerCase();
+            salonsFiltres.setPredicate(salon -> {
+                if (recherche.isEmpty()) return true; // champ vide → tout afficher
+                return salon.getNom_discussion().toLowerCase().contains(recherche);
+            });
+        });
+
+        // 4. Sélection d'un salon dans la liste
         salonList.getSelectionModel().selectedItemProperty().addListener(
             (obs, ancien, nouveau) -> {
                 if (nouveau != null && serveur != null) {
@@ -116,7 +138,7 @@ public class ChatController {
         try {
             List<Discussion> lst = server.listerSalons();
             if (lst != null && !lst.isEmpty()) {
-                salonList.getItems().addAll(lst);
+                tousLesSalons.setAll(lst);   // alimente la liste SOURCE (pas getItems())
                 Platform.runLater(() -> {
                     if (usernameLink != null) usernameLink.setText(pseudo);
                     if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
@@ -132,12 +154,8 @@ public class ChatController {
         }
     }
 
-    // ------------------------------------------------------------------ déconnexion (appelée par MenuBarController)
+    // ------------------------------------------------------------------ déconnexion
 
-    /**
-     * Désinscrit le client RMI du salon courant et libère les ressources.
-     * La navigation vers AuthLayout est ensuite faite par MenuBarController.
-     */
     public void deconnecter() {
         try {
             if (currentSalon != null && clientRMI != null) {
@@ -184,42 +202,25 @@ public class ChatController {
         }
     }
 
-    // ------------------------------------------------------------------ rafraîchir (appelé par MenuBarController)
+    // ------------------------------------------------------------------ rafraîchir
 
-    /** Recharge la liste des salons depuis le serveur. */
     public void rafraichirSalons() {
         if (serveur == null) return;
         try {
             List<Discussion> lst = serveur.listerSalons();
-            salonList.getItems().setAll(lst);
+            tousLesSalons.setAll(lst);   // la FilteredList se met à jour automatiquement
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
     }
 
-    // ------------------------------------------------------------------ création (appelée par MenuBarController ET par les boutons FXML)
+    // ------------------------------------------------------------------ création
 
-    /** Ouverture du dialog depuis la MenuBar (pas d'ActionEvent). */
-    public void createNewSalonFromMenu() {
-        ouvrirDialogNouveauSalon();
-    }
+    public void createNewSalonFromMenu() { ouvrirDialogNouveauSalon(); }
+    public void createNewTagFromMenu()   { ouvrirDialogNouveauTag();   }
 
-    /** Ouverture du dialog depuis la MenuBar (pas d'ActionEvent). */
-    public void createNewTagFromMenu() {
-        ouvrirDialogNouveauTag();
-    }
-
-    /** Bouton sidebar "+ Créer un salon". */
-    @FXML
-    private void createNewSalon(ActionEvent event) {
-        ouvrirDialogNouveauSalon();
-    }
-
-    /** Bouton sidebar "+ Ajouter un tag". */
-    @FXML
-    private void createNewTag(ActionEvent event) {
-        ouvrirDialogNouveauTag();
-    }
+    @FXML private void createNewSalon(ActionEvent e) { ouvrirDialogNouveauSalon(); }
+    @FXML private void createNewTag(ActionEvent e)   { ouvrirDialogNouveauTag();   }
 
     private void ouvrirDialogNouveauSalon() {
         if (serveur == null) {
@@ -233,7 +234,7 @@ public class ChatController {
         dialog.showAndWait().ifPresent(raw -> {
             String nom = raw.trim();
             if (nom.isEmpty()) return;
-            boolean existe = salonList.getItems().stream()
+            boolean existe = tousLesSalons.stream()
                 .anyMatch(d -> nom.equals(d.getNom_discussion()));
             if (existe) {
                 showAlert(AlertType.WARNING, "Erreur", "Ce salon existe déjà.");
@@ -241,7 +242,8 @@ public class ChatController {
             }
             try {
                 Discussion nouveau = serveur.creationSalon(nom, pseudo, false);
-                salonList.getItems().add(nouveau);
+                tousLesSalons.add(nouveau);           // ajout dans la source → visible si filtre OK
+                searchField.clear();                  // réinitialise la recherche pour voir le nouveau salon
                 salonList.getSelectionModel().select(nouveau);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
