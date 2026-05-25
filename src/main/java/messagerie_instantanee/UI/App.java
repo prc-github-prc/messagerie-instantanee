@@ -60,6 +60,8 @@ public class App extends Application {
             stage.setTitle("Messagerie Instantanée");
             DimensionManager dm = DimensionManager.attach(stage, scene);
             stage.setScene(scene);    // ← scène attachée en premier
+            stage.setWidth(1280);    // ← taille par défaut raisonnable
+            stage.setHeight(720); 
             stage.show();
             dm.maximize(stage);       // ← maintenant les dimensions sont correctes
             titleCtrl.setDimensionManager(dm);
