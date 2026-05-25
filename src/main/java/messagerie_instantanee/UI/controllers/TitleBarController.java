@@ -33,11 +33,19 @@ public class TitleBarController {
     @FXML
     private void handleMouseDragged(MouseEvent e) {
         Stage stage = getStage();
-        // Ne pas déplacer si la fenêtre est maximisée
-        if (!stage.isMaximized()) {
-            stage.setX(e.getScreenX() - dragOffsetX);
-            stage.setY(e.getScreenY() - dragOffsetY);
+
+        if (stage.isMaximized()) {
+            // Restaure la fenêtre en gardant la souris "ancrée" dans la barre
+            stage.setMaximized(false);
+            // Replace l'offset pour que la souris reste proportionnellement au même endroit
+            dragOffsetX = stage.getWidth() / 2;
+            dragOffsetY = e.getScreenY() - stage.getY();
+            // Met à jour l'icône
+            maximizeIcon.setIconLiteral("fas-expand");
         }
+
+        stage.setX(e.getScreenX() - dragOffsetX);
+        stage.setY(e.getScreenY() - dragOffsetY);
     }
 
     // ------------------------------------------------------------------ boutons

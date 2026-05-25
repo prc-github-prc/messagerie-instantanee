@@ -56,6 +56,7 @@ public class App extends Application {
             scene.getStylesheets().add(
                 getClass().getResource("/css/style.css").toExternalForm());
 
+            DimensionManager.attach(stage, scene);
             stage.setTitle("Messagerie Instantanée");
             stage.setMaximized(true);
             stage.setScene(scene);
@@ -77,7 +78,7 @@ public class App extends Application {
         }
         System.exit(0);
     }
-    
+
     public static void main(String[] args) {
         launch(args);
     }
