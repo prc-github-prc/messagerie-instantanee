@@ -26,40 +26,43 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        try{
+            // ── Supprime la barre Windows native ───────────────────────────
+            stage.initStyle(StageStyle.UNDECORATED);
 
-        // ── Supprime la barre Windows native ───────────────────────────
-        stage.initStyle(StageStyle.UNDECORATED);
+            // ── Structure racine ────────────────────────────────────────────
+            //   BorderPane
+            //   ├── top    → TitleBar.fxml  (barre custom persistante)
+            //   └── center → contenu courant (AuthLayout, ChatView…)
+            BorderPane root = new BorderPane();
+            root.getStyleClass().add("dark-theme");
 
-        // ── Structure racine ────────────────────────────────────────────
-        //   BorderPane
-        //   ├── top    → TitleBar.fxml  (barre custom persistante)
-        //   └── center → contenu courant (AuthLayout, ChatView…)
-        BorderPane root = new BorderPane();
-        root.getStyleClass().add("dark-theme");
+            // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
+            Pane titleBar = FXMLLoader.load(
+                getClass().getResource("/fxml/ChatView.fxml"));
+            root.setTop(titleBar);
 
-        // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
-        Pane titleBar = FXMLLoader.load(
-            getClass().getResource("/fxml/TitleBar.fxml"));
-        root.setTop(titleBar);
+            // Initialise le NavigationManager (utilise root.center pour les vues)
+            NavigationManager.init(root);
 
-        // Initialise le NavigationManager (utilise root.center pour les vues)
-        NavigationManager.init(root);
+            // Charge la première vue (AuthLayout)
+            FXMLLoader authLoader = new FXMLLoader(
+                getClass().getResource("/fxml/AuthLayout.fxml"));
+            Pane authPanel = authLoader.load();
+            root.setCenter(authPanel);
 
-        // Charge la première vue (AuthLayout)
-        FXMLLoader authLoader = new FXMLLoader(
-            getClass().getResource("/fxml/AuthLayout.fxml"));
-        Pane authPanel = authLoader.load();
-        root.setCenter(authPanel);
+            // ── Scène ───────────────────────────────────────────────────────
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                getClass().getResource("/css/style.css").toExternalForm());
 
-        // ── Scène ───────────────────────────────────────────────────────
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(
-            getClass().getResource("/css/style.css").toExternalForm());
-
-        stage.setTitle("Messagerie Instantanée");
-        stage.setMaximized(true);
-        stage.setScene(scene);
-        stage.show();
+            stage.setTitle("Messagerie Instantanée");
+            stage.setMaximized(true);
+            stage.setScene(scene);
+            stage.show();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

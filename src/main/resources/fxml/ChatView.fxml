@@ -92,6 +92,11 @@
                     <children>
                         <Button text="+ Ajouter un tag"   onAction="#createNewTag"   styleClass="sidebar-btn" maxWidth="Infinity"/>
                         <Button text="+ Créer un salon"   onAction="#createNewSalon" styleClass="sidebar-btn" maxWidth="Infinity"/>
+                        <Button fx:id="inscrireBtn" 
+                            text="S'inscrire" 
+                            onAction="#actionToggleInscription" 
+                            styleClass="sidebar-btn" 
+                            maxWidth="Infinity"/>
                     </children>
                 </VBox>
 

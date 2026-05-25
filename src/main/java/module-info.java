@@ -8,7 +8,8 @@ module messagerie_instantanee {
     requires com.google.gson;
     requires javafx.graphics;
     requires org.kordamp.ikonli.javafx;
-
+    requires org.kordamp.ikonli.fontawesome5;
+    
     // UI
     opens messagerie_instantanee.UI.controllers to javafx.fxml;
     exports messagerie_instantanee.UI;
