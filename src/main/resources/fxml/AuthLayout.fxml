@@ -20,40 +20,29 @@
         </children>
     </VBox>
 
-    <!-- Layout principal -->
-    <BorderPane pickOnBounds="false">
-
-        <!-- Sidebar droite masquée par défaut -->
-        <right>
-            <VBox fx:id="sidebarMenu"
-                  prefWidth="300.0"
-                  styleClass="sidebar-right"
-                  visible="false"
-                  managed="false">
-                <padding>
-                    <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
-                </padding>
-                <children>
-                    <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title"/>
-                </children>
-            </VBox>
-        </right>
-
-        <!-- Zone de contenu variable Login / Register -->
-        <center>
-            <StackPane fx:id="contentArea" pickOnBounds="false"/>
-        </center>
-
-    </BorderPane>
+    <!-- Zone de contenu variable Login / Register — occupe tout l'espace -->
+    <StackPane fx:id="contentArea" pickOnBounds="false"/>
 
     <!--
-        TopBar et Notification : fx:include SANS éléments enfants.
-        Le StackPane.alignment est un attribut XML valide sur fx:include.
-        La marge de la notification est appliquée programmatiquement
-        dans AuthLayoutController.initialize() via StackPane.setMargin().
+        Sidebar flottante — TOP_RIGHT, par-dessus le contenu.
+        managed="false" + visible="false" : n'occupe aucune place dans le layout.
+        Le décalage top compense la TopBar (même logique que la Notification).
     -->
+    <VBox fx:id="sidebarMenu"
+          styleClass="sidebar-right"
+          visible="false"
+          managed="false"
+          maxHeight="Infinity"
+          StackPane.alignment="CENTER_RIGHT">
+        <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
+        </padding>
+        <children>
+            <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title"/>
+        </children>
+    </VBox>
 
-    <!-- TopBar — ancré TOP_RIGHT -->
+    <!-- TopBar — ancrée TOP_RIGHT -->
     <fx:include fx:id="topBar"
                 source="TopBar.fxml"
                 StackPane.alignment="TOP_RIGHT"/>

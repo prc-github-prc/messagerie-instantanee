@@ -54,6 +54,7 @@
         <VBox spacing="6" fillWidth="true">
             <Label text="confirmation mot de passe" styleClass="input-label" style="-fx-font-size: 14;"/>
             <PasswordField fx:id="confirmPasswordField"
+                           onAction="#handleCreateAccount"
                            styleClass="login-input"
                            style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>
@@ -62,6 +63,7 @@
         <VBox spacing="6" fillWidth="true">
             <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;"/>
             <TextField fx:id="serverField"
+                       onAction="#handleCreateAccount"
                        styleClass="login-input"
                        style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>

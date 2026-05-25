@@ -1,12 +1,12 @@
 module messagerie_instantanee {
 
     requires javafx.controls;
-    requires javafx.fxml;
+    requires transitive javafx.graphics;
+    requires transitive javafx.fxml;
+    requires transitive java.sql;
 
-    requires java.sql;
     requires java.rmi;
     requires com.google.gson;
-    requires javafx.graphics;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.fontawesome5;
     

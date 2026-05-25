@@ -4,7 +4,7 @@
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
-/* --- BARRE DE TITRE CUSTOM --- */
+/* ======================================= BARRE DE TITRE CUSTOM ======================================= */
 .title-bar {
     -fx-background-color: #1a1b1e;
     -fx-border-color: transparent transparent #2f2f4a transparent;
@@ -84,7 +84,7 @@
     -fx-background-color: #d0d0e0;
 }
 
-/* --- BARRE LATÉRALE --- */
+/* ======================================= BARRE LATÉRALE ======================================= */
 .sidebar {
     -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
@@ -110,15 +110,14 @@
     -fx-background-color: transparent;
 }
 
-/* La Sidebar à droite */
+/* --- La Sidebar à droite --- */
 .sidebar-right {
     -fx-background-color: #252024;
     -fx-border-color: transparent transparent transparent #1e1f22;
     -fx-border-width: 1px;
-    -fx-background-radius: 25px 0 0 25px;
 }
 
-/* --- ZONE DE CHAT & MESSAGES --- */
+/* ======================================= ZONE DE CHAT & MESSAGES ======================================= */
 .chat-area {
     -fx-background-color: #640CBB;
 }
@@ -285,7 +284,7 @@
 }
 .btn-connect:hover { -fx-background-color: #640CBB; }
 
-/* --- BARRE DE MENUS --- */
+/* ======================================= BARRE DE MENUS ======================================= */
 .app-menubar {
     -fx-background-color: #1e1e2e;
     -fx-border-color: transparent transparent #3a3a5c transparent;
@@ -319,7 +318,7 @@
     -fx-text-fill: #89b4fa;
 }
 
-/* ═══════════════════════════════ THÈME SOMBRE ═══════════════════════════════ */
+/* ======================================= THÈME SOMBRE ======================================= */
 .dark-theme .login-box          { -fx-background-color: rgba(51,51,51,0.95); }
 .dark-theme .login-box .label   { -fx-text-fill: #cccccc; }
 .dark-theme .login-header       { -fx-text-fill: #ffffff; }
@@ -330,7 +329,7 @@
 .dark-theme .bg-top    { -fx-background-color: #640CBB; -fx-min-height: 250px; -fx-min-width: 500px; }
 .dark-theme .bg-bottom { -fx-background-color: #1a1b1e; -fx-min-height: 250px; -fx-min-width: 500px; }
 
-/* ═══════════════════════════════ THÈME CLAIR ════════════════════════════════ */
+/* ======================================= THÈME CLAIR ======================================= */
 .light-theme .login-box         { -fx-background-color: #C7C292; }
 .light-theme .login-box .label  { -fx-text-fill: black; }
 .light-theme .login-header      { -fx-text-fill: #C7C292; }

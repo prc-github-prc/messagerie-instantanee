@@ -28,10 +28,15 @@ public class AuthLayoutController {
     // ------------------------------------------------------------------ lifecycle
 
     @FXML
-    public void initialize(){
+    public void initialize() {
+        // Largeur sidebar = 1/4 de la largeur totale, recalculée dynamiquement
+        sidebarMenu.prefWidthProperty().bind(
+            contentArea.widthProperty().divide(4)
+        );
+
         // Décale la notification sous la TopBar (impossible en FXML sur fx:include)
         StackPane.setMargin(notification, new Insets(75, 20, 0, 0));
-        
+
         topBarController.setParent(this);
         showLogin();
     }

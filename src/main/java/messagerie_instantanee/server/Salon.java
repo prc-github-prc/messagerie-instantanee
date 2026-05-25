@@ -54,7 +54,6 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
         try {
             this.id_discussion = DiscussionDAO.insertDiscussionReturnId(nom, estPrivee, owner, autresParticipants);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         this.estPrivee = estPrivee;

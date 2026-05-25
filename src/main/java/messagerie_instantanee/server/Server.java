@@ -35,7 +35,6 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         if (convs != null) {
             for (Discussion conv : convs) {
                 map_salons.put(conv.getNom_discussion(), new Salon(conv));
-                System.out.println(conv.getNom_discussion()); // TODO à enlever après test
             }
         }
     }
@@ -87,8 +86,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     /**
      * serveur.close gère le stockage en BDD des données courantes.
      */
-    public void close() { //RECHECK duplication de coucou
-        //TODO gere la sauvegarde des liste d'inscrit
+    public void close() {
         map_salons.values().stream()
             .forEach((Salon salon) -> {
                 try {

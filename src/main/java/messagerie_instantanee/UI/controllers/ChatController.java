@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
@@ -99,11 +98,10 @@ public class ChatController {
             }
         );
 
-         salonList.setOnContextMenuRequested(event -> {
+        salonList.setOnContextMenuRequested(event -> {
             ContextMenu contextMenu = new ContextMenu();
             Discussion selected = salonList.getSelectionModel().getSelectedItem();
             estInscrit = salonsInscrits.contains(selected.getNom_discussion());
-            if (selected == null) return;
             if(estInscrit){
                 MenuItem mnuQuitter = new MenuItem("Se désinscrire");
                 mnuQuitter.setOnAction(e -> actionToggleInscription());

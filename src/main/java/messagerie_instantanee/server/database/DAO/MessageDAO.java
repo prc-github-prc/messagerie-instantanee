@@ -46,7 +46,7 @@ public class MessageDAO {
      */
     public static void addMessageToDiscussion(Message message) throws SQLException {
         try {
-            ResultSet rs = excuteInsertSQL(
+            excuteInsertSQL(
                 "INSERT OR ROLLBACK INTO Messages(contenu, datage, horo, id_author, id_discussion) VALUES ('"
                 + message.getContenu() + "', '"
                 + Date.valueOf(LocalDate.now()) + "', '"
