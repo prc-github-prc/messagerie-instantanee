@@ -35,6 +35,7 @@
           visible="false"
           managed="false"
           maxHeight="Infinity"
+          maxWidth="-Infinity"
           StackPane.alignment="CENTER_RIGHT">
         <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
@@ -57,11 +58,13 @@
     <!-- TopBar — ancrée TOP_RIGHT -->
     <fx:include fx:id="topBar"
                 source="TopBar.fxml"
-                StackPane.alignment="TOP_RIGHT"/>
+                StackPane.alignment="TOP_RIGHT"
+                maxHeight="-Infinity"/>
 
     <!-- Notification flottante — TOP_RIGHT, décalée sous la TopBar par le controller -->
     <fx:include fx:id="notification"
                 source="Notification.fxml"
-                StackPane.alignment="TOP_RIGHT"/>
+                StackPane.alignment="TOP_RIGHT"
+                maxHeight="-Infinity"/>
 
 </StackPane>

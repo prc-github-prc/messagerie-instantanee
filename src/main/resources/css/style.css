@@ -319,11 +319,11 @@
 }
 
 /* ======================================= THÈME SOMBRE ======================================= */
-.dark-theme .login-box          { -fx-background-color: rgba(51,51,51,0.95); }
+.dark-theme .login-box          { -fx-background-color: rgba(51,51,51); }
 .dark-theme .login-box .label   { -fx-text-fill: #cccccc; }
 .dark-theme .login-header       { -fx-text-fill: #ffffff; }
 .dark-theme .input-label        { -fx-text-fill: #ccc; }
-.dark-theme .login-input        { -fx-background-color: rgba(51,51,51,0.95); -fx-text-fill: white; }
+.dark-theme .login-input        { -fx-background-color: rgba(62,62,62); -fx-text-fill: white; }
 .dark-theme .login-link         { -fx-text-fill: #bbb; }
 
 .dark-theme .bg-top    { -fx-background-color: #640CBB; -fx-min-height: 250px; -fx-min-width: 500px; }

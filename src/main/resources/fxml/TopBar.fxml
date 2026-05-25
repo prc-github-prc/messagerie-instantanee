@@ -15,7 +15,7 @@
         - handleToggleTheme()   → bascule dark-theme / light-theme sur la scène
         - handleToggleSidebar() → appelle le parent (AuthLayoutController) pour afficher/masquer la sidebar
 -->
-
+<!-- TODO fusionner ce fichier avec la title bar(uniquement dans chatview) (plus joli et plus pratique)-->
 <HBox xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="messagerie_instantanee.UI.controllers.TopBarController"

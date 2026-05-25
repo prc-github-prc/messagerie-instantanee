@@ -28,6 +28,7 @@
       managed="false"
       alignment="CENTER_LEFT"
       spacing="12"
+      maxHeight="-Infinity"
       minWidth="280"
       maxWidth="380"
       style="-fx-background-color: #e74c3c;
