@@ -1,8 +1,10 @@
 package messagerie_instantanee.UI;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -22,6 +24,10 @@ public class DimensionManager {
     private double stageW, stageH;       // taille fenêtre
     private Zone   zone = Zone.NONE;
 
+    // Sauvegarde de la taille/position AVANT la fausse maximisation
+    private double savedX, savedY, savedW, savedH;
+    private boolean fakeMaximized = false;
+
     /** Les 8 zones de redimensionnement + NONE (zone centrale). */
     private enum Zone {
         NONE,
@@ -31,14 +37,63 @@ public class DimensionManager {
 
     // ------------------------------------------------------------------ API publique
 
-    public static void attach(Stage stage, Scene scene) {
-        DimensionManager rh = new DimensionManager();
+    public static DimensionManager  attach(Stage stage, Scene scene) {
+        DimensionManager dm = new DimensionManager();
 
-        scene.addEventFilter(MouseEvent.MOUSE_MOVED,   e -> rh.updateCursor(e, stage, scene));
-        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> rh.onPressed(e, stage));
-        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> rh.onDragged(e, stage));
-        scene.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> rh.zone = Zone.NONE);
+        scene.addEventFilter(MouseEvent.MOUSE_MOVED,   e -> dm.updateCursor(e, stage, scene));
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> dm.onPressed(e, stage));
+        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> dm.onDragged(e, stage));
+        scene.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> dm.zone = Zone.NONE);
+
+        return dm;   // retourne l'instance pour que App.java puisse appeler maximize()
     }
+
+    // ------------------------------------------------------------------ détection de zone
+
+    /**
+     * "Maximise" la fenêtre en la calant sur les visual bounds de l'écran
+     * (respecte la barre des tâches), sans utiliser stage.setMaximized().
+     */
+    public void maximize(Stage stage) {
+        if (fakeMaximized) return;
+
+        // Sauvegarde l'état courant pour pouvoir restaurer
+        savedX = stage.getX();
+        savedY = stage.getY();
+        savedW = stage.getWidth();
+        savedH = stage.getHeight();
+
+        // getVisualBounds() = écran MOINS la barre des tâches  ✅
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth());
+        stage.setHeight(bounds.getHeight());
+
+        fakeMaximized = true;
+    }
+
+    /**
+     * Restaure la fenêtre à sa taille/position d'avant la maximisation.
+     */
+    public void restore(Stage stage) {
+        if (!fakeMaximized) return;
+
+        stage.setX(savedX);
+        stage.setY(savedY);
+        stage.setWidth(savedW);
+        stage.setHeight(savedH);
+
+        fakeMaximized = false;
+    }
+
+    /** Bascule entre maximisé et restauré. */
+    public void toggleMaximize(Stage stage) {
+        if (fakeMaximized) restore(stage);
+        else maximize(stage);
+    }
+
+    public boolean isFakeMaximized() { return fakeMaximized; }
 
     // ------------------------------------------------------------------ détection de zone
 
@@ -65,7 +120,7 @@ public class DimensionManager {
     // ------------------------------------------------------------------ curseur
 
     private void updateCursor(MouseEvent e, Stage stage, Scene scene) {
-        if (stage.isMaximized()) {
+        if (fakeMaximized) {
             scene.setCursor(Cursor.DEFAULT);
             return;
         }
@@ -93,7 +148,7 @@ public class DimensionManager {
     // ------------------------------------------------------------------ drag
 
     private void onDragged(MouseEvent e, Stage stage) {
-        if (zone == Zone.NONE || stage.isMaximized()) return;
+        if (zone == Zone.NONE || fakeMaximized) return;
 
         double dx = e.getScreenX() - clickX;   // déplacement horizontal
         double dy = e.getScreenY() - clickY;   // déplacement vertical

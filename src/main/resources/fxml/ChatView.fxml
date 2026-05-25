@@ -34,19 +34,6 @@
             </padding>
             <children>
 
-                <!-- Compte connecté -->
-                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 15px 0;">
-                    <children>
-                        <Circle radius="20.0" fill="#2f55d4" styleClass="logo-circle"/>
-                        <Button fx:id="usernameLink"
-                                text="Vivi"
-                                onAction="#doNothings"
-                                styleClass="profile-name-link"
-                                HBox.hgrow="ALWAYS"
-                                maxWidth="Infinity"/>
-                    </children>
-                </HBox>
-
                 <!-- Barre de recherche -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <children>
@@ -103,22 +90,37 @@
                 <Line startX="0" startY="0" endX="320" endY="0"
                       stroke="#EAD3D3" strokeWidth="2.0"/>
 
-                <!-- Paramètres -->
-                <Button onAction="#doNothings" styleClass="settings-btn-container">
-                    <graphic>
-                        <StackPane styleClass="settings-icon-wrapper">
-                            <children>
-                                <FontIcon iconLiteral="fas-cog" iconSize="20" iconColor="white"/>
-                            </children>
-                        </StackPane>
-                    </graphic>
-                </Button>
+                <!-- zone du bas --> <!-- TODO pour l'instant ça sert a rien, trouver une utiliter -->
+                <HBox>
+                    <!-- Paramètres -->
+                    <Button onAction="#doNothings" styleClass="settings-btn-container">
+                        <graphic>
+                            <StackPane styleClass="settings-icon-wrapper">
+                                <children>
+                                    <FontIcon iconLiteral="fas-cog" iconSize="20" iconColor="white"/>
+                                </children>
+                            </StackPane>
+                        </graphic>
+                    </Button>
 
+                    <!-- Compte connecté -->
+                    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 15px 0;">
+                        <children>
+                            <Circle radius="20.0" fill="#2f55d4" styleClass="logo-circle"/>
+                            <Button fx:id="usernameLink"
+                                    text="Username"
+                                    onAction="#doNothings"
+                                    styleClass="profile-name-link"
+                                    HBox.hgrow="ALWAYS"
+                                    maxWidth="Infinity"/>
+                        </children>
+                    </HBox>
+                <HBox/>
             </children>
         </VBox>
     </left>
 
-    <!-- ══════════════════════════════════════════════ Zone de chat (CENTER) ══ -->
+    <!-- ========================= Zone de chat (CENTER) =============== -->
     <center>
         <VBox styleClass="chat-area" BorderPane.alignment="CENTER">
             <children>

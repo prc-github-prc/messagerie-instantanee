@@ -90,12 +90,4 @@ public class NavigationManager {
     public void naviguerVers(Pane panel) {
         root.setCenter(panel);
     }
-
-    /**
-     * permet de passez en pleine ecran
-     * @param value boolean t si oui 
-     */
-    public void setMaximized(Boolean value){
-        getStage().setMaximized(value);
-    }
 }

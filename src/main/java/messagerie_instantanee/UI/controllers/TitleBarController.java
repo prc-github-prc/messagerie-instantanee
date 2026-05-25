@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import messagerie_instantanee.UI.DimensionManager;
+
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
@@ -22,6 +24,10 @@ public class TitleBarController {
     private double dragOffsetX;
     private double dragOffsetY;
 
+    private static final double SNAP_THRESHOLD = 10; // px du bord haut pour déclencher
+
+    private DimensionManager dm;
+
     // ------------------------------------------------------------------ drag
 
     @FXML
@@ -33,19 +39,28 @@ public class TitleBarController {
     @FXML
     private void handleMouseDragged(MouseEvent e) {
         Stage stage = getStage();
-
-        if (stage.isMaximized()) {
-            // Restaure la fenêtre en gardant la souris "ancrée" dans la barre
-            stage.setMaximized(false);
-            // Replace l'offset pour que la souris reste proportionnellement au même endroit
+        if (dm.isFakeMaximized()) {          // ← remplace stage.isMaximized()
+            dm.restore(stage);
             dragOffsetX = stage.getWidth() / 2;
             dragOffsetY = e.getScreenY() - stage.getY();
-            // Met à jour l'icône
             maximizeIcon.setIconLiteral("fas-expand");
         }
-
         stage.setX(e.getScreenX() - dragOffsetX);
         stage.setY(e.getScreenY() - dragOffsetY);
+    }
+
+    @FXML
+    private void handleMouseReleased(MouseEvent e) {
+        titleBar.getScene().getRoot().setOpacity(1.0);
+        if (e.getScreenY() <=  SNAP_THRESHOLD) {
+            dm.maximize(getStage());
+            maximizeIcon.setIconLiteral("fas-compress");
+        }
+    }
+
+    // Méthode appelée par App.java après le attach()
+    public void setDimensionManager(DimensionManager dm) {
+        this.dm = dm;
     }
 
     // ------------------------------------------------------------------ boutons
@@ -57,11 +72,8 @@ public class TitleBarController {
 
     @FXML
     private void handleMaximize() {
-        Stage stage = getStage();
-        boolean maximized = !stage.isMaximized();
-        stage.setMaximized(maximized);
-        // Mise à jour de l'icône selon l'état
-        maximizeIcon.setIconLiteral(maximized ? "fas-compress" : "fas-expand");
+        dm.toggleMaximize(getStage());
+        maximizeIcon.setIconLiteral(dm.isFakeMaximized() ? "fas-compress" : "fas-expand");
     }
 
     @FXML

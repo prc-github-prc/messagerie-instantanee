@@ -15,7 +15,8 @@
       alignment="CENTER_LEFT"
       prefHeight="32"
       onMousePressed="#handleMousePressed"
-      onMouseDragged="#handleMouseDragged">
+      onMouseDragged="#handleMouseDragged"
+      onMouseReleased="#handleMouseReleased">
 
     <children>
 
@@ -31,7 +32,8 @@
                text="Messagerie Instantanée"
                styleClass="title-bar-text"
                onMousePressed="#handleMousePressed"
-               onMouseDragged="#handleMouseDragged"/>
+               onMouseDragged="#handleMouseDragged"
+               onMouseReleased="#handleMouseReleased"/>
 
         <!--
             Zone flexible : pickOnBounds="true" force JavaFX à détecter les clics
@@ -42,7 +44,8 @@
         <Region HBox.hgrow="ALWAYS"
                 pickOnBounds="true"
                 onMousePressed="#handleMousePressed"
-                onMouseDragged="#handleMouseDragged"/>
+                onMouseDragged="#handleMouseDragged"
+                onMouseReleased="#handleMouseReleased"/>
 
         <!-- Bouton Réduire -->
         <Button fx:id="minimizeBtn"

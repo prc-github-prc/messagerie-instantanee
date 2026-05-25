@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import messagerie_instantanee.UI.controllers.TitleBarController;
 import messagerie_instantanee.client.Client;
 
 /**
@@ -38,9 +39,9 @@ public class App extends Application {
             root.getStyleClass().add("dark-theme");
 
             // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
-            Pane titleBar = FXMLLoader.load(
-                getClass().getResource("/fxml/TitleBar.fxml"));
-            root.setTop(titleBar);
+            FXMLLoader titleLoader = new FXMLLoader(getClass().getResource("/fxml/TitleBar.fxml"));
+            Pane titleBar = titleLoader.load();
+            TitleBarController titleCtrl = titleLoader.getController();
 
             // Initialise le NavigationManager (utilise root.center pour les vues)
             NavigationManager.init(root);
@@ -56,11 +57,13 @@ public class App extends Application {
             scene.getStylesheets().add(
                 getClass().getResource("/css/style.css").toExternalForm());
 
-            DimensionManager.attach(stage, scene);
             stage.setTitle("Messagerie Instantanée");
-            stage.setMaximized(true);
-            stage.setScene(scene);
+            DimensionManager dm = DimensionManager.attach(stage, scene);
+            stage.setScene(scene);    // ← scène attachée en premier
             stage.show();
+            dm.maximize(stage);       // ← maintenant les dimensions sont correctes
+            titleCtrl.setDimensionManager(dm);
+            root.setTop(titleBar);
         } catch(Exception e){
             e.printStackTrace();
         }
