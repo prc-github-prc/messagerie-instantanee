@@ -42,6 +42,23 @@ public class LoginController {
         parent.showRegister();
     }
 
+    @FXML
+    private void showSignup() {
+        if (parent != null) {
+            parent.showRegister();
+        }
+    }
+
+    @FXML
+    private void handleToggleTheme() {
+        System.out.println("Changement de thème demandé");
+    }
+
+    /** Bouton sidebar dans LoginView.fxml */
+    @FXML
+    private void handleToggleSidebar() {
+        System.out.println("Affichage de la sidebar demandé");
+    }
     /** Valide les champs et tente la connexion RMI. */
     @FXML
     private void handleLogin() {

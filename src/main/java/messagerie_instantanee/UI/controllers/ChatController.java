@@ -2,8 +2,10 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 
 import javafx.application.Platform;
@@ -13,8 +15,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -35,6 +39,8 @@ public class ChatController {
     @FXML private Label                tagsLabel;
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
+    @FXML private Button inscrireBtn;
+
 
     // Injection automatique du controller MenuBar (fx:id="menuBar" → menuBarController)
     @FXML private MenuBarController menuBarController;
@@ -43,6 +49,10 @@ public class ChatController {
     private InterfaceSujetDiscussion currentSalon;
     private Client                   clientRMI;
     private String                   pseudo;
+    private boolean estInscrit = false;
+    private Set<String> salonsInscrits = new HashSet<>();
+    private Discussion discussionActuelle; 
+
 
     // ------------------------------------------------------------------ lifecycle
 
@@ -55,7 +65,7 @@ public class ChatController {
             (obs, ancien, nouveau) -> {
                 if (nouveau != null && serveur != null) {
                     try {
-                        rejoindre(nouveau.getNom_discussion());
+                        rejoindre(nouveau);
                         Platform.runLater(() -> {
                             setChatVisible(true);
                             if (tagsLabel != null) tagsLabel.setText("#discussion");
@@ -66,6 +76,25 @@ public class ChatController {
                 }
             }
         );
+
+         salonList.setOnContextMenuRequested(event -> {
+            ContextMenu contextMenu = new ContextMenu();
+            Discussion selected = salonList.getSelectionModel().getSelectedItem();
+            estInscrit = salonsInscrits.contains(selected.getNom_discussion());
+            if (selected == null) return;
+            if(estInscrit){
+                MenuItem mnuQuitter = new MenuItem("Se désinscrire");
+                mnuQuitter.setOnAction(e -> actionToggleInscription());
+                contextMenu.getItems().add(mnuQuitter);
+                
+            }
+            else{
+                MenuItem mnuInscrire = new MenuItem("S'inscire");
+                mnuInscrire.setOnAction(e -> actionToggleInscription());
+                contextMenu.getItems().add(mnuInscrire);
+            }
+            contextMenu.show(salonList, event.getScreenX(), event.getScreenY());
+        });
     }
 
     // ------------------------------------------------------------------ session
@@ -127,13 +156,23 @@ public class ChatController {
 
     // ------------------------------------------------------------------ salon
 
-    private void rejoindre(String titre) throws RemoteException {
+    private void rejoindre(Discussion d) throws RemoteException {
+        this.discussionActuelle = d;
         if (currentSalon != null && clientRMI != null) {
             currentSalon.desinscription(clientRMI);
         }
-        currentSalon = serveur.obtientSujet(titre);
+        currentSalon = serveur.obtientSujet(d.getNom_discussion());
+        estInscrit = salonsInscrits.contains(d.getNom_discussion());
+        if(estInscrit){
+            inscrireBtn.setText("Quitter le salon");
+            inputField.setDisable(false);
+        }
+        else{
+            inscrireBtn.setText("S'inscrire");
+            inputField.setDisable(true);
+        }
         currentSalon.inscription(clientRMI);
-        titreLabel.setText("# " + titre);
+        titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
         utils_loadMessages(currentSalon.getArchive());
     }
@@ -280,6 +319,33 @@ public class ChatController {
         alert.setHeaderText(null);
         alert.setContentText(contenu);
         alert.showAndWait();
+    }
+
+    @FXML
+      private void actionToggleInscription() {
+        if (currentSalon == null) return;
+
+        try {
+            String nom = discussionActuelle.getNom_discussion();
+            if (estInscrit) {
+                currentSalon.desinscription(clientRMI);
+                salonsInscrits.remove(nom);
+                //currentSalon = null;
+                estInscrit = false;
+                inscrireBtn.setText("S'inscrire"); 
+                inputField.setDisable(true);
+                inputField.setPromptText("Inscrivez-vous pour écrire...");
+            } else {
+                currentSalon.inscription(clientRMI);
+                salonsInscrits.add(nom);
+                estInscrit = true;
+                inscrireBtn.setText("Quitter le salon"); 
+                inputField.setDisable(false);
+                inputField.setPromptText("Écrire un message...");
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML private void doNothings() { /* placeholder */ }
