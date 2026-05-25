@@ -74,7 +74,6 @@
 .sidebar {
     -fx-background-color: #252024;
     -fx-border-color: transparent #1e1f22 transparent transparent;
-    -fx-background-radius: 0 25px 25px 0;
 }
 .sidebar-title {
     -fx-text-fill: #ffffff;
@@ -332,3 +331,91 @@
 .light-theme .app-menubar .menu .label,
 .light-theme .app-menubar .menu-item .label    { -fx-text-fill: #333344; }
 .light-theme .app-menubar .context-menu        { -fx-background-color: #f0f0f8; -fx-border-color: #c0c0d0; }
+
+/** Chat Area**/
+.dark-theme .chat-root {
+    -fx-background-color: #313338;
+}
+
+.dark-theme .sidebar {
+    -fx-background-color: #252024;
+}
+
+.dark-theme .chat-area {
+    -fx-background-color: #640CBB;
+}
+
+.dark-theme .chat-header {
+    -fx-background-color: #2b2d31;
+}
+
+.dark-theme .chat-input {
+    -fx-background-color: #383a40;
+    -fx-text-fill: white;
+}
+
+.light-theme {
+    -fx-base: #f4f4f4;
+    -fx-background: #ffffff;
+}
+
+.light-theme .chat-root {
+    -fx-background-color: #f4f4f4;
+}
+
+.light-theme .sidebar {
+    -fx-background-color: #928AD0; 
+    -fx-border-color: transparent #928AD0 transparent;
+}
+
+.light-theme .chat-area {
+    -fx-background-color: #188750; 
+}
+
+.light-theme .chat-header {
+    -fx-background-color: #C7C292;
+    -fx-border-color: transparent transparent #222222 transparent;
+}
+
+.light-theme .chat-input {
+    -fx-background-color: #C7C292;
+    -fx-text-fill: #555555;;         
+    -fx-prompt-text-fill: #555555;  
+}
+
+.light-theme .sidebar-title, 
+.light-theme .chat-title {
+    -fx-text-fill: #555555;;
+
+}
+
+
+.light-theme .font-icon {
+    -fx-icon-color: #188750;
+}
+
+
+.light-theme .label, 
+.light-theme .button, 
+.light-theme .text-field, 
+.light-theme .check-menu-item .label {
+    -fx-text-fill: #383a40;
+}
+
+.sidebar-scroll,
+.sidebar-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.sidebar-list {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent; 
+}
+
+.sidebar-scroll .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: #640CBB;
+}
