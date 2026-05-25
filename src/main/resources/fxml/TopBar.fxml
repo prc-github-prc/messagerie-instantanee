@@ -34,7 +34,7 @@
         <!-- Bouton accès paramètres serveur -->
         <Button fx:id="sidebarBtn" onAction="#handleToggleSidebar" styleClass="icon-button-clean">
             <graphic>
-                <FontIcon iconLiteral="fas-sliders-h" iconSize="20" iconColor="white"/>
+                <FontIcon iconLiteral="fas-bookmark" iconSize="20" iconColor="white"/>
             </graphic>
         </Button>
     </children>

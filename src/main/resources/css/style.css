@@ -47,6 +47,20 @@
     -fx-background-color: #3a3a5c;
 }
 
+.title-bar-btn-close {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-min-width: 46px;
+    -fx-max-width: 46px;
+    -fx-min-height: 32px;
+    -fx-max-height: 32px;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.title-bar-btn-close .ikonli-font-icon {
+    -fx-icon-color: #cdd6f4;
+}
 /* Bouton Fermer : survol rouge */
 .title-bar-btn-close:hover {
     -fx-background-color: #c0392b;

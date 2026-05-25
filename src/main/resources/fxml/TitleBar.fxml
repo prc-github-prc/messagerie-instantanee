@@ -65,7 +65,7 @@
         <!-- Bouton Fermer -->
         <Button fx:id="closeBtn"
                 onAction="#handleClose"
-                styleClass="title-bar-btn title-bar-btn-close">
+                styleClass="title-bar-btn-close">
             <graphic>
                 <FontIcon iconLiteral="fas-times" iconSize="11"/>
             </graphic>

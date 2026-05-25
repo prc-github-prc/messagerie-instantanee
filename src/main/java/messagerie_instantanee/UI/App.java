@@ -39,7 +39,7 @@ public class App extends Application {
 
             // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
             Pane titleBar = FXMLLoader.load(
-                getClass().getResource("/fxml/ChatView.fxml"));
+                getClass().getResource("/fxml/TitleBar.fxml"));
             root.setTop(titleBar);
 
             // Initialise le NavigationManager (utilise root.center pour les vues)
@@ -77,7 +77,7 @@ public class App extends Application {
         }
         System.exit(0);
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
