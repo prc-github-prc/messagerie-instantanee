@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
@@ -25,39 +26,9 @@
     <!-- Zone de contenu variable Login / Register — occupe tout l'espace -->
     <StackPane fx:id="contentArea" pickOnBounds="false"/>
 
-    <!--
-        Sidebar flottante — TOP_RIGHT, par-dessus le contenu.
-        managed="false" + visible="false" : n'occupe aucune place dans le layout.
-        Le décalage top compense la TopBar (même logique que la Notification).
-    -->
-    <VBox fx:id="sidebarMenu"
-          styleClass="sidebar-right"
-          visible="false"
-          managed="false"
-          maxHeight="Infinity"
-          maxWidth="-Infinity"
-          StackPane.alignment="CENTER_RIGHT">
-        <padding>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
-        </padding>
-        <children>
-            <VBox>
-                <!-- titre -->
-                <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title"/>
-                <!-- liste des marque page -->
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                            VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
-                    <content>
-                        <ListView fx:id="BookMarkList" styleClass="sidebar-list"/>
-                    </content>
-                </ScrollPane>
-            </VBox>
-        </children>
-    </VBox>
-
     <!-- TopBar — ancrée TOP_RIGHT -->
-    <fx:include fx:id="topBar"
-                source="TopBar.fxml"
+    <fx:include fx:id="siadAuthSettings"
+                source="SiadAuthSettings.fxml"
                 StackPane.alignment="TOP_RIGHT"
                 maxHeight="-Infinity"/>
 

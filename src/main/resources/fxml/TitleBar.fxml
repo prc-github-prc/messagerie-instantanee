@@ -7,6 +7,8 @@
 <?import javafx.geometry.Insets?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<!-- TODO fusionner ce fichier avec la menu bar(uniquement dans chatview) (plus joli et plus pratique)-->
+
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="messagerie_instantanee.UI.controllers.TitleBarController"

@@ -28,7 +28,7 @@ public class ServerBookmarkService {
      * 
      * Charge une liste de serverBookmark.
      */
-    public List<ServerBookmark> charger() throws IOException {
+    public static List<ServerBookmark> charger() throws IOException {
         if (!Files.exists(FICHIER)) return new ArrayList<>();
         return new Gson().fromJson(
             Files.readString(FICHIER),
@@ -36,7 +36,7 @@ public class ServerBookmarkService {
         );
     }
 
-    public void sauvegarder(List<ServerBookmark> liste) throws IOException {
+    public static void sauvegarder(List<ServerBookmark> liste) throws IOException {
         Files.writeString(FICHIER,
             new GsonBuilder().setPrettyPrinting().create().toJson(liste));
     }

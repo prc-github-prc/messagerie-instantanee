@@ -4,30 +4,28 @@ package messagerie_instantanee.client.models;
  * ServerBookmark.
  */
 public class ServerBookmark {
-    /**
-     * nom.
-     */
     public String nom;
-    /**
-     * adresse.
-     */
-    public String adresse;
-    /**
-     * port.
-     */
+    public String ip;
     public int    port;
 
     /**
      * 
      * @param nom
-     * @param adresse
+     * @param ip
      * @param port
      * 
      * Crée un serverbookmark.
      */
-    public ServerBookmark(String nom, String adresse, int port) {
+    public ServerBookmark(String nom, String ip, int port) {
         this.nom     = nom;
-        this.adresse = adresse;
+        this.ip = ip;
         this.port    = port;
     }
+
+    public String getName() { return nom; }
+    public String getIp()   { return ip;   }
+    public int getPort()   { return port;}
+    public void setName(String name) { this.nom = name;}
+    public void setIp(String ip)     { this.ip  = ip;}
+    public void setPort(int port) { this.port= port;}
 }

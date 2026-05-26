@@ -8,7 +8,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * Controller du squelette d'authentification (AuthLayout.fxml).
@@ -16,10 +15,9 @@ import javafx.scene.layout.VBox;
 public class AuthLayoutController {
 
     @FXML private StackPane contentArea;
-    @FXML private VBox      sidebarMenu;
 
     // Injection automatique des controllers enfants (fx:id="topBar" → topBarController)
-    @FXML private TopBarController       topBarController;
+    @FXML private SideAuthSettingsController sideAuthSettingsController;
     @FXML private NotificationController notificationController;
 
     // Injection du noeud racine de Notification.fxml (HBox) pour pouvoir lui appliquer une marge
@@ -29,15 +27,10 @@ public class AuthLayoutController {
 
     @FXML
     public void initialize() {
-        // Largeur sidebar = 1/4 de la largeur totale, recalculée dynamiquement
-        sidebarMenu.prefWidthProperty().bind(
-            contentArea.widthProperty().divide(4)
-        );
-
         // Décale la notification sous la TopBar (impossible en FXML sur fx:include)
         StackPane.setMargin(notification, new Insets(75, 20, 0, 0));
 
-        topBarController.setParent(this);
+        sideAuthSettingsController.setParent(this);
         showLogin();
     }
 
@@ -69,14 +62,6 @@ public class AuthLayoutController {
             e.printStackTrace();
             showError("Impossible de charger la vue : " + fxmlPath);
         }
-    }
-
-    // ------------------------------------------------------------------ sidebar
-
-    public void toggleSidebar() {
-        boolean estVisible = sidebarMenu.isVisible();
-        sidebarMenu.setVisible(!estVisible);
-        sidebarMenu.setManaged(!estVisible);
     }
 
     // ------------------------------------------------------------------ notifications
