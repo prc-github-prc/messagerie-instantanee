@@ -21,27 +21,27 @@ public class App extends Application {
 
     private static Client clientRMI;
 
+    /** Référence statique au TitleBarController, accessible depuis n'importe quel controller. */
+    public static TitleBarController titleBarController;
+
     public static void setClientRMI(Client client) {
         clientRMI = client;
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        try{
-            // ── Supprime la barre Windows native ───────────────────────────
+        try {
+            // ── Supprime la barre Windows native ──────────────────────────
             stage.initStyle(StageStyle.UNDECORATED);
 
-            // ── Structure racine ────────────────────────────────────────────
-            //   BorderPane
-            //   ├── top    → TitleBar.fxml  (barre custom persistante)
-            //   └── center → contenu courant (AuthLayout, ChatView…)
+            // ── Structure racine ───────────────────────────────────────────
             BorderPane root = new BorderPane();
             root.getStyleClass().add("dark-theme");
 
             // Barre de titre custom (posée UNE SEULE FOIS, ne change jamais)
             FXMLLoader titleLoader = new FXMLLoader(getClass().getResource("/fxml/TitleBar.fxml"));
             Pane titleBar = titleLoader.load();
-            TitleBarController titleCtrl = titleLoader.getController();
+            titleBarController = titleLoader.getController();
 
             // Initialise le NavigationManager (utilise root.center pour les vues)
             NavigationManager.init(root);
@@ -52,21 +52,22 @@ public class App extends Application {
             Pane authPanel = authLoader.load();
             root.setCenter(authPanel);
 
-            // ── Scène ───────────────────────────────────────────────────────
+            // ── Scène ──────────────────────────────────────────────────────
             Scene scene = new Scene(root);
             scene.getStylesheets().add(
                 getClass().getResource("/css/style.css").toExternalForm());
 
-            stage.setTitle("Messagerie Instantanée");
             DimensionManager dm = DimensionManager.attach(stage, scene);
-            stage.setScene(scene);    // ← scène attachée en premier
-            stage.setWidth(1280);    // ← taille par défaut raisonnable
-            stage.setHeight(720); 
+            stage.setTitle("Messagerie Instantanée");
+            stage.setScene(scene);
+            stage.setWidth(1280);
+            stage.setHeight(720);
             stage.show();
-            dm.maximize(stage);       // ← maintenant les dimensions sont correctes
-            titleCtrl.setDimensionManager(dm);
+            dm.maximize(stage);
+            titleBarController.setDimensionManager(dm);
             root.setTop(titleBar);
-        } catch(Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

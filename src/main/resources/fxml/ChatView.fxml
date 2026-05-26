@@ -21,11 +21,6 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="messagerie_instantanee.UI.controllers.ChatController">
 
-    <!-- ══════════════════════════════════════════════ Barre de menus (TOP) ══ -->
-    <top>
-        <fx:include fx:id="menuBar" source="MenuBar.fxml"/>
-    </top>
-
     <!-- ══════════════════════════════════════════════ Sidebar gauche ══ -->
     <left>
         <VBox prefWidth="350.0" styleClass="sidebar" spacing="15">
@@ -79,18 +74,18 @@
                     <children>
                         <Button text="+ Ajouter un tag"   onAction="#createNewTag"   styleClass="sidebar-btn" maxWidth="Infinity"/>
                         <Button text="+ Créer un salon"   onAction="#createNewSalon" styleClass="sidebar-btn" maxWidth="Infinity"/>
-                        <Button fx:id="inscrireBtn" 
-                            text="S'inscrire" 
-                            onAction="#actionToggleInscription" 
-                            styleClass="sidebar-btn" 
-                            maxWidth="Infinity"/>
+                        <Button fx:id="inscrireBtn"
+                                text="S'inscrire"
+                                onAction="#actionToggleInscription"
+                                styleClass="sidebar-btn"
+                                maxWidth="Infinity"/>
                     </children>
                 </VBox>
 
                 <Line startX="0" startY="0" endX="320" endY="0"
                       stroke="#EAD3D3" strokeWidth="2.0"/>
 
-                <!-- zone du bas --> <!-- TODO pour l'instant ça sert a rien, trouver une utiliter -->
+                <!-- Zone du bas -->
                 <HBox>
                     <!-- Paramètres -->
                     <Button onAction="#doNothings" styleClass="settings-btn-container">
@@ -115,12 +110,13 @@
                                     maxWidth="Infinity"/>
                         </children>
                     </HBox>
-                <HBox/>
+                </HBox>
+
             </children>
         </VBox>
     </left>
 
-    <!-- ========================= Zone de chat (CENTER) =============== -->
+    <!-- ══════════════════════════════════════════════ Zone de chat (CENTER) ══ -->
     <center>
         <VBox styleClass="chat-area" BorderPane.alignment="CENTER">
             <children>

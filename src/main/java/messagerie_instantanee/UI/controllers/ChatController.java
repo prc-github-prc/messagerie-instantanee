@@ -38,12 +38,11 @@ public class ChatController {
     @FXML private VBox                 messagesBox;
     @FXML private ScrollPane           scrollPane;
     @FXML private TextField            inputField;
-    @FXML private TextField            searchField;   // barre de recherche
+    @FXML private TextField            searchField;
     @FXML private Label                tagsLabel;
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
-    @FXML private Button inscrireBtn;
-
+    @FXML private Button               inscrireBtn;
 
     @FXML private MenuBarController menuBarController;
 
@@ -53,10 +52,8 @@ public class ChatController {
     private String                   pseudo;
     private boolean estInscrit = false;
     private Set<String> salonsInscrits = new HashSet<>();
-    private Discussion discussionActuelle; 
+    private Discussion discussionActuelle;
 
-
-    // Liste source (tous les salons) + vue filtrée branchée sur la ListView
     private final ObservableList<Discussion> tousLesSalons = FXCollections.observableArrayList();
     private FilteredList<Discussion>         salonsFiltres;
 
@@ -66,17 +63,22 @@ public class ChatController {
     public void initialize() {
         menuBarController.setParent(this);
 
-        // 1. Crée la FilteredList à partir de la liste source
-        salonsFiltres = new FilteredList<>(tousLesSalons, s -> true); // prédicat initial : tout afficher
+        // ✅ Injecte la MenuBar dans la TitleBar (uniquement dans ChatView)
+        if (App.titleBarController != null) {
+            App.titleBarController.injectMenuBar(menuBarController.getMenuBar());
+        }
 
-        // 2. Branche la liste filtrée sur la ListView (à la place de getItems())
+        // 1. Crée la FilteredList à partir de la liste source
+        salonsFiltres = new FilteredList<>(tousLesSalons, s -> true);
+
+        // 2. Branche la liste filtrée sur la ListView
         salonList.setItems(salonsFiltres);
 
         // 3. Écoute les changements dans le champ de recherche
         searchField.textProperty().addListener((obs, ancien, nouveau) -> {
             String recherche = nouveau == null ? "" : nouveau.trim().toLowerCase();
             salonsFiltres.setPredicate(salon -> {
-                if (recherche.isEmpty()) return true; // champ vide → tout afficher
+                if (recherche.isEmpty()) return true;
                 return salon.getNom_discussion().toLowerCase().contains(recherche);
             });
         });
@@ -102,14 +104,12 @@ public class ChatController {
             ContextMenu contextMenu = new ContextMenu();
             Discussion selected = salonList.getSelectionModel().getSelectedItem();
             estInscrit = salonsInscrits.contains(selected.getNom_discussion());
-            if(estInscrit){
+            if (estInscrit) {
                 MenuItem mnuQuitter = new MenuItem("Se désinscrire");
                 mnuQuitter.setOnAction(e -> actionToggleInscription());
                 contextMenu.getItems().add(mnuQuitter);
-                
-            }
-            else{
-                MenuItem mnuInscrire = new MenuItem("S'inscire");
+            } else {
+                MenuItem mnuInscrire = new MenuItem("S'inscrire");
                 mnuInscrire.setOnAction(e -> actionToggleInscription());
                 contextMenu.getItems().add(mnuInscrire);
             }
@@ -136,7 +136,7 @@ public class ChatController {
         try {
             List<Discussion> lst = server.listerSalons();
             if (lst != null && !lst.isEmpty()) {
-                tousLesSalons.setAll(lst);   // alimente la liste SOURCE (pas getItems())
+                tousLesSalons.setAll(lst);
                 Platform.runLater(() -> {
                     if (usernameLink != null) usernameLink.setText(pseudo);
                     if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
@@ -179,11 +179,10 @@ public class ChatController {
         }
         currentSalon = serveur.obtientSujet(d.getNom_discussion());
         estInscrit = salonsInscrits.contains(d.getNom_discussion());
-        if(estInscrit){
+        if (estInscrit) {
             inscrireBtn.setText("Quitter le salon");
             inputField.setDisable(false);
-        }
-        else{
+        } else {
             inscrireBtn.setText("S'inscrire");
             inputField.setDisable(true);
         }
@@ -206,7 +205,7 @@ public class ChatController {
         if (serveur == null) return;
         try {
             List<Discussion> lst = serveur.listerSalons();
-            tousLesSalons.setAll(lst);   // la FilteredList se met à jour automatiquement
+            tousLesSalons.setAll(lst);
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
@@ -240,8 +239,8 @@ public class ChatController {
             }
             try {
                 Discussion nouveau = serveur.creationSalon(nom, pseudo, false);
-                tousLesSalons.add(nouveau);           // ajout dans la source → visible si filtre OK
-                searchField.clear();                  // réinitialise la recherche pour voir le nouveau salon
+                tousLesSalons.add(nouveau);
+                searchField.clear();
                 salonList.getSelectionModel().select(nouveau);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -322,7 +321,7 @@ public class ChatController {
     }
 
     @FXML
-      private void actionToggleInscription() {
+    private void actionToggleInscription() {
         if (currentSalon == null) return;
 
         try {
@@ -330,16 +329,15 @@ public class ChatController {
             if (estInscrit) {
                 currentSalon.desinscription(clientRMI);
                 salonsInscrits.remove(nom);
-                //currentSalon = null;
                 estInscrit = false;
-                inscrireBtn.setText("S'inscrire"); 
+                inscrireBtn.setText("S'inscrire");
                 inputField.setDisable(true);
                 inputField.setPromptText("Inscrivez-vous pour écrire...");
             } else {
                 currentSalon.inscription(clientRMI);
                 salonsInscrits.add(nom);
                 estInscrit = true;
-                inscrireBtn.setText("Quitter le salon"); 
+                inscrireBtn.setText("Quitter le salon");
                 inputField.setDisable(false);
                 inputField.setPromptText("Écrire un message...");
             }

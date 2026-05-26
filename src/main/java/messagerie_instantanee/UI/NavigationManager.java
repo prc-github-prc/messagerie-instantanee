@@ -10,26 +10,12 @@ import javafx.stage.Stage;
  * Détient le BorderPane racine de l'application et permet
  * à n'importe quel controller de changer le panel affiché
  * sans avoir besoin d'une référence directe à App.java.
- *
  */
 public class NavigationManager {
 
-    // ── Instance unique ───────────────────────────────────────────────
-    /**
-     * instance de gestionnaire de navigation.
-     */
     private static NavigationManager instance;
-
-    // ── Référence au BorderPane racine de la fenêtre ──────────────────
-    /**
-     * root.
-     */
     private BorderPane root;
 
-    // ── Constructeur privé : empêche le new depuis l'extérieur ────────
-    /**
-     * 
-     */
     private NavigationManager() {}
 
     /**
@@ -55,7 +41,7 @@ public class NavigationManager {
     }
 
     /**
-     * Retourne le stage de l'instance unique
+     * Retourne le Stage courant.
      */
     public Stage getStage() {
         if (instance == null) {
@@ -67,27 +53,33 @@ public class NavigationManager {
 
     /**
      * Charge un fichier FXML et l'affiche dans le centre du root.
-     * Retourne le FXMLLoader pour que l'appelant puisse récupérer
-     * le controller via loader.getController() si besoin.
+     * Retire automatiquement la MenuBar de la TitleBar avant chaque navigation,
+     * ce qui garantit qu'elle n'apparaît que dans ChatView.
      *
      * @param cheminFxml  ex: "/fxml/ChatView.fxml"
-     * @return le FXMLLoader après chargement
+     * @return le FXMLLoader après chargement (permet de récupérer le controller)
      */
     public FXMLLoader naviguerVers(String cheminFxml) throws Exception {
-        FXMLLoader loader = new FXMLLoader(
-            getClass().getResource(cheminFxml));
+        // ✅ Retire la MenuBar de la TitleBar à chaque changement de vue.
+        // ChatController.initialize() la réinjectera si on va vers ChatView.
+        if (App.titleBarController != null) {
+            App.titleBarController.removeMenuBar();
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(cheminFxml));
         Pane panel = loader.load();
         root.setCenter(panel);
-        return loader; // ← permet de récupérer le controller si besoin
+        return loader;
     }
 
     /**
      * Affiche directement un Pane déjà chargé (sans recharger le FXML).
      * Utile si on veut mettre en cache un panel.
-     *
-     * @param panel le Pane à afficher
      */
     public void naviguerVers(Pane panel) {
+        if (App.titleBarController != null) {
+            App.titleBarController.removeMenuBar();
+        }
         root.setCenter(panel);
     }
 }

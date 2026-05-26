@@ -8,6 +8,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
+import messagerie_instantanee.UI.App;
 import messagerie_instantanee.UI.NavigationManager;
 
 /**
@@ -16,8 +17,7 @@ import messagerie_instantanee.UI.NavigationManager;
  */
 public class MenuBarController {
 
-    // Injection du nœud MenuBar lui-même pour accéder à la scène / la fenêtre
-    @FXML private MenuBar      menuBar;
+    @FXML private MenuBar       menuBar;
     @FXML private CheckMenuItem darkThemeItem;
     @FXML private CheckMenuItem fullscreenItem;
 
@@ -27,6 +27,14 @@ public class MenuBarController {
 
     public void setParent(ChatController parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Expose le nœud MenuBar pour que ChatController puisse l'injecter
+     * dans la TitleBar via TitleBarController.injectMenuBar().
+     */
+    public MenuBar getMenuBar() {
+        return menuBar;
     }
 
     /** Raccourci : récupère le Stage depuis le nœud MenuBar injecté. */
@@ -39,6 +47,12 @@ public class MenuBarController {
     @FXML
     private void handleDeconnexion() {
         if (parent != null) parent.deconnecter();
+
+        // ✅ Retire la MenuBar de la TitleBar avant de changer de vue
+        if (App.titleBarController != null) {
+            App.titleBarController.removeMenuBar();
+        }
+
         try {
             NavigationManager.getInstance().naviguerVers("/fxml/AuthLayout.fxml");
         } catch (IOException e) {
@@ -50,7 +64,7 @@ public class MenuBarController {
 
     @FXML
     private void handleQuitter() {
-        getStage().close();   // déclenche App.stop() → unexport RMI
+        getStage().close();
     }
 
     // ------------------------------------------------------------------ Discussion

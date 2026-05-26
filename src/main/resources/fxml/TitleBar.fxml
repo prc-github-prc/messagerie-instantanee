@@ -7,8 +7,6 @@
 <?import javafx.geometry.Insets?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<!-- TODO fusionner ce fichier avec la menu bar(uniquement dans chatview) (plus joli et plus pratique)-->
-
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="messagerie_instantanee.UI.controllers.TitleBarController"
@@ -36,6 +34,17 @@
                onMousePressed="#handleMousePressed"
                onMouseDragged="#handleMouseDragged"
                onMouseReleased="#handleMouseReleased"/>
+
+        <!--
+            Slot MenuBar — vide dans AuthView, rempli par TitleBarController.injectMenuBar()
+            quand on navigue vers ChatView. Les handlers drag sont répétés pour que la zone
+            reste draggable quand la MenuBar n'est pas injectée.
+        -->
+        <HBox fx:id="menuBarSlot"
+              alignment="CENTER_LEFT"
+              onMousePressed="#handleMousePressed"
+              onMouseDragged="#handleMouseDragged"
+              onMouseReleased="#handleMouseReleased"/>
 
         <!--
             Zone flexible : pickOnBounds="true" force JavaFX à détecter les clics
