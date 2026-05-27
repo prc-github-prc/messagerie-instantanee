@@ -25,12 +25,12 @@
 
     <!--
         fx:id="sideAuthSettings" → JavaFX injecte le controller dans le champ
-        "sideAuthSettingsController" de AuthLayoutController  ✅
+        "sideAuthSettingsController" de AuthLayoutController 
     -->
     <fx:include fx:id="sideAuthSettings"
                 source="SideAuthSettings.fxml"
                 StackPane.alignment="TOP_RIGHT"
-                maxHeight="-Infinity"/>
+                maxHeight="Infinity"/>
 
     <!-- Notification flottante -->
     <fx:include fx:id="notification"

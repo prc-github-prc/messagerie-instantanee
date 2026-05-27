@@ -19,7 +19,7 @@ public class SideAuthSettingsController {
 
     @FXML private Button    themeBtn;
     @FXML private Button    sidebarBtn;
-    @FXML private VBox      serveurSidebarMenu;
+    @FXML private VBox      sideServerSettings;
     @FXML private TextField serverField;
     @FXML private VBox      BookMarkList;
 
@@ -49,9 +49,9 @@ public class SideAuthSettingsController {
 
     @FXML
     private void handleToggleSidebar() {
-        boolean visible = !serveurSidebarMenu.isVisible();
-        serveurSidebarMenu.setVisible(visible);
-        serveurSidebarMenu.setManaged(visible);
+        boolean visible = !sideServerSettings.isVisible();
+        sideServerSettings.setVisible(visible);
+        sideServerSettings.setManaged(visible);
     }
 
     // ------------------------------------------------------------------ bookmarks
