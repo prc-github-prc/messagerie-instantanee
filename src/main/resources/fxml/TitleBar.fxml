@@ -27,14 +27,6 @@
             <HBox.margin><Insets left="12" right="8"/></HBox.margin>
         </FontIcon>
 
-        <!-- Titre -->
-        <Label fx:id="titleLabel"
-               text="Messagerie Instantanée"
-               styleClass="title-bar-text"
-               onMousePressed="#handleMousePressed"
-               onMouseDragged="#handleMouseDragged"
-               onMouseReleased="#handleMouseReleased"/>
-
         <!--
             Slot MenuBar — vide dans AuthView, rempli par TitleBarController.injectMenuBar()
             quand on navigue vers ChatView. Les handlers drag sont répétés pour que la zone

@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -20,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -44,7 +46,8 @@ public class ChatController {
     @FXML private Button               usernameLink;
     @FXML private Button               inscrireBtn;
 
-    @FXML private MenuBarController menuBarController;
+    // Chargé programmatiquement dans initialize() — pas via @FXML
+    private MenuBarController menuBarController;
 
     private InterfaceServeurForum    serveur;
     private InterfaceSujetDiscussion currentSalon;
@@ -61,20 +64,27 @@ public class ChatController {
 
     @FXML
     public void initialize() {
-        menuBarController.setParent(this);
+        // ✅ Charge MenuBar.fxml programmatiquement — évite les problèmes
+        //    de positionnement liés à fx:include dans un BorderPane.
+        try {
+            FXMLLoader menuLoader = new FXMLLoader(
+                getClass().getResource("/fxml/MenuBar.fxml"));
+            MenuBar menuBarNode = menuLoader.load();
+            menuBarController = menuLoader.getController();
+            menuBarController.setParent(this);
 
-        // ✅ Injecte la MenuBar dans la TitleBar (uniquement dans ChatView)
-        if (App.titleBarController != null) {
-            App.titleBarController.injectMenuBar(menuBarController.getMenuBar());
+            // Injecte la MenuBar dans le slot de la TitleBar
+            if (App.titleBarController != null) {
+                App.titleBarController.injectMenuBar(menuBarNode);
+            }
+        } catch (Exception e) {
+            System.err.println("[ChatController] Impossible de charger MenuBar.fxml : " + e.getMessage());
+            e.printStackTrace();
         }
 
-        // 1. Crée la FilteredList à partir de la liste source
         salonsFiltres = new FilteredList<>(tousLesSalons, s -> true);
-
-        // 2. Branche la liste filtrée sur la ListView
         salonList.setItems(salonsFiltres);
 
-        // 3. Écoute les changements dans le champ de recherche
         searchField.textProperty().addListener((obs, ancien, nouveau) -> {
             String recherche = nouveau == null ? "" : nouveau.trim().toLowerCase();
             salonsFiltres.setPredicate(salon -> {
@@ -83,7 +93,6 @@ public class ChatController {
             });
         });
 
-        // 4. Sélection d'un salon dans la liste
         salonList.getSelectionModel().selectedItemProperty().addListener(
             (obs, ancien, nouveau) -> {
                 if (nouveau != null && serveur != null) {
@@ -272,7 +281,6 @@ public class ChatController {
     public void actionEnvoi() {
         String texte = inputField.getText().trim();
         if (texte.isEmpty()) return;
-
         if (currentSalon == null) {
             showAlert(AlertType.WARNING, "Aucun salon sélectionné",
                 "Veuillez sélectionner un salon avant d'envoyer un message.");
@@ -323,7 +331,6 @@ public class ChatController {
     @FXML
     private void actionToggleInscription() {
         if (currentSalon == null) return;
-
         try {
             String nom = discussionActuelle.getNom_discussion();
             if (estInscrit) {

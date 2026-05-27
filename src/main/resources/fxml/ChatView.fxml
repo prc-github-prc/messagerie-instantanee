@@ -15,6 +15,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
+<!--
+    Pas de fx:include MenuBar ici.
+    La MenuBar est chargée programmatiquement dans ChatController.initialize()
+    via FXMLLoader, puis injectée dans la TitleBar.
+-->
 <BorderPane styleClass="chat-root"
             stylesheets="@../css/style.css"
             xmlns="http://javafx.com/javafx"
@@ -29,7 +34,6 @@
             </padding>
             <children>
 
-                <!-- Barre de recherche -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <children>
                         <TextField fx:id="searchField"
@@ -58,7 +62,6 @@
                 <Label styleClass="sidebar-title" text="FORUM DISCUSSION"/>
                 <Label styleClass="section-title" text="SALONS DISPONIBLES"/>
 
-                <!-- Liste des salons -->
                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                             VBox.vgrow="ALWAYS" styleClass="sidebar-scroll">
                     <content>
@@ -69,7 +72,6 @@
                 <Line startX="0" startY="0" endX="320" endY="0"
                       stroke="#EAD3D3" strokeWidth="2.0"/>
 
-                <!-- Boutons de création -->
                 <VBox spacing="10" style="-fx-padding: 15px 0 5px 0;">
                     <children>
                         <Button text="+ Ajouter un tag"   onAction="#createNewTag"   styleClass="sidebar-btn" maxWidth="Infinity"/>
@@ -85,9 +87,7 @@
                 <Line startX="0" startY="0" endX="320" endY="0"
                       stroke="#EAD3D3" strokeWidth="2.0"/>
 
-                <!-- Zone du bas -->
                 <HBox>
-                    <!-- Paramètres -->
                     <Button onAction="#doNothings" styleClass="settings-btn-container">
                         <graphic>
                             <StackPane styleClass="settings-icon-wrapper">
@@ -97,8 +97,6 @@
                             </StackPane>
                         </graphic>
                     </Button>
-
-                    <!-- Compte connecté -->
                     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 15px 0;">
                         <children>
                             <Circle radius="20.0" fill="#2f55d4" styleClass="logo-circle"/>
@@ -116,12 +114,11 @@
         </VBox>
     </left>
 
-    <!-- ══════════════════════════════════════════════ Zone de chat (CENTER) ══ -->
+    <!-- ══════════════════════════════════════════════ Zone de chat ══ -->
     <center>
         <VBox styleClass="chat-area" BorderPane.alignment="CENTER">
             <children>
 
-                <!-- Header du salon -->
                 <VBox alignment="CENTER_LEFT" styleClass="chat-header">
                     <padding>
                         <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
@@ -132,7 +129,6 @@
                     </children>
                 </VBox>
 
-                <!-- Messages -->
                 <ScrollPane fx:id="scrollPane" fitToWidth="true"
                             hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                             VBox.vgrow="ALWAYS" styleClass="chat-scroll">
@@ -144,7 +140,6 @@
                     </content>
                 </ScrollPane>
 
-                <!-- Zone de saisie -->
                 <HBox alignment="CENTER" spacing="12" styleClass="input-bar">
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0"/>
