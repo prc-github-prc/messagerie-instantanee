@@ -463,3 +463,104 @@
 .sidebar-btn:hover {
     -fx-background-color: #640CBB;
 }
+
+/* ======================================= DIALOG ======================================= */
+.dialog-root {
+    -fx-background-color: #2b2d31;
+}
+
+.dialog-title {
+    -fx-text-fill: #f2f3f5;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 15px 15px 5px 15px;
+}
+
+.dialog-label {
+    -fx-text-fill: #b9bbbe;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.dialog-input {
+    -fx-background-color: #383a40;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #72767d;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1e1f22;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+.dialog-input:focused {
+    -fx-border-color: #5865f2;
+    -fx-border-width: 2px;
+}
+
+.dialog-checkbox {
+    -fx-text-fill: #b9bbbe;
+    -fx-font-size: 13px;
+}
+
+.dialog-checkbox .box {
+    -fx-background-color: #383a40;
+    -fx-border-color: #72767d;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.dialog-checkbox:selected .box {
+    -fx-background-color: #5865f2;
+    -fx-border-color: #5865f2;
+}
+
+.dialog-checkbox:selected .mark {
+    -fx-background-color: white;
+}
+
+.dialog-btn-valider {
+    -fx-background-color: #640CBB;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+}
+
+.dialog-btn-valider:hover  { -fx-background-color: #710057; }
+.dialog-btn-valider:armed  { -fx-background-color: #4a0088; }
+
+.dialog-btn-annuler {
+    -fx-background-color: #383a40;
+    -fx-text-fill: #b9bbbe;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+}
+
+.dialog-btn-annuler:hover  { -fx-background-color: #e74c3c; -fx-text-fill: #ffffff; }
+.dialog-btn-annuler:armed  { -fx-background-color: #c0392b; -fx-text-fill: #ffffff; }
+
+.dialog-footer {
+    -fx-background-color: #1e1f22;
+    -fx-padding: 10px 15px;
+}
+
+.dialog-input {
+    -fx-background-color: #383a40;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #72767d;
+    -fx-background-radius: 8px;
+    -fx-border-color: #1e1f22;
+    -fx-border-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 13px;
+}
+
+.dialog-input:focused {
+    -fx-border-color: #5865f2;
+    -fx-border-width: 2px;
+}

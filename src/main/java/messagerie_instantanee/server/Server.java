@@ -15,16 +15,13 @@ import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.HideDAO;
-
+import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
-import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
-import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
-
-
 import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
+import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
 
 public class Server extends UnicastRemoteObject implements InterfaceServeurForum {
