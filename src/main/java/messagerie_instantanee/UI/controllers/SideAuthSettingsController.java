@@ -125,6 +125,8 @@ public class SideAuthSettingsController {
             System.out.println("Bookmark supprimé : " + toDelete.getName());
         });
 
+        VBox.setMargin(row, new Insets(8, 0, 8, 0));
+        row.getStyleClass().setAll("bookmark");
         bookMarkList.getChildren().add(row);
     }
 }

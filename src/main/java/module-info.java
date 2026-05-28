@@ -18,6 +18,13 @@ module messagerie_instantanee {
     opens messagerie_instantanee.client to javafx.fxml;
     exports messagerie_instantanee.client;
 
+    // client models — opens à Gson pour la désérialisation par réflexion
+    opens messagerie_instantanee.client.models to com.google.gson;
+    exports messagerie_instantanee.client.models;
+
+    // client services
+    exports messagerie_instantanee.client.services;
+
     // interfaces
     exports messagerie_instantanee.interfaces;
 
