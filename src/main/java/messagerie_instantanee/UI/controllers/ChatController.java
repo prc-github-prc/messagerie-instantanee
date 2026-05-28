@@ -29,7 +29,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -277,11 +276,15 @@ public class ChatController {
         vbox.setPadding(new Insets(15));
         vbox.setAlignment(Pos.CENTER_LEFT);
         TextField tfsalon    = new TextField();
+        tfsalon.getStyleClass().add("dialog-input");
         tfsalon.setPromptText("Nom du Salon");
+        Label lbl = new Label("Nom du salon");
+        lbl.getStyleClass().add("dialog-label");
         CheckBox cbPrive = new CheckBox("Salon privé ?");
+        cbPrive.getStyleClass().add("dialog-checkbox");
 
         vbox.getChildren().addAll(
-            new Label("Nom du salon"),
+            lbl,
             tfsalon,
             cbPrive);
         
@@ -290,16 +293,18 @@ public class ChatController {
         Button btnValider = new Button("Valider");
         Button btnAnnuler = new Button("Annuler");
         btnValider.setDefaultButton(true);
-        btnAnnuler.setCancelButton(true);
-        btnValider.getStyleClass().add("envoi-btn-container");
-        btnAnnuler.getStyleClass().add("envoi-btn-container");
+        btnAnnuler.setCancelButton(false);
+        btnValider.getStyleClass().add("dialog-btn-valider");
+        btnAnnuler.getStyleClass().add("dialog-btn-annuler");
+
 
         HBox boutons = new HBox(10, btnValider, btnAnnuler);
         boutons.setAlignment(Pos.CENTER_RIGHT);
         boutons.setPadding(new Insets(0, 15, 15, 15));
-
+        boutons.getStyleClass().add("dialog-footer");
         // Layout principal
         BorderPane root = new BorderPane();
+        root.getStyleClass().add("dialog-root");
         root.setCenter(vbox);
         root.setBottom(boutons);
         
@@ -329,31 +334,11 @@ public class ChatController {
 
         btnAnnuler.setOnAction(e -> dialog.close());
 
-        dialog.setScene(new Scene(root, 300, 200));
+        Scene scene = new Scene(root, 300, 200);
+        scene.getStylesheets().addAll(salonList.getScene().getStylesheets());
+        dialog.setScene(scene);
         dialog.showAndWait();
 
-
-        /* TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouveau Salon");
-        dialog.setContentText("Nom du salon :");
-        dialog.showAndWait().ifPresent(raw -> {
-            String nom = raw.trim();
-            if (nom.isEmpty()) return;
-            boolean existe = tousLesSalons.stream()
-                .anyMatch(d -> nom.equals(d.getNom_discussion()));
-            if (existe) {
-                showAlert(AlertType.WARNING, "Erreur", "Ce salon existe déjà.");
-                return;
-            }
-            try {
-                Discussion nouveau = serveur.creationSalon(nom, pseudo, false);
-                tousLesSalons.add(nouveau);
-                searchField.clear();
-                salonList.getSelectionModel().select(nouveau);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        }); */
     }
 
     // permet dde créer un tag
@@ -363,16 +348,122 @@ public class ChatController {
                 "Veuillez sélectionner un salon avant d'ajouter un tag.");
             return;
         }
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nouveau tag");
-        dialog.setContentText("Nom du tag :");
-        dialog.showAndWait().ifPresent(tag -> {
-            String t = tag.trim();
-            if (t.isEmpty()) return;
-            if (!t.startsWith("#")) t = "#" + t;
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner((Stage) salonList.getScene().getWindow()); 
+        dialog.setTitle("Nouveau Tag");
+        dialog.setResizable(false);
+        
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        TextField tfTag   = new TextField();
+        tfTag.getStyleClass().add("dialog-input");
+        tfTag.setPromptText("Nom du Tag");
+        Label lbl = new Label("Nom du Tag");
+        lbl.getStyleClass().add("dialog-label");
+
+        vbox.getChildren().addAll(
+            lbl,
+            tfTag);
+
+        // Boutons
+        Button btnValider = new Button("Valider");
+        Button btnAnnuler = new Button("Annuler");
+        btnValider.setDefaultButton(true);
+        btnAnnuler.setCancelButton(false);
+        btnValider.getStyleClass().add("dialog-btn-valider");
+        btnAnnuler.getStyleClass().add("dialog-btn-annuler");
+
+        HBox boutons = new HBox(10, btnValider, btnAnnuler);
+        boutons.setAlignment(Pos.CENTER_RIGHT);
+        boutons.setPadding(new Insets(0, 15, 15, 15));
+        boutons.getStyleClass().add("dialog-footer");
+        
+        // Layout principal
+        BorderPane root = new BorderPane();
+        root.getStyleClass().add("dialog-root");
+        root.setCenter(vbox);
+        root.setBottom(boutons);
+
+        btnValider.setOnAction(e->{
+            String tag  = tfTag.getText().trim();
+            if (tag.isEmpty()) return;
+            if (!tag.startsWith("#")) tag = "#" + tag;
             String actuel = tagsLabel.getText();
-            tagsLabel.setText((actuel == null || actuel.isEmpty()) ? t : actuel + " " + t);
+            tagsLabel.setText((actuel == null || actuel.isEmpty()) ? tag : actuel + " " + tag);
+            dialog.close();
         });
+        btnAnnuler.setOnAction(e -> dialog.close());
+
+        Scene scene = new Scene(root, 300, 200);
+        scene.getStylesheets().addAll(salonList.getScene().getStylesheets());
+        dialog.setScene(scene);
+        dialog.showAndWait();
+    }
+
+    //permet d'ajouter quelqu'un
+    private void ouvrirDialogInvitation(){
+        if (currentSalon == null) {
+            showAlert(AlertType.INFORMATION, "Information",
+                "Veuillez sélectionner un salon avant d'ajouter un tag.");
+            return;
+        }
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner((Stage) salonList.getScene().getWindow()); 
+        dialog.setTitle("Invitation");
+        dialog.setResizable(false);
+        
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        TextField tfUsername   = new TextField();
+        tfUsername.getStyleClass().add("dialog-input");
+        tfUsername.setPromptText("Nom de l'utilisateur");
+        Label lbl = new Label("username");
+        lbl.getStyleClass().add("dialog-label");
+
+        vbox.getChildren().addAll(
+            lbl,
+            tfUsername);
+
+        // Boutons
+        Button btnValider = new Button("Valider");
+        Button btnAnnuler = new Button("Annuler");
+        btnValider.setDefaultButton(true);
+        btnAnnuler.setCancelButton(false);
+        btnValider.getStyleClass().add("dialog-btn-valider");
+        btnAnnuler.getStyleClass().add("dialog-btn-annuler");
+
+        HBox boutons = new HBox(10, btnValider, btnAnnuler);
+        boutons.setAlignment(Pos.CENTER_RIGHT);
+        boutons.setPadding(new Insets(0, 15, 15, 15));
+        boutons.getStyleClass().add("dialog-footer");
+        
+        // Layout principal
+        BorderPane root = new BorderPane();
+        root.getStyleClass().add("dialog-root");
+        root.setCenter(vbox);
+        root.setBottom(boutons);
+
+        btnValider.setOnAction(e->{
+            String username = tfUsername.getText().trim();
+            try {
+                serveur.addUserToDiscussion(discussionActuelle.getId_discussion(), username);
+            } catch (RemoteException e1) {
+                showAlert(AlertType.ERROR, "Erreur d'envoi",
+                    "Problème lors de l'invitation : " + e1.getMessage());
+        }
+            dialog.close();
+        });
+        btnAnnuler.setOnAction(e -> dialog.close());
+
+        Scene scene = new Scene(root, 300, 200);
+        scene.getStylesheets().addAll(salonList.getScene().getStylesheets());
+        dialog.setScene(scene);
+        dialog.showAndWait();
+
     }
 
     // ========== envoi de message ========
