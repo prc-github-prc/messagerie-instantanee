@@ -145,7 +145,7 @@ public class ChatController {
         try {
             clientRMI = new Client(
                 msg -> Platform.runLater(
-                    () -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
+                    () -> afficherBulle(msg)),
                 pseudo);
             App.setClientRMI(clientRMI);
         } catch (RemoteException e) {
@@ -217,7 +217,7 @@ public class ChatController {
     private void utils_loadMessages(Stack<Message> messages) {
         while (!messages.isEmpty()) {
             Message m = messages.pop();
-            afficherBulle(m.getContenu(), m.getAuthorName().equals(pseudo));
+            afficherBulle(m);
         }
     }
 
@@ -322,13 +322,31 @@ public class ChatController {
     // =================== fonction utilitaire d'affichage ==================
 
     // affiche un message du bon cote selon auhtor ou pas
-    private void afficherBulle(String msg, boolean estMoi) {
-        Label label = new Label(msg);
-        label.getStyleClass().add("bulle-message");
-        label.setWrapText(true);
-        label.setMaxWidth(300);
-        VBox conteneur = new VBox(label);
-        conteneur.setAlignment(estMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+    private void afficherBulle(Message m) {
+        boolean estMoi = m.getAuthorName().equals(pseudo);  
+        VBox conteneur = new VBox(2);
+
+        // pseudo au-dessus du message
+        if (!estMoi) {
+            Label pseudoLabel = new Label(m.getAuthorName());
+            pseudoLabel.getStyleClass().add("bulle-pseudo");
+
+            conteneur.getChildren().add(pseudoLabel);
+        }
+
+        // message
+        Label messageLabel = new Label(m.getContenu());
+        messageLabel.getStyleClass().add("bulle-message");
+        messageLabel.setWrapText(true);
+        messageLabel.setMaxWidth(300);
+
+        conteneur.getChildren().add(messageLabel);
+
+        // alignement
+        conteneur.setAlignment(
+            estMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT
+        );
+
         messagesBox.getChildren().add(conteneur);
     }
 
