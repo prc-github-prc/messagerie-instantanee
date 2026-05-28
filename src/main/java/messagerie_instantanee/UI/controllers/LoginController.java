@@ -23,7 +23,6 @@ public class LoginController {
 
     @FXML private TextField     pseudoField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField     serverField;
 
     private AuthLayoutController parent;
 
@@ -63,7 +62,7 @@ public class LoginController {
     @FXML
     private void handleLogin() {
         String pseudo   = pseudoField.getText().trim();
-        String serveur  = serverField.getText().trim();
+        String serveur  = parent.getServerIp();
         String password = passwordField.getText().trim();
 
         // -------- validation basique --------

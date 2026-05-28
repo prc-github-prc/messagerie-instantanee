@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.Button?>
@@ -8,24 +10,25 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="messagerie_instantanee.UI.controllers.TitleBarController"
-      fx:id="titleBar"
-      styleClass="title-bar"
-      alignment="CENTER_LEFT"
-      prefHeight="32"
-      onMousePressed="#handleMousePressed"
-      onMouseDragged="#handleMouseDragged"
-      onMouseReleased="#handleMouseReleased">
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="messagerie_instantanee.UI.controllers.TitleBarController"
+        fx:id="titleBar"
+        styleClass="title-bar"
+        alignment="CENTER_LEFT"
+        prefHeight="32"
+        onMousePressed="#handleMousePressed"
+        onMouseDragged="#handleMouseDragged"
+        onMouseReleased="#handleMouseReleased">
 
     <children>
 
         <!-- Icône de l'app -->
-        <FontIcon iconLiteral="fas-comments"
-                  iconSize="14"
-                  styleClass="title-bar-icon">
+        <ImageView  fitWidth="24" fitHeight="24" preserveRatio="true">
+            <image>
+                <Image url="@../icons/logo-ogmos.png"/>
+            </image>
             <HBox.margin><Insets left="12" right="8"/></HBox.margin>
-        </FontIcon>
+        </ImageView>
 
         <!--
             Slot MenuBar — vide dans AuthView, rempli par TitleBarController.injectMenuBar()

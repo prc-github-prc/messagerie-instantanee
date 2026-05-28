@@ -51,10 +51,10 @@ public class AuthLayoutController {
 
             // Injection de la référence parent dans le controller enfant
             Object ctrl = loader.getController();
-            if (ctrl instanceof LoginController) {
-                ((LoginController) ctrl).setParent(this);
-            } else if (ctrl instanceof RegisterController) {
-                ((RegisterController) ctrl).setParent(this);
+            if (ctrl instanceof LoginController lc) {
+                lc.setParent(this);
+            } else if (ctrl instanceof RegisterController rc) {
+                rc.setParent(this);
             }
 
             contentArea.getChildren().setAll(form);
@@ -69,4 +69,9 @@ public class AuthLayoutController {
     public void showError(String message)   { notificationController.showError(message);   }
     public void showSuccess(String message) { notificationController.showSuccess(message); }
     public void showInfo(String message)    { notificationController.showInfo(message);    }
+
+    /** Retourne l'IP saisie dans la sidebar, utilisée par Login et Register. */
+    public String getServerIp() {
+        return sideAuthSettingsController.getServerIp();
+    }
 }

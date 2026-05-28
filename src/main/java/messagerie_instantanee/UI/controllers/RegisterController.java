@@ -24,7 +24,6 @@ public class RegisterController {
     @FXML private TextField     pseudoField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
-    @FXML private TextField     serverField;
 
     private AuthLayoutController parent;
 
@@ -47,7 +46,7 @@ public class RegisterController {
     @FXML
     private void handleCreateAccount(ActionEvent event) {
         String pseudo    = pseudoField.getText().trim();
-        String serveur   = serverField.getText().trim();
+        String serveur   = parent.getServerIp();
         String password  = passwordField.getText().trim();
         String confirm   = confirmPasswordField.getText().trim();
 

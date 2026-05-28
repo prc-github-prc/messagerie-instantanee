@@ -69,6 +69,22 @@ public class DiscussionDAO {
         }
     }
 
+    //useless dans implementation actuelle mais pourrait être utile pour filtrer les salons affichés à l'utilisateur :)
+    public static List<Discussion> findAllVisibleDiscussionsByIdUser(int id_user) {
+        try {
+            ResultSet data_discussions = executeSQLQuerry(
+                "SELECT * FROM Discussion WHERE est_prive = 0 OR id_discussion IN (SELECT id_discussion FROM Roles WHERE id_user = " + id_user + ")"
+            );
+            return rsToDiscussion(data_discussions);
+        } catch (SQLException e) {
+            System.out.println("[DiscussionDAO] connexion impossible a la base de donnée : " + e.getMessage());
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("[DiscussionDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
+            return null;
+        }
+    }
+
     public static List<Message> findMessagesByIdDiscussion(int id_discussion) {
         try {
             ResultSet data_messages = executeSQLQuerry(

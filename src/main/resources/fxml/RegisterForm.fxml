@@ -38,35 +38,35 @@
         <VBox spacing="6" fillWidth="true">
             <Label text="username" styleClass="input-label" style="-fx-font-size: 14;"/>
             <TextField fx:id="pseudoField"
-                       styleClass="login-input"
-                       style="-fx-padding: 12; -fx-background-radius: 8;"/>
+                        styleClass="login-input"
+                        style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>
 
         <!-- Champ mot de passe -->
         <VBox spacing="6" fillWidth="true">
             <Label text="mot de passe" styleClass="input-label" style="-fx-font-size: 14;"/>
             <PasswordField fx:id="passwordField"
-                           styleClass="login-input"
-                           style="-fx-padding: 12; -fx-background-radius: 8;"/>
+                            styleClass="login-input"
+                            style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>
 
         <!-- Champ confirmation mot de passe -->
         <VBox spacing="6" fillWidth="true">
             <Label text="confirmation mot de passe" styleClass="input-label" style="-fx-font-size: 14;"/>
             <PasswordField fx:id="confirmPasswordField"
-                           onAction="#handleCreateAccount"
-                           styleClass="login-input"
-                           style="-fx-padding: 12; -fx-background-radius: 8;"/>
+                            onAction="#handleCreateAccount"
+                            styleClass="login-input"
+                            style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>
 
-        <!-- Champ serveur -->
+        <!-- Champ serveur
         <VBox spacing="6" fillWidth="true">
             <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;"/>
             <TextField fx:id="serverField"
-                       onAction="#handleCreateAccount"
-                       styleClass="login-input"
-                       style="-fx-padding: 12; -fx-background-radius: 8;"/>
-        </VBox>
+                        onAction="#handleCreateAccount"
+                        styleClass="login-input"
+                        style="-fx-padding: 12; -fx-background-radius: 8;"/>
+        </VBox> -->
 
         <!-- Bouton création -->
         <Button text="Créer le compte"
@@ -77,7 +77,8 @@
         <!-- Lien retour connexion -->
         <Hyperlink text="Déjà un compte ? Connectez-vous"
                    onAction="#showLogin"
-                   style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;"/>
+                   styleClass="login-link"
+                   style="-fx-underline: false; -fx-font-size: 13;"/>
     </children>
 
 </VBox>

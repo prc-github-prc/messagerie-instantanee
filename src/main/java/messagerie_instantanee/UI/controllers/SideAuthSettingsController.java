@@ -1,15 +1,18 @@
 package messagerie_instantanee.UI.controllers;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.List;
 
+import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.models.ServerBookmark;
 import messagerie_instantanee.client.services.ServerBookmarkService;
@@ -33,7 +36,7 @@ public class SideAuthSettingsController {
 
     private AuthLayoutController parent;
 
-    // ------------------------------------------------------------------ init
+    // ============== init ==============
 
     public void setParent(AuthLayoutController parent) {
         this.parent = parent;
@@ -87,6 +90,14 @@ public class SideAuthSettingsController {
     }
 
     /**
+     * Expose la propriété du champ serveur pour un binding bidirectionnel
+     * avec les controllers Login et Register.
+     */
+    public javafx.beans.property.StringProperty serverIpProperty() {
+        return serverField.textProperty();
+    }
+
+    /**
      * Ajoute un bookmark dans la liste et crée sa ligne visuelle.
      */
     public void addBookmark(ServerBookmark bookmark) {
@@ -123,6 +134,13 @@ public class SideAuthSettingsController {
             ServerBookmark toDelete = (ServerBookmark) row.getUserData();
             bookMarkList.getChildren().remove(row);
             System.out.println("Bookmark supprimé : " + toDelete.getName());
+        });
+
+        // Empêche le clic sur "supprimer" de remonter jusqu'à la ligne
+        deleteBtn.addEventHandler(MouseEvent.MOUSE_CLICKED, Event::consume);
+
+        row.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            serverField.setText(((ServerBookmark) row.getUserData()).getIp());
         });
 
         VBox.setMargin(row, new Insets(8, 0, 8, 0));

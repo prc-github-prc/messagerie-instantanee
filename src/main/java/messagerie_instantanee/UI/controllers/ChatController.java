@@ -62,8 +62,8 @@ public class ChatController {
     private InterfaceSujetDiscussion currentSalon;
     private Client                   clientRMI;
     private String                   pseudo;
-    private boolean estInscrit = false;
-    private Set<String> salonsInscrits = new HashSet<>();
+    private boolean estInscritNotification = false;
+    private Set<String> salonsInscritsNotification = new HashSet<>();
     private Discussion discussionActuelle;
 
     private final ObservableList<Discussion> tousLesSalons = FXCollections.observableArrayList();
@@ -73,8 +73,8 @@ public class ChatController {
 
     @FXML
     public void initialize() {
-        // ✅ Charge MenuBar.fxml programmatiquement — évite les problèmes
-        //    de positionnement liés à fx:include dans un BorderPane.
+
+        // ================ permet l'insersion de la menu bar dans la chatview ==============
         try {
             FXMLLoader menuLoader = new FXMLLoader(
                 getClass().getResource("/fxml/MenuBar.fxml"));
@@ -90,17 +90,10 @@ public class ChatController {
             System.err.println("[ChatController] Impossible de charger MenuBar.fxml : " + e.getMessage());
             e.printStackTrace();
         }
-        
-        List<Discussion> masque = new ArrayList<>();
-       /*  try{
-            masque = serveur.getDiscussionsHidedByUser(pseudo);
-            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //ajoute aussi les salons privés non visibles (ou le user n'est pas dans la liste des participants) à la liste des salons à masquer.
-        } catch (RemoteException e) {
-            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage()); //s'il y a une erreur la liste est vide et aucun salon n'est masqué.
-        }*/
 
+        // ============= permet de filtrer les discussion afficher selon la bar de recherche =============
 
-        final List<Discussion> masqueFinal = masque; //Java exige qu'une variable utilisée dans un lambda soit finale
+        final List<Discussion> masqueFinal = new ArrayList<>(); //Java exige qu'une variable utilisée dans un lambda soit finale
 
         salonsFiltres = new FilteredList<>(tousLesSalons, s -> !masqueFinal.contains(s));
         salonList.setItems(salonsFiltres);
@@ -114,6 +107,7 @@ public class ChatController {
             });
         });
 
+        // ============== event listener qui gere le click sur un salon ============
         salonList.getSelectionModel().selectedItemProperty().addListener(
             (obs, ancien, nouveau) -> {
                 if (nouveau != null && serveur != null) {
@@ -130,13 +124,14 @@ public class ChatController {
             }
         );
 
+        // even listener du bouton d'inscription au notification
         salonList.setOnContextMenuRequested(event -> {
             ContextMenu contextMenu = new ContextMenu();
             Discussion selected = salonList.getSelectionModel().getSelectedItem();
-            estInscrit = salonsInscrits.contains(selected.getNom_discussion());
+            estInscritNotification = salonsInscritsNotification.contains(selected.getNom_discussion());
             MenuItem mnuMasquer = new MenuItem("Masquer");
             mnuMasquer.setOnAction(e -> handleMasquerSalon(e));
-            if (estInscrit) {
+            if (estInscritNotification) {
                 MenuItem mnuQuitter = new MenuItem("Se désinscrire");
                 mnuQuitter.setOnAction(e -> actionToggleInscription());
                 contextMenu.getItems().add(mnuQuitter);
@@ -158,12 +153,14 @@ public class ChatController {
         try {
             clientRMI = new Client(
                 msg -> Platform.runLater(
-                    () -> afficherBulle(msg.getContenu(), msg.getAuthorName().equals(pseudo))),
+                    () -> afficherBulle(msg)),
                 pseudo);
             App.setClientRMI(clientRMI);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
+        // === popule la list des salon ===
         rafraichirSalons();
         try {
             List<Discussion> lst = server.listerSalons();
@@ -205,18 +202,19 @@ public class ChatController {
     // ------------------------------------------------------------------ salon
 
     private void rejoindre(Discussion d) throws RemoteException {
-        this.discussionActuelle = d;
+        // si on était sur un salon, se désinscrit
         if (currentSalon != null && clientRMI != null) {
             currentSalon.desinscription(clientRMI);
         }
+        
+        // met a jour la discussion et le salon actuelle
+        this.discussionActuelle = d;
         currentSalon = serveur.obtientSujet(d.getNom_discussion());
-        estInscrit = salonsInscrits.contains(d.getNom_discussion());
-        if (estInscrit) {
-            inscrireBtn.setText("Quitter le salon");
-            inputField.setDisable(false);
+        estInscritNotification = salonsInscritsNotification.contains(d.getNom_discussion()); //TODO modifier quand les notif seront implementer
+        if (estInscritNotification) {
+            inscrireBtn.setText("Ne plus suivre le salon");
         } else {
-            inscrireBtn.setText("S'inscrire");
-            inputField.setDisable(true);
+            inscrireBtn.setText("Suivre le salon");
         }
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
@@ -233,11 +231,11 @@ public class ChatController {
     private void utils_loadMessages(Stack<Message> messages) {
         while (!messages.isEmpty()) {
             Message m = messages.pop();
-            afficherBulle(m.getContenu(), m.getAuthorName().equals(pseudo));
+            afficherBulle(m);
         }
     }
 
-    // ------------------------------------------------------------------ rafraîchir
+    // ================ rafraîchir les salon ================
 
     public void rafraichirSalons() {
         if (serveur == null) return;
@@ -245,7 +243,7 @@ public class ChatController {
             List<Discussion> lst = serveur.listerSalons();
             tousLesSalons.setAll(lst);
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
-            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo));
+            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
             salonsFiltres.setPredicate(s -> !masque.contains(s)); 
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
@@ -254,12 +252,14 @@ public class ChatController {
 
     // ------------------------------------------------------------------ création
 
+    // fonction appeler depuis la menu bar
     public void createNewSalonFromMenu() { ouvrirDialogNouveauSalon(); }
     public void createNewTagFromMenu()   { ouvrirDialogNouveauTag();   }
 
     @FXML private void createNewSalon(ActionEvent e) { ouvrirDialogNouveauSalon(); }
     @FXML private void createNewTag(ActionEvent e)   { ouvrirDialogNouveauTag();   }
 
+    // permet de creer un salon
     private void ouvrirDialogNouveauSalon() {
         if (serveur == null) {
             showAlert(AlertType.ERROR, "Erreur serveur",
@@ -356,6 +356,7 @@ public class ChatController {
         }); */
     }
 
+    // permet dde créer un tag
     private void ouvrirDialogNouveauTag() {
         if (currentSalon == null) {
             showAlert(AlertType.INFORMATION, "Information",
@@ -374,7 +375,7 @@ public class ChatController {
         });
     }
 
-    // ------------------------------------------------------------------ envoi message
+    // ========== envoi de message ========
 
     @FXML
     public void actionEnvoi() {
@@ -398,18 +399,38 @@ public class ChatController {
         }
     }
 
-    // ------------------------------------------------------------------ affichage
+    // =================== fonction utilitaire d'affichage ==================
 
-    private void afficherBulle(String msg, boolean estMoi) {
-        Label label = new Label(msg);
-        label.getStyleClass().add("bulle-message");
-        label.setWrapText(true);
-        label.setMaxWidth(300);
-        VBox conteneur = new VBox(label);
-        conteneur.setAlignment(estMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+    // affiche un message du bon cote selon auhtor ou pas
+    private void afficherBulle(Message m) {
+        boolean estMoi = m.getAuthorName().equals(pseudo);  
+        VBox conteneur = new VBox(2);
+
+        // pseudo au-dessus du message
+        if (!estMoi) {
+            Label pseudoLabel = new Label(m.getAuthorName());
+            pseudoLabel.getStyleClass().add("bulle-pseudo");
+
+            conteneur.getChildren().add(pseudoLabel);
+        }
+
+        // message
+        Label messageLabel = new Label(m.getContenu());
+        messageLabel.getStyleClass().add("bulle-message");
+        messageLabel.setWrapText(true);
+        messageLabel.setMaxWidth(300);
+
+        conteneur.getChildren().add(messageLabel);
+
+        // alignement
+        conteneur.setAlignment(
+            estMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT
+        );
+
         messagesBox.getChildren().add(conteneur);
     }
 
+    // rend la bar d'ecriture de message visible
     private void setChatVisible(boolean visible) {
         if (scrollPane != null) { scrollPane.setVisible(visible); scrollPane.setManaged(visible); }
         if (inputField != null && inputField.getParent() != null) {
@@ -419,6 +440,7 @@ public class ChatController {
         if (tagsLabel != null) { tagsLabel.setVisible(true); tagsLabel.setManaged(true); }
     }
 
+    // permet d'afficher des alerts (sert surtout a factoriser le code)
     private void showAlert(AlertType type, String titre, String contenu) {
         Alert alert = new Alert(type);
         alert.setTitle(titre);
@@ -432,23 +454,23 @@ public class ChatController {
         if (currentSalon == null) return;
         try {
             String nom = discussionActuelle.getNom_discussion();
-            if (estInscrit) {
-                currentSalon.desinscription(clientRMI);
-                salonsInscrits.remove(nom);
-                estInscrit = false;
+            if (estInscritNotification) {
+                // currentSalon.desinscription(clientRMI);
+                salonsInscritsNotification.remove(nom);
+                estInscritNotification = false;
                 inscrireBtn.setText("S'inscrire");
-                inputField.setDisable(true);
-                inputField.setPromptText("Inscrivez-vous pour écrire...");
+                //inputField.setDisable(true);
+                //inputField.setPromptText("Inscrivez-vous pour écrire...");
             } else {
-                currentSalon.inscription(clientRMI);
-                salonsInscrits.add(nom);
-                estInscrit = true;
+                // currentSalon.inscription(clientRMI);
+                salonsInscritsNotification.add(nom);
+                estInscritNotification = true;
                 inscrireBtn.setText("Quitter le salon");
-                inputField.setDisable(false);
-                inputField.setPromptText("Écrire un message...");
+                //inputField.setDisable(false);
+                //inputField.setPromptText("Écrire un message...");
             }
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        } catch(Exception e){ //TODO changer en RemoteException quand y'aura inscriptionNotif cote serv
+            return;
         }
     }
 
@@ -471,5 +493,44 @@ public class ChatController {
             
         }
     }
+
+    public void showHiddenChannels() {
+        try {
+            List<Discussion> masques = serveur.getDiscussionsHidedByUser(pseudo);
+            if (masques.isEmpty()) {
+                showAlert(AlertType.INFORMATION, "Salons", "Aucun salon masqué.");
+                return;
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Salons masqués");
+
+            ListView<Discussion> listView = new ListView<>(FXCollections.observableArrayList(masques));
+            Button btnRetablir = new Button("Rétablir le salon");
+
+            btnRetablir.setOnAction(e -> {
+                Discussion select = listView.getSelectionModel().getSelectedItem();
+                if (select != null) {
+                    try {
+                        serveur.unhideDiscussion(select.getId_discussion(), pseudo);
+                        rafraichirSalons(); 
+                        listView.getItems().remove(select); 
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            VBox root = new VBox(10, new Label("Salons masqués :"), listView, btnRetablir);
+            root.setAlignment(Pos.CENTER);
+            stage.setScene(new Scene(root, 300, 400));
+            stage.show();
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // === fonction appeler par les bouton pas encore connecter
     @FXML private void doNothings() { /* placeholder */ }
 }
