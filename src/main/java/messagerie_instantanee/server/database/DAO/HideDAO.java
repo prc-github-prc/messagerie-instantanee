@@ -32,6 +32,21 @@ public class HideDAO {
         }
     }
 
+    public static List<Discussion> findHidedDiscussionListByUsername(String username) {
+        try {
+            ResultSet discussion_data = executeSQLQuerry(
+                "SELECT * FROM Discussion d NATURAL JOIN Hide h WHERE h.id_user = (SELECT id_user FROM User WHERE username = '" + username + "')"
+            );
+            return rsToDiscussion(discussion_data);
+        } catch (SQLException e) {
+            System.out.println("[HideDAO] connexion impossible a la base de donnée : " + e.getMessage());
+            return null;
+        } catch (NoSuchElementException e) {
+            System.out.println("[HideDAO] ce résultats ne contient aucune valeur : " + e.getMessage());
+            return null;
+        }
+    }
+
     /*================================Méthode d'écriture==================================================== */
 
     public static void addHideDiscussionByIdDiscussion(int id_discussion, int id_user) throws SQLException {
