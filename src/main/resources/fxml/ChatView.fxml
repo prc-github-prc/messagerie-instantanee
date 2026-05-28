@@ -101,7 +101,7 @@
                             <Circle radius="20.0" fill="#2f55d4" styleClass="logo-circle"/>
                             <Button fx:id="usernameLink"
                                     text="Username"
-                                    onAction="#doNothings"
+                                    onAction="#openProfile"
                                     styleClass="profile-name-link"
                                     HBox.hgrow="ALWAYS"
                                     maxWidth="Infinity"/>

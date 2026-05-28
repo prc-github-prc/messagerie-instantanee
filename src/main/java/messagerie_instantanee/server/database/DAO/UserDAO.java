@@ -60,4 +60,15 @@ public class UserDAO {
             throw e;
         }
     }
+
+    public static void updateUsername(String username, String newUsername) throws SQLException {
+        try {
+            excuteInsertSQL(
+                "UPDATE OR ROLLBACK User SET username = '" + newUsername + "' WHERE username = '" + username + "'"
+            );
+        } catch (SQLException e) {
+            System.out.println("[UserDAO] erreur update username : " + e.getMessage());
+            throw e;
+        }
+    }
 }

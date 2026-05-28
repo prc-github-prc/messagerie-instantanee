@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.App;
+import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -533,4 +534,20 @@ public class ChatController {
 
     // === fonction appeler par les bouton pas encore connecter
     @FXML private void doNothings() { /* placeholder */ }
+
+
+    // === ouverture du profilf
+    @FXML
+    private void openProfile() {
+        try {
+            FXMLLoader loader = NavigationManager.getInstance()
+                .naviguerVers("/fxml/ProfilView.fxml");
+
+            ProfileController controller = loader.getController();
+            controller.configurerProfil(serveur, pseudo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
