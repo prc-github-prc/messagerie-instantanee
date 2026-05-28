@@ -1,31 +1,21 @@
 package messagerie_instantanee.client.models;
 
-/**
- * ServerBookmark.
- */
 public class ServerBookmark {
     public String nom;
-    public String ip;
+    public String adresse;   // ← correspond au champ JSON "adresse"
     public int    port;
 
-    /**
-     * 
-     * @param nom
-     * @param ip
-     * @param port
-     * 
-     * Crée un serverbookmark.
-     */
-    public ServerBookmark(String nom, String ip, int port) {
+    public ServerBookmark(String nom, String adresse, int port) {
         this.nom     = nom;
-        this.ip = ip;
+        this.adresse = adresse;
         this.port    = port;
     }
 
-    public String getName() { return nom; }
-    public String getIp()   { return ip;   }
-    public int getPort()   { return port;}
-    public void setName(String name) { this.nom = name;}
-    public void setIp(String ip)     { this.ip  = ip;}
-    public void setPort(int port) { this.port= port;}
+    public String getName() { return nom;     }
+    public String getIp()   { return adresse; }  // getIp() conservé pour compatibilité
+    public int    getPort() { return port;    }
+
+    public void setName(String nom)      { this.nom     = nom;     }
+    public void setIp(String adresse)    { this.adresse = adresse; }
+    public void setPort(int port)        { this.port    = port;    }
 }

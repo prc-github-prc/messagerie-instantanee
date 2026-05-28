@@ -118,8 +118,15 @@
 }
 
 .settings-display-card{
-    -fx-background-color: #584b4f;
-    -fx-border-radius: 8px
+    -fx-background-color: #3b076e;
+    -fx-background-radius: 8px;
+    -fx-padding: 5px 2px;
+}
+
+.bookmark{
+    -fx-background-color: #2a0a30;
+    -fx-background-radius: 8px;
+    -fx-padding: 2px 3px;
 }
 
 /* ======================================= ZONE DE CHAT & MESSAGES ======================================= */

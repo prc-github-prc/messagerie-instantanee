@@ -10,33 +10,31 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="messagerie_instantanee.UI.controllers.SideAuthSettingsController"
-      spacing="15"
-      pickOnBounds="false">
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="messagerie_instantanee.UI.controllers.SideAuthSettingsController"
+        spacing="15"
+        pickOnBounds="false">
     <padding>
         <Insets top="0" right="15" bottom="0" left="0"/>
     </padding>
 
     <!-- Panneau latéral serveur/bookmarks -->
     <VBox fx:id="sideServerSettings"
-          styleClass="sidebar-settings"
-          visible="false"
-          managed="false"
-          prefWidth="220"
-          maxHeight="Infinity">
+            styleClass="sidebar-settings"
+            visible="false"
+            managed="false"
+            prefWidth="280"
+            maxHeight="Infinity">
         <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="25.0"/>
         </padding>
         <children>
 
-            <!-- Ce VBox intérieur doit aussi s'étirer → VBox.vgrow="ALWAYS" -->
-            <VBox VBox.vgrow="ALWAYS">
+            <VBox VBox.vgrow="ALWAYS" spacing="12">
                 <children>
 
                     <Label text="Serveur(s) utilisé(s)" styleClass="sidebar-title"/>
 
-                    <!-- Champ serveur -->
                     <VBox spacing="8" fillWidth="true">
                         <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;"/>
                         <TextField fx:id="serverField"
@@ -44,11 +42,7 @@
                                     styleClass="login-input"
                                     style="-fx-padding: 12; -fx-background-radius: 8;"/>
                     </VBox>
-
-                    <!--
-                        ScrollPane avec VBox.vgrow="ALWAYS" → prend tout l'espace restant
-                        fitToHeight="true" → force le contenu à s'étirer verticalement aussi
-                    -->
+                    
                     <ScrollPane fitToWidth="true"
                                 fitToHeight="true"
                                 hbarPolicy="NEVER"
@@ -56,12 +50,10 @@
                                 VBox.vgrow="ALWAYS"
                                 styleClass="sidebar-scroll">
                         <content>
-                            <VBox fx:id="BookMarkList"
+                            <VBox fx:id="bookMarkList"
                                     styleClass="settings-display-card"
                                     VBox.vgrow="ALWAYS"
-                                    minHeight="0">
-                                <Label text="erreur" styleClass="sidebar-title"/>
-                            </VBox>
+                                    minHeight="0"/>
                         </content>
                     </ScrollPane>
 
@@ -71,7 +63,7 @@
         </children>
     </VBox>
 
-    <!-- Boutons icônes (thème + sidebar) -->
+    <!-- Boutons icônes -->
     <VBox>
         <children>
             <Button fx:id="themeBtn" onAction="#handleToggleTheme" styleClass="icon-button-clean">

@@ -12,22 +12,10 @@ import com.google.gson.reflect.TypeToken;
 
 import messagerie_instantanee.client.models.ServerBookmark;
 
-/**
- * Service de ServerBookmark.
- */
 public class ServerBookmarkService {
-    /**
-     * chemin vers le fichier json.
-     */
-    private static final Path FICHIER = Path.of("data/serversBookmark.json");
 
-    /**
-     * 
-     * @return
-     * @throws IOException
-     * 
-     * Charge une liste de serverBookmark.
-     */
+    private static final Path FICHIER = Path.of("data/serverBookmark.json");
+
     public static List<ServerBookmark> charger() throws IOException {
         if (!Files.exists(FICHIER)) return new ArrayList<>();
         return new Gson().fromJson(
@@ -37,6 +25,7 @@ public class ServerBookmarkService {
     }
 
     public static void sauvegarder(List<ServerBookmark> liste) throws IOException {
+        Files.createDirectories(FICHIER.getParent());
         Files.writeString(FICHIER,
             new GsonBuilder().setPrettyPrinting().create().toJson(liste));
     }
