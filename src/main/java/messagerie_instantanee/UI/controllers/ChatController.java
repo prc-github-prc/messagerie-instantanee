@@ -156,23 +156,6 @@ public class ChatController {
 
         // === popule la list des salon ===
         rafraichirSalons();
-        try {
-            List<Discussion> lst = server.listerSalons();
-            if (lst != null && !lst.isEmpty()) {
-                tousLesSalons.setAll(lst);
-                Platform.runLater(() -> {
-                    if (usernameLink != null) usernameLink.setText(pseudo);
-                    if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
-                    if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
-                    setChatVisible(false);
-                });
-            } else {
-                currentSalon = null;
-                titreLabel.setText("Aucun salon disponible");
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     // ------------------------------------------------------------------ déconnexion
@@ -229,10 +212,24 @@ public class ChatController {
         if (serveur == null) return;
         try {
             List<Discussion> lst = serveur.listerSalons();
-            tousLesSalons.setAll(lst);
+            //cretaion du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
             masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
-            salonsFiltres.setPredicate(s -> !masque.contains(s)); 
+            //application du masque
+            lst.removeAll(masque);
+            if (lst == null || lst.isEmpty()) {
+                currentSalon = null;
+                discussionActuelle = null;
+                titreLabel.setText("Aucun salon disponible");
+                return;
+            }
+            tousLesSalons.setAll(lst);
+            Platform.runLater(() -> {
+                if (usernameLink != null) usernameLink.setText(pseudo);
+                if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
+                if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
+                setChatVisible(false);
+            });
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
@@ -402,7 +399,7 @@ public class ChatController {
         if(selected != null){
             try{
                 serveur.hideDiscussion(selected.getId_discussion(), this.pseudo);
-                rafraichirSalons();
+                rafraichirSalons(); //TODO juste suprimer la discussion au lieux de tout recharger
                 if(discussionActuelle != null){
                     messagesBox.getChildren().clear();
                     titreLabel.setText("# Sélectionnez un salon");

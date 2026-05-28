@@ -86,7 +86,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         return salonToDiscussion(map_salons.get(nom_Salon));
     }
 
-    /*
+    /**
      * Retourne la liste des discussions masquées par un utilisateur via HideDAO.
      * cette fonction est utiliser dans ChatController pour filtrer les salons affichés à l'utilisateur.
      */
