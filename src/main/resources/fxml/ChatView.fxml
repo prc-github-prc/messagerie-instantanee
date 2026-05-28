@@ -127,6 +127,7 @@
                         <Label fx:id="tagsLabel"  styleClass="chat-subtitle" text="Choisis un salon à gauche pour commencer à discuter"/>
                     </children>
                 </VBox>
+                <VBox alignment ="CENTER_RIGHT" styleClass= "chat-header" fx:id="boutonInvitationSlot"/>
 
                 <ScrollPane fx:id="scrollPane" fitToWidth="true"
                             hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"

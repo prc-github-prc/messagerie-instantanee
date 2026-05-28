@@ -15,11 +15,13 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -28,7 +30,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.App;
 import messagerie_instantanee.client.Client;
@@ -48,6 +53,7 @@ public class ChatController {
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
     @FXML private Button               inscrireBtn;
+    @FXML private VBox                 boutonInvitationSlot;
 
     // Chargé programmatiquement dans initialize() — pas via @FXML
     private MenuBarController menuBarController;
@@ -196,6 +202,12 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
+        if(discussionActuelle.getPrive()){
+            Button inviteBtn = new Button("Inviter");
+            inviteBtn.getStyleClass().add("envoi-btn-container");
+            boutonInvitationSlot.getChildren().add(inviteBtn);
+            // TODDO faire la fonction de invitetn
+        }
         utils_loadMessages(currentSalon.getArchive());
     }
 
@@ -251,8 +263,74 @@ public class ChatController {
                 "Impossible de créer un salon : le serveur n'est pas initialisé.");
             return;
         }
-        //pop up pour les parametre du salon
-        TextInputDialog dialog = new TextInputDialog();
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner((Stage) salonList.getScene().getWindow()); 
+        dialog.setTitle("Nouveau Salon");
+        dialog.setResizable(false);
+
+        //------Contenu Formulaire
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+        TextField tfsalon    = new TextField();
+        tfsalon.setPromptText("Nom du Salon");
+        CheckBox cbPrive = new CheckBox("Salon privé ?");
+
+        vbox.getChildren().addAll(
+            new Label("Nom du salon"),
+            tfsalon,
+            cbPrive);
+        
+
+        // Boutons
+        Button btnValider = new Button("Valider");
+        Button btnAnnuler = new Button("Annuler");
+        btnValider.setDefaultButton(true);
+        btnAnnuler.setCancelButton(true);
+        btnValider.getStyleClass().add("envoi-btn-container");
+        btnAnnuler.getStyleClass().add("envoi-btn-container");
+
+        HBox boutons = new HBox(10, btnValider, btnAnnuler);
+        boutons.setAlignment(Pos.CENTER_RIGHT);
+        boutons.setPadding(new Insets(0, 15, 15, 15));
+
+        // Layout principal
+        BorderPane root = new BorderPane();
+        root.setCenter(vbox);
+        root.setBottom(boutons);
+        
+        btnValider.setOnAction(e -> {
+            String salon  = tfsalon.getText().trim();
+            if (salon.isEmpty()) return;
+            boolean existe = tousLesSalons.stream()
+                .anyMatch(d -> salon.equals(d.getNom_discussion()));
+            if (existe) {
+                showAlert(AlertType.WARNING, "Erreur", "Ce salon existe déjà.");
+                return;
+            }
+            Boolean estPrive= false;
+            if (cbPrive.isSelected()) { 
+                estPrive=true;
+            }
+            try {
+                Discussion nouveau = serveur.creationSalon(salon, pseudo, estPrive);
+                tousLesSalons.add(nouveau);
+                searchField.clear();
+                salonList.getSelectionModel().select(nouveau);
+            } catch (Exception e1) {
+                System.err.println(e1.getMessage());
+            }
+            dialog.close();
+        });
+
+        btnAnnuler.setOnAction(e -> dialog.close());
+
+        dialog.setScene(new Scene(root, 300, 200));
+        dialog.showAndWait();
+
+
+        /* TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nouveau Salon");
         dialog.setContentText("Nom du salon :");
         dialog.showAndWait().ifPresent(raw -> {
@@ -272,7 +350,7 @@ public class ChatController {
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
-        });
+        }); */
     }
 
     // permet dde créer un tag
