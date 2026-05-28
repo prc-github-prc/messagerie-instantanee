@@ -2,6 +2,7 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,8 +82,17 @@ public class ChatController {
             System.err.println("[ChatController] Impossible de charger MenuBar.fxml : " + e.getMessage());
             e.printStackTrace();
         }
+        
+        List<Discussion> masque = new ArrayList<>();
+        try{
+            masque = serveur.getDiscussionsHidedByUser(pseudo);
+        } catch (RemoteException e) {
+            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage());
+        }
 
-        salonsFiltres = new FilteredList<>(tousLesSalons, s -> true);
+        final List<Discussion> masqueFinal = masque; //Java exige qu'une variable utilisée dans un lambda soit finale
+        
+        salonsFiltres = new FilteredList<>(tousLesSalons, s -> !masqueFinal.contains(s));
         salonList.setItems(salonsFiltres);
 
         searchField.textProperty().addListener((obs, ancien, nouveau) -> {

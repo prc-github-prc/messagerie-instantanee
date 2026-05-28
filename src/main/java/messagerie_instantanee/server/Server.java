@@ -16,6 +16,7 @@ import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
+import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
 
 
@@ -81,6 +82,15 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         User owner = findUserByUsername(username);
         map_salons.put(nom_Salon, new Salon(nom_Salon, owner, est_privee));
         return salonToDiscussion(map_salons.get(nom_Salon));
+    }
+
+    /*
+     * Retourne la liste des discussions masquées par un utilisateur via HideDAO.
+     * cette fonction est utiliser dans ChatController pour filtrer les salons affichés à l'utilisateur.
+     */
+    @Override
+    public List<Discussion> getDiscussionsHidedByUser(String username) throws RemoteException {
+        return findHidedDiscussionListByUsername(username);
     }
 
     /**
