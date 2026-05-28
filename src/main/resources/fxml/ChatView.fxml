@@ -81,6 +81,10 @@
                                 onAction="#actionToggleInscription"
                                 styleClass="sidebar-btn"
                                 maxWidth="Infinity"/>
+                        <Button text="Masquer ce salon" 
+                                onAction="#handleMasquerSalon" 
+                                styleClass="sidebar-btn" 
+                                maxWidth="Infinity"/>
                     </children>
                 </VBox>
 

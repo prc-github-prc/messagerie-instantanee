@@ -84,13 +84,13 @@ public class ChatController {
         }
         
         List<Discussion> masque = new ArrayList<>();
-        try{
+       /*  try{
             masque = serveur.getDiscussionsHidedByUser(pseudo);
+            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //ajoute aussi les salons privés non visibles (ou le user n'est pas dans la liste des participants) à la liste des salons à masquer.
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage()); //s'il y a une erreur la liste est vide et aucun salon n'est masqué.
-        }
+        }*/
 
-        masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //ajoute aussi les salons privés non visibles (ou le user n'est pas dans la liste des participants) à la liste des salons à masquer.
 
         final List<Discussion> masqueFinal = masque; //Java exige qu'une variable utilisée dans un lambda soit finale
 
@@ -99,6 +99,7 @@ public class ChatController {
 
         searchField.textProperty().addListener((obs, ancien, nouveau) -> {
             String recherche = nouveau == null ? "" : nouveau.trim().toLowerCase();
+            
             salonsFiltres.setPredicate(salon -> {
                 if (recherche.isEmpty()) return true;
                 return salon.getNom_discussion().toLowerCase().contains(recherche);
@@ -125,6 +126,8 @@ public class ChatController {
             ContextMenu contextMenu = new ContextMenu();
             Discussion selected = salonList.getSelectionModel().getSelectedItem();
             estInscrit = salonsInscrits.contains(selected.getNom_discussion());
+            MenuItem mnuMasquer = new MenuItem("Masquer");
+            mnuMasquer.setOnAction(e -> handleMasquerSalon(e));
             if (estInscrit) {
                 MenuItem mnuQuitter = new MenuItem("Se désinscrire");
                 mnuQuitter.setOnAction(e -> actionToggleInscription());
@@ -153,7 +156,7 @@ public class ChatController {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
+        rafraichirSalons();
         try {
             List<Discussion> lst = server.listerSalons();
             if (lst != null && !lst.isEmpty()) {
@@ -227,6 +230,9 @@ public class ChatController {
         try {
             List<Discussion> lst = serveur.listerSalons();
             tousLesSalons.setAll(lst);
+            List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
+            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo));
+            salonsFiltres.setPredicate(s -> !masque.contains(s)); 
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
@@ -365,5 +371,24 @@ public class ChatController {
         }
     }
 
+    @FXML
+    private void handleMasquerSalon(ActionEvent event){
+        Discussion selected = salonList.getSelectionModel().getSelectedItem();
+        if(selected != null){
+            try{
+                serveur.hideDiscussion(selected.getId_discussion(), this.pseudo);
+                rafraichirSalons();
+                if(discussionActuelle != null){
+                    messagesBox.getChildren().clear();
+                    titreLabel.setText("# Sélectionnez un salon");
+                    inputField.setDisable(true);
+                }
+            }
+            catch(RemoteException e){
+                System.err.println("[Client] Erreur masquage " + e.getMessage());
+            }
+            
+        }
+    }
     @FXML private void doNothings() { /* placeholder */ }
 }

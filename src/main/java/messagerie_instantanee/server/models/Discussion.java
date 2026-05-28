@@ -41,4 +41,17 @@ public class Discussion implements Serializable {
     public String toString() {
         return nom_discussion;
     }
+
+    @Override 
+    public boolean equals(Object o){
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Discussion that = (Discussion) o;
+        return id_discussion == that.id_discussion;
+    }
+    
+    @Override
+    public int hashCode(){
+        return Integer.hashCode(id_discussion);
+    }
 }
