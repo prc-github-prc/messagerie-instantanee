@@ -46,20 +46,20 @@
         <VBox spacing="8" fillWidth="true">
             <Label text="mot de passe" styleClass="input-label" style="-fx-font-size: 14;"/>
             <PasswordField fx:id="passwordField"
-                           onAction="#handleLogin"
-                           styleClass="login-input"
-                           style="-fx-padding: 12; -fx-background-radius: 8;"/>
+                            onAction="#handleLogin"
+                            styleClass="login-input"
+                            style="-fx-padding: 12; -fx-background-radius: 8;"/>
         </VBox>
 
-        <!-- Champ serveur -->
+        <!-- Champ serveur
         <VBox spacing="8" fillWidth="true">
             <Label text="serveur" styleClass="input-label" style="-fx-font-size: 14;"/>
             <TextField fx:id="serverField"
-                       text="localhost"
-                       onAction="#handleLogin"
-                       styleClass="login-input"
-                       style="-fx-padding: 12; -fx-background-radius: 8;"/>
-        </VBox>
+                        text="localhost"
+                        onAction="#handleLogin"
+                        styleClass="login-input"
+                        style="-fx-padding: 12; -fx-background-radius: 8;"/>
+        </VBox> -->
 
         <!-- Bouton de connexion -->
         <Button text="Se connecter"

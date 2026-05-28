@@ -3,6 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.nio.channels.IllegalSelectorException;
 import java.rmi.Naming;
 
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -33,6 +34,11 @@ public class RegisterController {
     /** Injecté par AuthLayoutController après le chargement du FXML. */
     public void setParent(AuthLayoutController parent) {
         this.parent = parent;
+    }
+
+    /** Lie le champ serveur à celui de SideAuthSettingsController (binding bidirectionnel). */
+    public void bindServerIp(StringProperty serverIpProperty) {
+        serverField.textProperty().bindBidirectional(serverIpProperty);
     }
 
     // ------------------------------------------------------------------ actions FXML

@@ -15,18 +15,13 @@
 <?import javafx.scene.shape.Circle?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<!--
-    Pas de fx:include MenuBar ici.
-    La MenuBar est chargée programmatiquement dans ChatController.initialize()
-    via FXMLLoader, puis injectée dans la TitleBar.
--->
 <BorderPane styleClass="chat-root"
             stylesheets="@../css/style.css"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="messagerie_instantanee.UI.controllers.ChatController">
 
-    <!-- ══════════════════════════════════════════════ Sidebar gauche ══ -->
+    <!-- ====================== Sidebar gauche =============== -->
     <left>
         <VBox prefWidth="350.0" styleClass="sidebar" spacing="15">
             <padding>
@@ -37,21 +32,21 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <children>
                         <TextField fx:id="searchField"
-                                   promptText="Rechercher..."
-                                   styleClass="chat-input"
-                                   HBox.hgrow="ALWAYS"/>
+                                    promptText="Rechercher..."
+                                    styleClass="chat-input"
+                                    HBox.hgrow="ALWAYS"/>
                         <Button styleClass="search-btn">
                             <graphic>
                                 <StackPane>
                                     <children>
                                         <SVGPath content="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-                                                 stroke="#EDE3E3" strokeWidth="2.0"
-                                                 strokeLineCap="ROUND" strokeLineJoin="ROUND"
-                                                 fill="transparent"/>
+                                                stroke="#EDE3E3" strokeWidth="2.0"
+                                                strokeLineCap="ROUND" strokeLineJoin="ROUND"
+                                                fill="transparent"/>
                                         <SVGPath content="M21 21L16.65 16.65"
-                                                 stroke="#EDE3E3" strokeWidth="2.0"
-                                                 strokeLineCap="ROUND" strokeLineJoin="ROUND"
-                                                 fill="transparent"/>
+                                                stroke="#EDE3E3" strokeWidth="2.0"
+                                                strokeLineCap="ROUND" strokeLineJoin="ROUND"
+                                                fill="transparent"/>
                                     </children>
                                 </StackPane>
                             </graphic>
@@ -70,7 +65,7 @@
                 </ScrollPane>
 
                 <Line startX="0" startY="0" endX="320" endY="0"
-                      stroke="#EAD3D3" strokeWidth="2.0"/>
+                        stroke="#EAD3D3" strokeWidth="2.0"/>
 
                 <VBox spacing="10" style="-fx-padding: 15px 0 5px 0;">
                     <children>
@@ -89,7 +84,7 @@
                 </VBox>
 
                 <Line startX="0" startY="0" endX="320" endY="0"
-                      stroke="#EAD3D3" strokeWidth="2.0"/>
+                        stroke="#EAD3D3" strokeWidth="2.0"/>
 
                 <HBox>
                     <Button onAction="#doNothings" styleClass="settings-btn-container">
@@ -118,7 +113,7 @@
         </VBox>
     </left>
 
-    <!-- ══════════════════════════════════════════════ Zone de chat ══ -->
+    <!-- =========================== Zone de chat ========================== -->
     <center>
         <VBox styleClass="chat-area" BorderPane.alignment="CENTER">
             <children>
@@ -150,10 +145,10 @@
                     </padding>
                     <children>
                         <TextField fx:id="inputField"
-                                   onAction="#actionEnvoi"
-                                   promptText="Écrire un message dans ce salon…"
-                                   styleClass="chat-input"
-                                   HBox.hgrow="ALWAYS"/>
+                                    onAction="#actionEnvoi"
+                                    promptText="Écrire un message dans ce salon…"
+                                    styleClass="chat-input"
+                                    HBox.hgrow="ALWAYS"/>
                         <Button onAction="#actionEnvoi" styleClass="envoi-btn-container">
                             <graphic>
                                 <StackPane>

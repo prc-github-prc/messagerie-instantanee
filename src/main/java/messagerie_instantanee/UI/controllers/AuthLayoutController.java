@@ -51,10 +51,12 @@ public class AuthLayoutController {
 
             // Injection de la référence parent dans le controller enfant
             Object ctrl = loader.getController();
-            if (ctrl instanceof LoginController) {
-                ((LoginController) ctrl).setParent(this);
-            } else if (ctrl instanceof RegisterController) {
-                ((RegisterController) ctrl).setParent(this);
+            if (ctrl instanceof LoginController lc) {
+                lc.setParent(this);
+                lc.bindServerIp(sideAuthSettingsController.serverIpProperty());
+            } else if (ctrl instanceof RegisterController rc) {
+                rc.setParent(this);
+                rc.bindServerIp(sideAuthSettingsController.serverIpProperty());
             }
 
             contentArea.getChildren().setAll(form);

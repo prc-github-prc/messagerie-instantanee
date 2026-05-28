@@ -3,6 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 import java.rmi.Naming;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -32,6 +33,11 @@ public class LoginController {
     /** Injecté par AuthLayoutController après le chargement du FXML. */
     public void setParent(AuthLayoutController parent) {
         this.parent = parent;
+    }
+
+    /** Lie le champ serveur à celui de SideAuthSettingsController (binding bidirectionnel). */
+    public void bindServerIp(StringProperty serverIpProperty) {
+        serverField.textProperty().bindBidirectional(serverIpProperty);
     }
 
     // ------------------------------------------------------------------ actions FXML

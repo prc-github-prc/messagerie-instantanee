@@ -99,7 +99,7 @@ public class ChatController {
             });
         });
 
-        // ============== event listener qui gere le click sur un salon =========
+        // ============== event listener qui gere le click sur un salon ============
         salonList.getSelectionModel().selectedItemProperty().addListener(
             (obs, ancien, nouveau) -> {
                 if (nouveau != null && serveur != null) {
