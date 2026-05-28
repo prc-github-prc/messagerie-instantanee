@@ -36,10 +36,10 @@
             reste draggable quand la MenuBar n'est pas injectée.
         -->
         <HBox fx:id="menuBarSlot"
-              alignment="CENTER_LEFT"
-              onMousePressed="#handleMousePressed"
-              onMouseDragged="#handleMouseDragged"
-              onMouseReleased="#handleMouseReleased"/>
+                alignment="CENTER_LEFT"
+                onMousePressed="#handleMousePressed"
+                onMouseDragged="#handleMouseDragged"
+                onMouseReleased="#handleMouseReleased"/>
 
         <!--
             Zone flexible : pickOnBounds="true" force JavaFX à détecter les clics
