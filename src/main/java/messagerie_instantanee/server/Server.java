@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import messagerie_instantanee.server.database.DAO.HideDAO;
+
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
 import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
@@ -91,6 +93,17 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     @Override
     public List<Discussion> getDiscussionsHidedByUser(String username) throws RemoteException {
         return findHidedDiscussionListByUsername(username);
+    }
+
+    @Override
+    public void hideDiscussion(int id_discussion, String username) throws RemoteException {
+        User user = findUserByUsername(username);
+        try {
+            HideDAO.addHideDiscussionByIdDiscussion(id_discussion, user.getId_user());
+        } catch (SQLException e) {
+            System.out.println("[Server] Impossible de masquer le salon : " + e.getMessage());
+            throw new RemoteException("Erreur lors du masquage du salon", e);
+        }
     }
 
     /**

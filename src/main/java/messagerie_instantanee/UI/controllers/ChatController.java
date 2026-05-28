@@ -87,11 +87,11 @@ public class ChatController {
         try{
             masque = serveur.getDiscussionsHidedByUser(pseudo);
         } catch (RemoteException e) {
-            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage());
+            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage()); //s'il y a une erreur
         }
 
         final List<Discussion> masqueFinal = masque; //Java exige qu'une variable utilisée dans un lambda soit finale
-        
+
         salonsFiltres = new FilteredList<>(tousLesSalons, s -> !masqueFinal.contains(s));
         salonList.setItems(salonsFiltres);
 
