@@ -25,7 +25,6 @@ public class RoleDAO {
             case User  -> 0;
         };
         try {
-            // CORRIGÉ : "role" → "roles" (nom réel de la colonne dans table_init.sql)
             ResultSet user_data = executeSQLQuerry(
                 "SELECT * FROM User WHERE id_user IN "
                 + "(SELECT id_user FROM Roles WHERE id_discussion = " + id_discussion

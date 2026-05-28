@@ -226,7 +226,7 @@ public class ChatController {
             List<Discussion> lst = serveur.listerSalons();
             //cretaion du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
-            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
+            //masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
             //application du masque
             lst.removeAll(masque);
             if (lst == null || lst.isEmpty()) {
