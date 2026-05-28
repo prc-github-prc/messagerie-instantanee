@@ -111,10 +111,15 @@
 }
 
 /* --- La Sidebar à droite --- */
-.sidebar-right {
+.sidebar-settings {
     -fx-background-color: #252024;
     -fx-border-color: transparent transparent transparent #1e1f22;
     -fx-border-width: 1px;
+}
+
+.settings-display-card{
+    -fx-background-color: #584b4f;
+    -fx-border-radius: 8px
 }
 
 /* ======================================= ZONE DE CHAT & MESSAGES ======================================= */

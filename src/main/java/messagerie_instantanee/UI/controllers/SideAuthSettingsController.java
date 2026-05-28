@@ -1,11 +1,18 @@
 package messagerie_instantanee.UI.controllers;
 
+import java.io.IOException;
+import java.util.List;
+
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import messagerie_instantanee.client.models.ServerBookmark;
+import messagerie_instantanee.client.services.ServerBookmarkService;
 
 /**
  * Controller de SideAuthSettings.fxml.
@@ -17,11 +24,12 @@ import messagerie_instantanee.client.models.ServerBookmark;
  */
 public class SideAuthSettingsController {
 
+    @FXML private TextField serverField;
+    @FXML private VBox      sideServerSettings;
+    @FXML private VBox      bookMarkList;
+    
     @FXML private Button    themeBtn;
     @FXML private Button    sidebarBtn;
-    @FXML private VBox      sideServerSettings;
-    @FXML private TextField serverField;
-    @FXML private VBox      BookMarkList;
 
     private AuthLayoutController parent;
 
@@ -31,7 +39,21 @@ public class SideAuthSettingsController {
         this.parent = parent;
     }
 
-    // ------------------------------------------------------------------ thème
+    @FXML
+    public void initialize() {
+        try {
+            List<ServerBookmark> lst_bookMark = ServerBookmarkService.charger();
+            for (ServerBookmark mark : lst_bookMark){
+                addBookmark(mark);
+            }
+        } catch (IOException e) {
+            Label error = new Label("le chargement des marque page a échouer");
+            bookMarkList.getChildren().add(error);
+        }
+    }
+
+
+    // ==================  thème ====================
 
     @FXML
     private void handleToggleTheme() {
@@ -45,7 +67,7 @@ public class SideAuthSettingsController {
         }
     }
 
-    // ------------------------------------------------------------------ sidebar serveur
+    // ================================  sidebar serveur ======================
 
     @FXML
     private void handleToggleSidebar() {
@@ -54,7 +76,7 @@ public class SideAuthSettingsController {
         sideServerSettings.setManaged(visible);
     }
 
-    // ------------------------------------------------------------------ bookmarks
+    // ========== bookmarks ==========
 
     /**
      * Retourne l'IP saisie dans le champ serveur.
@@ -94,15 +116,15 @@ public class SideAuthSettingsController {
         row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         HBox.setHgrow(textBox, javafx.scene.layout.Priority.ALWAYS);
 
-        // ✅ Attache le bookmark à la ligne pour le retrouver lors de la suppression
+        // Attache le bookmark à la ligne pour le retrouver lors de la suppression
         row.setUserData(bookmark);
 
         deleteBtn.setOnAction(e -> {
             ServerBookmark toDelete = (ServerBookmark) row.getUserData();
-            BookMarkList.getChildren().remove(row);
+            bookMarkList.getChildren().remove(row);
             System.out.println("Bookmark supprimé : " + toDelete.getName());
         });
 
-        BookMarkList.getChildren().add(row);
+        bookMarkList.getChildren().add(row);
     }
 }

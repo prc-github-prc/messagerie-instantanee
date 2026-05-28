@@ -32,6 +32,7 @@
                 StackPane.alignment="TOP_RIGHT"
                 maxHeight="Infinity"/>
 
+
     <!-- Notification flottante -->
     <fx:include fx:id="notification"
                 source="Notification.fxml"
