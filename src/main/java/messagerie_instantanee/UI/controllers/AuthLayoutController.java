@@ -53,10 +53,8 @@ public class AuthLayoutController {
             Object ctrl = loader.getController();
             if (ctrl instanceof LoginController lc) {
                 lc.setParent(this);
-                lc.bindServerIp(sideAuthSettingsController.serverIpProperty());
             } else if (ctrl instanceof RegisterController rc) {
                 rc.setParent(this);
-                rc.bindServerIp(sideAuthSettingsController.serverIpProperty());
             }
 
             contentArea.getChildren().setAll(form);
@@ -71,4 +69,9 @@ public class AuthLayoutController {
     public void showError(String message)   { notificationController.showError(message);   }
     public void showSuccess(String message) { notificationController.showSuccess(message); }
     public void showInfo(String message)    { notificationController.showInfo(message);    }
+
+    /** Retourne l'IP saisie dans la sidebar, utilisée par Login et Register. */
+    public String getServerIp() {
+        return sideAuthSettingsController.getServerIp();
+    }
 }

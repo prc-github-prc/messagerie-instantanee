@@ -3,7 +3,6 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 import java.rmi.Naming;
 
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -24,7 +23,6 @@ public class LoginController {
 
     @FXML private TextField     pseudoField;
     @FXML private PasswordField passwordField;
-    @FXML private TextField     serverField;
 
     private AuthLayoutController parent;
 
@@ -33,11 +31,6 @@ public class LoginController {
     /** Injecté par AuthLayoutController après le chargement du FXML. */
     public void setParent(AuthLayoutController parent) {
         this.parent = parent;
-    }
-
-    /** Lie le champ serveur à celui de SideAuthSettingsController (binding bidirectionnel). */
-    public void bindServerIp(StringProperty serverIpProperty) {
-        serverField.textProperty().bindBidirectional(serverIpProperty);
     }
 
     // ------------------------------------------------------------------ actions FXML
@@ -69,7 +62,7 @@ public class LoginController {
     @FXML
     private void handleLogin() {
         String pseudo   = pseudoField.getText().trim();
-        String serveur  = serverField.getText().trim();
+        String serveur  = parent.getServerIp();
         String password = passwordField.getText().trim();
 
         // -------- validation basique --------
