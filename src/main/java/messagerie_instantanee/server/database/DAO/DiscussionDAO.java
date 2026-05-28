@@ -69,6 +69,7 @@ public class DiscussionDAO {
         }
     }
 
+    //useless dans implementation actuelle mais pourrait être utile pour filtrer les salons affichés à l'utilisateur :)
     public static List<Discussion> findAllVisibleDiscussionsByIdUser(int id_user) {
         try {
             ResultSet data_discussions = executeSQLQuerry(
