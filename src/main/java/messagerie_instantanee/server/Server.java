@@ -107,11 +107,30 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     }
 
     @Override
-    public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) {
+    public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) throws RemoteException {
         return map_salons.values().stream()
             .filter(salon -> salon.getEstPrivee() && ! (salon.getUser().contains(findUserByUsername(username)) || salon.getAdmin().contains(findUserByUsername(username))))
             .map(salon -> salonToDiscussion(salon))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addUserToDiscussion(int id_discussion, String username) throws RemoteException {
+        User user = findUserByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("Impossible d'ajouter l'utilisateur à la discussion : utilisateur introuvable");
+        }
+        Salon salon = map_salons.values().stream()
+            .filter(s -> s.getSalonId() == id_discussion)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Impossible d'ajouter l'utilisateur à la discussion : discussion introuvable"));
+        try {
+            DiscussionDAO.addUserToDiscussionById(id_discussion, user.getId_user());
+            salon.getUser().add(user);
+        } catch (SQLException e) {
+            System.out.println("[Server] Impossible d'ajouter l'utilisateur à la discussion : " + e.getMessage());
+            throw new RemoteException("Erreur lors de l'ajout de l'utilisateur à la discussion", e);
+        }
     }
 
     /**
