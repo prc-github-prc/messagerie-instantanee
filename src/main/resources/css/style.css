@@ -427,6 +427,10 @@
     -fx-text-fill: #383a40;
 }
 
+.light-theme .btn-connect {
+    -fx-background-color: #928AD0; 
+}
+
 .sidebar-scroll,
 .sidebar-scroll .viewport {
     -fx-background-color: transparent;

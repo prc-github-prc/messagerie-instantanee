@@ -77,7 +77,8 @@
         <!-- Lien retour connexion -->
         <Hyperlink text="Déjà un compte ? Connectez-vous"
                    onAction="#showLogin"
-                   style="-fx-text-fill: #bbb; -fx-underline: false; -fx-font-size: 13;"/>
+                   styleClass="login-link"
+                   style="-fx-underline: false; -fx-font-size: 13;"/>
     </children>
 
 </VBox>
