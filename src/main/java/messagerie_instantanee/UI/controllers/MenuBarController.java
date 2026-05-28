@@ -103,6 +103,10 @@ public class MenuBarController {
         getStage().setFullScreen(fullscreenItem.isSelected());
     }
 
+    @FXML
+    private void handleShowHiddenChannels(){
+        if(parent != null) parent.showHiddenChannels();
+    }
     // ------------------------------------------------------------------ Aide
 
     @FXML

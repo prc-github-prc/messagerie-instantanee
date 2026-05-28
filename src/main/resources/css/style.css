@@ -439,6 +439,13 @@
     -fx-background-color: #928AD0; 
 }
 
+.light-theme .btn-connect:hover {
+    -fx-background-color: #640CBB; 
+}
+.light-theme .login-link:hover {
+    -fx-text-fill: #640CBB;
+}
+
 .sidebar-scroll,
 .sidebar-scroll .viewport {
     -fx-background-color: transparent;
