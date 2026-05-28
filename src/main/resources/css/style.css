@@ -237,6 +237,14 @@
     -fx-font-size: 14px;
 }
 
+.bulle-speudo {
+    -fx-text-fill: #b9bbbe;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-padding: 0 0 4px 0;
+    -fx-text-fill: rgb(15, 15, 42);
+}
+
 /* --- BOUTON ENVOI --- */
 .envoi-btn-container {
     -fx-background-color: transparent;
