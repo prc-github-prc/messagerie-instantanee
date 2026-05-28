@@ -57,6 +57,8 @@
                                text="Plein écran"
                                onAction="#handleToggleFullscreen"
                                accelerator="F11"/>
+                <SeparatorMenuItem/> <MenuItem text="Gérer mes salons masqués" 
+                  onAction="#handleShowHiddenChannels"/>
             </items>
         </Menu>
 

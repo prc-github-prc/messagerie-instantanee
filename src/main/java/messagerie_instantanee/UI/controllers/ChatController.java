@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import messagerie_instantanee.UI.App;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
@@ -411,6 +413,43 @@ public class ChatController {
                 System.err.println("[Client] Erreur masquage " + e.getMessage());
             }
             
+        }
+    }
+
+    public void showHiddenChannels() {
+        try {
+            List<Discussion> masques = serveur.getDiscussionsHidedByUser(pseudo);
+            if (masques.isEmpty()) {
+                showAlert(AlertType.INFORMATION, "Salons", "Aucun salon masqué.");
+                return;
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Salons masqués");
+
+            ListView<Discussion> listView = new ListView<>(FXCollections.observableArrayList(masques));
+            Button btnRetablir = new Button("Rétablir le salon");
+
+            btnRetablir.setOnAction(e -> {
+                Discussion select = listView.getSelectionModel().getSelectedItem();
+                if (select != null) {
+                    try {
+                        serveur.unhideDiscussion(select.getId_discussion(), pseudo);
+                        rafraichirSalons(); 
+                        listView.getItems().remove(select); 
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            VBox root = new VBox(10, new Label("Salons masqués :"), listView, btnRetablir);
+            root.setAlignment(Pos.CENTER);
+            stage.setScene(new Scene(root, 300, 400));
+            stage.show();
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 

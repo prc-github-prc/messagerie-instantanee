@@ -106,6 +106,18 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }
     }
 
+    @Override 
+    public void unhideDiscussion(int id_discussion, String username) throws RemoteException {
+        User user = findUserByUsername(username);
+        try{
+            HideDAO.deleteHideDiscussionByIdDiscussion(id_discussion, user.getId_user());
+        }
+        catch(SQLException e){
+            System.out.println("[Server] Impossible de masquer le salon : " + e.getMessage());
+            throw new RemoteException("Erreur lors du démasque du salon", e);
+        }
+    }
+
     @Override
     public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) throws RemoteException {
         return map_salons.values().stream()

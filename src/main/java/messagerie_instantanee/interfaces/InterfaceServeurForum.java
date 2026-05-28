@@ -17,6 +17,7 @@ public interface InterfaceServeurForum extends Remote {
     Discussion creationSalon(String nom_salon, String pseudo_owner, Boolean salon_privee) throws RemoteException;
     List<Discussion> getDiscussionsHidedByUser(String username) throws RemoteException;
     void hideDiscussion(int id_discussion, String username) throws RemoteException;
+    void unhideDiscussion(int id_discussion, String username) throws RemoteException;
     List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) throws RemoteException;
     void addUserToDiscussion(int id_discussion, String username) throws RemoteException;
 }
