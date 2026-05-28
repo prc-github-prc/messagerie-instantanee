@@ -87,8 +87,10 @@ public class ChatController {
         try{
             masque = serveur.getDiscussionsHidedByUser(pseudo);
         } catch (RemoteException e) {
-            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage()); //s'il y a une erreur
+            System.err.println("[ChatController] Erreur lors de la récupération des discussions masquées : " + e.getMessage()); //s'il y a une erreur la liste est vide et aucun salon n'est masqué.
         }
+
+        masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //ajoute aussi les salons privés non visibles (ou le user n'est pas dans la liste des participants) à la liste des salons à masquer.
 
         final List<Discussion> masqueFinal = masque; //Java exige qu'une variable utilisée dans un lambda soit finale
 

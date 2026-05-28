@@ -106,6 +106,14 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
         }
     }
 
+    @Override
+    public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) {
+        return map_salons.values().stream()
+            .filter(salon -> salon.getEstPrivee() && ! (salon.getUser().contains(findUserByUsername(username)) || salon.getAdmin().contains(findUserByUsername(username))))
+            .map(salon -> salonToDiscussion(salon))
+            .collect(Collectors.toList());
+    }
+
     /**
      * serveur.close gère le stockage en BDD des données courantes.
      */
