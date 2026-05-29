@@ -30,6 +30,7 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     private Map<String, Salon> map_salons = new HashMap<>();
 
     public Server() throws RemoteException {
+        super(8091);
         DatabaseLaucher.initialiser();
         List<Discussion> convs = DiscussionDAO.findAllDiscussions();
 

@@ -30,7 +30,6 @@ public class AuthLayoutController {
         // Décale la notification sous la TopBar (impossible en FXML sur fx:include)
         StackPane.setMargin(notification, new Insets(75, 20, 0, 0));
 
-        sideAuthSettingsController.setParent(this);
         showLogin();
     }
 

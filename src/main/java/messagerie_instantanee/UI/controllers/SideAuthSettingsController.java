@@ -1,19 +1,22 @@
 package messagerie_instantanee.UI.controllers;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import messagerie_instantanee.client.models.ServerBookmark;
 import messagerie_instantanee.client.services.ServerBookmarkService;
 
@@ -34,13 +37,7 @@ public class SideAuthSettingsController {
     @FXML private Button    themeBtn;
     @FXML private Button    sidebarBtn;
 
-    private AuthLayoutController parent;
-
     // ============== init ==============
-
-    public void setParent(AuthLayoutController parent) {
-        this.parent = parent;
-    }
 
     @FXML
     public void initialize() {
@@ -89,12 +86,109 @@ public class SideAuthSettingsController {
         return serverField.getText().trim();
     }
 
-    /**
-     * Expose la propriété du champ serveur pour un binding bidirectionnel
-     * avec les controllers Login et Register.
-     */
-    public javafx.beans.property.StringProperty serverIpProperty() {
-        return serverField.textProperty();
+    List<ServerBookmark> getBookmarks() {
+        return bookMarkList.getChildren().stream()
+            .filter(node -> node.getUserData() instanceof ServerBookmark)
+            .map(node -> (ServerBookmark) node.getUserData())
+            .toList();
+    }
+
+    public void handleNewBookmark(){
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner((Stage) bookMarkList.getScene().getWindow()); 
+        dialog.setTitle("Nouveau MarquePage");
+        dialog.setResizable(false);
+
+        //------Contenu Formulaire
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+        vbox.setAlignment(Pos.CENTER_LEFT);
+
+        // label nom
+        Label labelNom = new Label("Nom du marque-page");
+        labelNom.getStyleClass().add("dialog-label");
+        // champ nom
+        TextField textFieldNom    = new TextField();
+        textFieldNom.getStyleClass().add("dialog-input");
+        textFieldNom.setPromptText("mon serveur");
+
+        // label adress
+        Label labelAdress = new Label("Adress du serveur");
+        labelAdress.getStyleClass().add("dialog-label");
+        // champ adress
+        TextField textFieldAdress    = new TextField();
+        textFieldAdress.getStyleClass().add("dialog-input");
+        textFieldAdress.setPromptText("127.0.0.1");
+        
+        // label adress
+        Label labelPort = new Label("Port du seveur");
+        labelPort.getStyleClass().add("dialog-label");
+        // champ adress
+        TextField textFieldPort    = new TextField();
+        textFieldPort.getStyleClass().add("dialog-input");
+        textFieldPort.setPromptText("8282");
+
+        vbox.getChildren().addAll(
+            labelNom,
+            textFieldNom,
+            labelAdress,
+            textFieldAdress,
+            labelPort,
+            textFieldPort);
+
+        // Boutons
+        Button btnValider = new Button("Valider");
+        Button btnAnnuler = new Button("Annuler");
+        btnValider.setDefaultButton(true);
+        btnAnnuler.setCancelButton(false);
+        btnValider.getStyleClass().add("dialog-btn-valider");
+        btnAnnuler.getStyleClass().add("dialog-btn-annuler");
+
+
+        HBox boutons = new HBox(10, btnValider, btnAnnuler);
+        boutons.setAlignment(Pos.CENTER_RIGHT);
+        boutons.setPadding(new Insets(0, 15, 15, 15));
+        boutons.getStyleClass().add("dialog-footer");
+        // Layout principal
+        BorderPane root = new BorderPane();
+        root.getStyleClass().add("dialog-root");
+        root.setCenter(vbox);
+        root.setBottom(boutons);
+        
+        btnValider.setOnAction(e -> {
+            String nom  = textFieldNom.getText().trim();
+            String adress  = textFieldAdress.getText().trim();
+            int port = Integer.parseInt(textFieldPort.getText().trim());
+            if (nom.isEmpty() || adress.isEmpty()) return;
+            try {
+                ServerBookmark new_bookmark = new ServerBookmark(nom, adress, port);
+                addBookmark(new_bookmark);
+                //sauvegarde
+                save_bookmark_list();
+            } catch (Exception e1) {
+                System.err.println(e1.getMessage());
+            }
+            dialog.close();
+        });
+
+        btnAnnuler.setOnAction(e -> dialog.close());
+
+        Scene scene = new Scene(root, 300, 200);
+        scene.getStylesheets().addAll(bookMarkList.getScene().getStylesheets());
+        dialog.setScene(scene);
+        dialog.showAndWait();
+    }
+
+    private boolean save_bookmark_list(){
+        try {
+            ServerBookmarkService.sauvegarder(getBookmarks());
+            return true;
+        } catch (IOException e) {
+            System.out.println("sauvegarde json impossible");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -134,6 +228,7 @@ public class SideAuthSettingsController {
             ServerBookmark toDelete = (ServerBookmark) row.getUserData();
             bookMarkList.getChildren().remove(row);
             System.out.println("Bookmark supprimé : " + toDelete.getName());
+            save_bookmark_list();
         });
 
         // Empêche le clic sur "supprimer" de remonter jusqu'à la ligne

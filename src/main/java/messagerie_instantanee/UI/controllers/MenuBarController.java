@@ -3,6 +3,7 @@ package messagerie_instantanee.UI.controllers;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
@@ -10,6 +11,7 @@ import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.App;
 import messagerie_instantanee.UI.NavigationManager;
+import messagerie_instantanee.interfaces.InterfaceServeurForum;
 
 /**
  * Controller de MenuBar.fxml.
@@ -22,6 +24,13 @@ public class MenuBarController {
     @FXML private CheckMenuItem fullscreenItem;
 
     private ChatController parent;
+    private InterfaceServeurForum serveur;
+    private String pseudo;
+
+    public void configurerSession(InterfaceServeurForum serveur, String pseudo) {
+        this.serveur = serveur;
+        this.pseudo = pseudo;
+    }
 
     // ------------------------------------------------------------------ init
 
@@ -105,7 +114,14 @@ public class MenuBarController {
 
     @FXML
     private void handleShowHiddenChannels(){
-        if(parent != null) parent.showHiddenChannels();
+        try {
+            FXMLLoader loader = NavigationManager.getInstance().naviguerVers("/fxml/ProfilView.fxml");
+            
+            ProfileController controller = loader.getController();
+            controller.configurerProfil(serveur, pseudo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     // ------------------------------------------------------------------ Aide
 

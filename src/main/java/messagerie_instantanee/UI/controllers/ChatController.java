@@ -8,9 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -155,6 +152,12 @@ public class ChatController {
         this.pseudo  = pseudo;
         this.serveur = server;
 
+        if (menuBarController != null) {
+            menuBarController.configurerSession(serveur, pseudo);
+        } else {
+            System.err.println("ERR: menuBarController est null dans ChatController");
+        }
+
         try {
             clientRMI = new Client(
                 msg -> Platform.runLater(
@@ -190,7 +193,7 @@ public class ChatController {
         serveur      = null;
     }
 
-    // ------------------------------------------------------------------ salon
+    // ========================== salon ========================
 
     private void rejoindre(Discussion d) throws RemoteException {
         // si on était sur un salon, se désinscrit
@@ -230,7 +233,7 @@ public class ChatController {
         if (serveur == null) return;
         try {
             List<Discussion> lst = serveur.listerSalons();
-            //cretaion du masque
+            //creation du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
             System.out.println(masque.toString());
             masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
