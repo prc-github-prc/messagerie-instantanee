@@ -210,6 +210,7 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
+        System.out.println(discussionActuelle.getNom_discussion()+"=================================");
         boutonInvitation.setVisible(discussionActuelle.getPrive());
         utils_loadMessages(currentSalon.getArchive());
     }
@@ -229,7 +230,7 @@ public class ChatController {
             List<Discussion> lst = serveur.listerSalons();
             //cretaion du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
-            //masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
+            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
             //application du masque
             lst.removeAll(masque);
             if (lst == null || lst.isEmpty()) {
