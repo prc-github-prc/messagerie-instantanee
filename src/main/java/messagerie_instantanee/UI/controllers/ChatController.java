@@ -57,7 +57,7 @@ public class ChatController {
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
     @FXML private Button               inscrireBtn;
-    @FXML private VBox                 boutonInvitationSlot;
+    @FXML private Button               boutonInvitation;
 
     // Chargé programmatiquement dans initialize() — pas via @FXML
     private MenuBarController menuBarController;
@@ -210,12 +210,7 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
-        if(discussionActuelle.getPrive()){
-            Button inviteBtn = new Button("Inviter");
-            inviteBtn.getStyleClass().add("envoi-btn-container");
-            boutonInvitationSlot.getChildren().add(inviteBtn);
-            // TODDO faire la fonction de invitetn
-        }
+        boutonInvitation.setVisible(discussionActuelle.getPrive());
         utils_loadMessages(currentSalon.getArchive());
     }
 
@@ -243,6 +238,8 @@ public class ChatController {
                 titreLabel.setText("Aucun salon disponible");
                 return;
             }
+            boutonInvitation.setVisible(false);
+            tousLesSalons.setAll(lst);
             Platform.runLater(() -> {
                 tousLesSalons.setAll(lst);
                 if (usernameLink != null) usernameLink.setText(pseudo);
@@ -269,6 +266,7 @@ public class ChatController {
 
     @FXML private void createNewSalon(ActionEvent e) { ouvrirDialogNouveauSalon(); }
     @FXML private void createNewTag(ActionEvent e)   { ouvrirDialogNouveauTag();   }
+    @FXML private void invitation(ActionEvent e){ ouvrirDialogInvitation();}
 
     // permet de creer un salon
     private void ouvrirDialogNouveauSalon() {
