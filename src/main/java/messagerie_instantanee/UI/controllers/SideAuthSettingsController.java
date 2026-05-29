@@ -1,18 +1,14 @@
 package messagerie_instantanee.UI.controllers;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.List;
 
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -23,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import messagerie_instantanee.client.models.ServerBookmark;
 import messagerie_instantanee.client.services.ServerBookmarkService;
-import messagerie_instantanee.server.models.Discussion;
 
 /**
  * Controller de SideAuthSettings.fxml.
@@ -42,13 +37,7 @@ public class SideAuthSettingsController {
     @FXML private Button    themeBtn;
     @FXML private Button    sidebarBtn;
 
-    private AuthLayoutController parent;
-
     // ============== init ==============
-
-    public void setParent(AuthLayoutController parent) {
-        this.parent = parent;
-    }
 
     @FXML
     public void initialize() {

@@ -15,7 +15,6 @@ import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.HideDAO;
-import messagerie_instantanee.server.database.DAO.UserDAO;
 
 import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
