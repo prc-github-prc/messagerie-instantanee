@@ -2,11 +2,15 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -35,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.App;
+import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.client.Client;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
@@ -52,7 +57,7 @@ public class ChatController {
     @FXML private Label                titreLabel;
     @FXML private Button               usernameLink;
     @FXML private Button               inscrireBtn;
-    @FXML private VBox                 boutonInvitationSlot;
+    @FXML private Button               boutonInvitation;
 
     // Chargé programmatiquement dans initialize() — pas via @FXML
     private MenuBarController menuBarController;
@@ -80,6 +85,7 @@ public class ChatController {
             MenuBar menuBarNode = menuLoader.load();
             menuBarController = menuLoader.getController();
             menuBarController.setParent(this);
+            menuBarController.setDarkTheme(tagsLabel.getStyleClass().contains("dark-theme"));
 
             // Injecte la MenuBar dans le slot de la TitleBar
             if (App.titleBarController != null) {
@@ -102,7 +108,7 @@ public class ChatController {
             
             salonsFiltres.setPredicate(salon -> {
                 if (recherche.isEmpty()) return true;
-                return salon.getNom_discussion().toLowerCase().contains(recherche);
+                return normaliserTexte(salon.getNom_discussion().toLowerCase()).contains(recherche);
             });
         });
 
@@ -161,6 +167,9 @@ public class ChatController {
 
         // === popule la list des salon ===
         rafraichirSalons();
+        // ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        // executor.scheduleAtFixedRate(rafraichirSalonsAuto, 0, 60, TimeUnit.SECONDS);
+
     }
 
     // ------------------------------------------------------------------ déconnexion
@@ -201,12 +210,8 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
-        if(discussionActuelle.getPrive()){
-            Button inviteBtn = new Button("Inviter");
-            inviteBtn.getStyleClass().add("envoi-btn-container");
-            boutonInvitationSlot.getChildren().add(inviteBtn);
-            // TODDO faire la fonction de invitetn
-        }
+        System.out.println(discussionActuelle.getNom_discussion()+"=================================");// TODO à enlever
+        boutonInvitation.setVisible(discussionActuelle.getPrive());
         utils_loadMessages(currentSalon.getArchive());
     }
 
@@ -225,7 +230,7 @@ public class ChatController {
             List<Discussion> lst = serveur.listerSalons();
             //creation du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
-            //masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo));
+            masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
             //application du masque
             lst.removeAll(masque);
             if (lst == null || lst.isEmpty()) {
@@ -234,8 +239,10 @@ public class ChatController {
                 titreLabel.setText("Aucun salon disponible");
                 return;
             }
+            boutonInvitation.setVisible(false);
             tousLesSalons.setAll(lst);
             Platform.runLater(() -> {
+                tousLesSalons.setAll(lst);
                 if (usernameLink != null) usernameLink.setText(pseudo);
                 if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
                 if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
@@ -246,6 +253,12 @@ public class ChatController {
         }
     }
 
+    Runnable rafraichirSalonsAuto = new Runnable(){
+        public void run(){
+            rafraichirSalons();
+        }
+    };
+
     // ------------------------------------------------------------------ création
 
     // fonction appeler depuis la menu bar
@@ -254,6 +267,7 @@ public class ChatController {
 
     @FXML private void createNewSalon(ActionEvent e) { ouvrirDialogNouveauSalon(); }
     @FXML private void createNewTag(ActionEvent e)   { ouvrirDialogNouveauTag();   }
+    @FXML private void invitation(ActionEvent e){ ouvrirDialogInvitation();}
 
     // permet de creer un salon
     private void ouvrirDialogNouveauSalon() {
@@ -621,4 +635,27 @@ public class ChatController {
 
     // === fonction appeler par les bouton pas encore connecter
     @FXML private void doNothings() { /* placeholder */ }
+
+
+    // === ouverture du profilf
+    @FXML
+    private void openProfile() {
+        try {
+            FXMLLoader loader = NavigationManager.getInstance()
+                .naviguerVers("/fxml/ProfilView.fxml");
+
+            ProfileController controller = loader.getController();
+            controller.configurerProfil(serveur, pseudo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String normaliserTexte(String texte){
+        if (texte == null) return "";
+       String sansAccents = Normalizer.normalize(texte, Normalizer.Form.NFD)
+                                   .replaceAll("\\p{M}", "");
+        return sansAccents.toLowerCase().trim();
+    }
 }

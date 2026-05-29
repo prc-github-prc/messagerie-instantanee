@@ -101,7 +101,7 @@
                             <Circle radius="20.0" fill="#2f55d4" styleClass="logo-circle"/>
                             <Button fx:id="usernameLink"
                                     text="Username"
-                                    onAction="#doNothings"
+                                    onAction="#openProfile"
                                     styleClass="profile-name-link"
                                     HBox.hgrow="ALWAYS"
                                     maxWidth="Infinity"/>
@@ -117,17 +117,26 @@
     <center>
         <VBox styleClass="chat-area" BorderPane.alignment="CENTER">
             <children>
-
-                <VBox alignment="CENTER_LEFT" styleClass="chat-header">
-                    <padding>
-                        <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
-                    </padding>
-                    <children>
-                        <Label fx:id="titreLabel" styleClass="chat-title"    text="# Sélectionnez un salon"/>
-                        <Label fx:id="tagsLabel"  styleClass="chat-subtitle" text="Choisis un salon à gauche pour commencer à discuter"/>
-                    </children>
-                </VBox>
-                <VBox alignment ="CENTER_RIGHT" styleClass= "chat-header" fx:id="boutonInvitationSlot"/>
+                <HBox styleClass="chat-header">
+                    <VBox alignment="CENTER_LEFT" >
+                        <padding>
+                            <Insets bottom="15.0" left="20.0" right="20.0" top="15.0"/>
+                        </padding>
+                        <children>
+                            <Label fx:id="titreLabel" styleClass="chat-title"    text="# Sélectionnez un salon"/>
+                            <Label fx:id="tagsLabel"  styleClass="chat-subtitle" text="Choisis un salon à gauche pour commencer à discuter"/>
+                        </children>
+                    </VBox>
+                    <VBox alignment ="CENTER_RIGHT">
+                        <children>
+                            <Button fx:id="boutonInvitation"
+                                    text="Invite"
+                                    onAction="#invitation"
+                                    styleClass="btn-invite"
+                                    />
+                        </children>
+                    </VBox>
+                </HBox>
 
                 <ScrollPane fx:id="scrollPane" fitToWidth="true"
                             hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
