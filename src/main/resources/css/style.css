@@ -819,3 +819,26 @@
     -fx-border-color: #5865f2;
     -fx-border-width: 2px;
 }
+
+/*=======================================================================================
+==================================Bouton invite==========================================*/
+.btn-invite {
+
+    -fx-background-color: #5865f2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-padding: 8px 18px;
+    -fx-cursor: hand;
+    display: none;
+}
+
+.btn-invite:hover {
+
+    -fx-background-color: #4752c4;
+}
+
+.btn-invite:pressed {
+
+    -fx-background-color: #3c45a5;
+}
