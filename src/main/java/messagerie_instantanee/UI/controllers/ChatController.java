@@ -166,9 +166,9 @@ public class ChatController {
         }
 
         // === popule la list des salon ===
-        //rafraichirSalons();
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(rafraichirSalonsAuto, 0, 60, TimeUnit.SECONDS);
+        rafraichirSalons();
+        // ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        // executor.scheduleAtFixedRate(rafraichirSalonsAuto, 0, 60, TimeUnit.SECONDS);
 
     }
 
