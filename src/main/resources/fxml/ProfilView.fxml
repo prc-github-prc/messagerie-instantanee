@@ -107,6 +107,13 @@
                         <TextField fx:id="usernameField"
                                 promptText="Nouveau username"
                                 styleClass="profile-input"/>
+                        
+                        <Label fx:id="passwordLabel"
+                            styleClass="profile-username"/>
+
+                        <javafx.scene.control.PasswordField fx:id="passwordField"
+                                    promptText="Entrez votre mot de passe pour confirmer"
+                                    styleClass="profile-input"/>
 
                         <Button text="Modifier username"
                                 onAction="#handleUpdateUsername"
