@@ -242,6 +242,7 @@ public class ChatController {
             boutonInvitation.setVisible(false);
             tousLesSalons.setAll(lst);
             Platform.runLater(() -> {
+                tousLesSalons.setAll(lst);
                 if (usernameLink != null) usernameLink.setText(pseudo);
                 if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
                 if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
