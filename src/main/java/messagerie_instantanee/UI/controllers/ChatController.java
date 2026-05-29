@@ -210,7 +210,7 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
-        System.out.println(discussionActuelle.getNom_discussion()+"=================================");
+        System.out.println(discussionActuelle.getNom_discussion()+"=================================");// TODO à enlever
         boutonInvitation.setVisible(discussionActuelle.getPrive());
         utils_loadMessages(currentSalon.getArchive());
     }
