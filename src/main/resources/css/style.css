@@ -393,7 +393,7 @@
 }
 
 .light-theme .chat-root {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #188750;
 }
 
 .light-theme .sidebar {
@@ -629,6 +629,10 @@
 .light-theme .hidden-discussion-name {
 
     -fx-text-fill: #383a40;
+}
+
+.light-theme .profile-root {
+    -fx-background-color: #2d4f3b; 
 }
 
 /* =========================================================
