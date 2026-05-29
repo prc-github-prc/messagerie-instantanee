@@ -152,6 +152,12 @@ public class ChatController {
         this.pseudo  = pseudo;
         this.serveur = server;
 
+        if (menuBarController != null) {
+            menuBarController.configurerSession(serveur, pseudo);
+        } else {
+            System.err.println("ERR: menuBarController est null dans ChatController");
+        }
+
         try {
             clientRMI = new Client(
                 msg -> Platform.runLater(
