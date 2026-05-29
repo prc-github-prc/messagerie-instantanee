@@ -175,7 +175,7 @@ public class SideAuthSettingsController {
         btnAnnuler.setOnAction(e -> dialog.close());
 
         Scene scene = new Scene(root, 300, 200);
-        //scene.getStylesheets().addAll(salonList.getScene().getStylesheets());
+        scene.getStylesheets().addAll(bookMarkList.getScene().getStylesheets());
         dialog.setScene(scene);
         dialog.showAndWait();
     }

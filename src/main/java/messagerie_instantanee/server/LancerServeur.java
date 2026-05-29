@@ -1,5 +1,6 @@
 package messagerie_instantanee.server;
 
+import java.net.InetAddress;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,6 +17,8 @@ public class LancerServeur {
 
     public static void main(String[] args) {
         try {
+            System.setProperty("java.rmi.server.hostname",
+                InetAddress.getLocalHost().getHostAddress());
             Registry registry = LocateRegistry.createRegistry(PORT);
             Server serveur = new Server();
             Naming.bind("//localhost:" + PORT + "/" + NOM, serveur);
