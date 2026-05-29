@@ -2,6 +2,7 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -103,7 +104,7 @@ public class ChatController {
             
             salonsFiltres.setPredicate(salon -> {
                 if (recherche.isEmpty()) return true;
-                return salon.getNom_discussion().toLowerCase().contains(recherche);
+                return normaliserTexte(salon.getNom_discussion().toLowerCase()).contains(recherche);
             });
         });
 
@@ -637,5 +638,12 @@ public class ChatController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String normaliserTexte(String texte){
+        if (texte == null) return "";
+       String sansAccents = Normalizer.normalize(texte, Normalizer.Form.NFD)
+                                   .replaceAll("\\p{M}", "");
+        return sansAccents.toLowerCase().trim();
     }
 }

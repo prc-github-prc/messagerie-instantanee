@@ -18,6 +18,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import messagerie_instantanee.UI.NavigationManager;
 import messagerie_instantanee.interfaces.InterfaceServeurForum;
@@ -98,6 +100,8 @@ public class ProfileController {
                     nomDiscussion.getStyleClass()
                         .add("sidebar-title");
 
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
                     Button btnAfficher =
                         new Button("Afficher");
 
@@ -124,7 +128,7 @@ public class ProfileController {
 
                     HBox container =
                         new HBox(15,
-                            nomDiscussion,
+                            nomDiscussion, spacer,
                             btnAfficher
                         );
 

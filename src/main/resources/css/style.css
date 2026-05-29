@@ -229,13 +229,22 @@
 .sidebar-btn:armed  { -fx-background-color: #3700b3; -fx-text-fill: #ffffff; }
 
 /* --- BULLE MESSAGE --- */
-.bulle-message {
+.dark-theme .bulle-message {
     -fx-background-color: #424640;
     -fx-text-fill: white;
     -fx-background-radius: 15px;
     -fx-padding: 8px 14px;
     -fx-font-size: 14px;
 }
+
+.light-theme .bulle-message {
+    -fx-background-color: #cdd6f4;
+    -fx-text-fill: #333333;
+    -fx-background-radius: 15px;
+    -fx-padding: 8px 14px;
+    -fx-font-size: 14px;
+}
+
 
 .bulle-speudo {
     -fx-text-fill: #b9bbbe;
@@ -393,7 +402,7 @@
 }
 
 .light-theme .chat-root {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #188750;
 }
 
 .light-theme .sidebar {
@@ -629,6 +638,10 @@
 .light-theme .hidden-discussion-name {
 
     -fx-text-fill: #383a40;
+}
+
+.light-theme .profile-root {
+    -fx-background-color: #2d4f3b; 
 }
 
 /* =========================================================
