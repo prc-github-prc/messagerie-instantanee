@@ -243,8 +243,8 @@ public class ChatController {
                 titreLabel.setText("Aucun salon disponible");
                 return;
             }
-            tousLesSalons.setAll(lst);
             Platform.runLater(() -> {
+                tousLesSalons.setAll(lst);
                 if (usernameLink != null) usernameLink.setText(pseudo);
                 if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
                 if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
