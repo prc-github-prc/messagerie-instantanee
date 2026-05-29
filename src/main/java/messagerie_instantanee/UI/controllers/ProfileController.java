@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -33,6 +34,12 @@ public class ProfileController {
 
     @FXML
     private TextField usernameField;
+
+    @FXML
+    private Label passwordLabel;
+
+    @FXML
+    private PasswordField passwordField;
 
     @FXML
     private ListView<Discussion> hiddenDiscussionList;
@@ -165,22 +172,31 @@ public class ProfileController {
     @FXML
     private void handleUpdateUsername() {
         String newUsername = usernameField.getText().trim();
+        String passwordInput = passwordField.getText();
 
         if (newUsername.isEmpty()) {
-            showAlert(AlertType.INFORMATION, "Succès", "Username mis à jour !");
+            showAlert(AlertType.WARNING, "Erreur", "Pseudo ne peut pas être vide");
+            return;
+        }
+
+        if(passwordInput.isEmpty()){
+            showAlert(AlertType.WARNING, "Attention", "Veuillez entrer votre mot de passe pour confirmer");
             return;
         }
 
         try {
-            UserDAO.updateUsername(pseudo, newUsername);
+            if(serveur.checkId(pseudo, passwordInput)){
+                UserDAO.updateUsername(pseudo, newUsername);
 
-            // update local state
-            pseudo= newUsername;
-            usernameLabel.setText(newUsername);
+                pseudo= newUsername;
+                usernameLabel.setText(newUsername);
+                usernameField.clear();
+                passwordField.clear();
 
-            showAlert(AlertType.INFORMATION, "Succès", "Username mis à jour !");
+                showAlert(AlertType.INFORMATION, "Succès", "Username mis à jour !");
+            }
             
-        } catch (SQLException e) {
+        } catch (RemoteException | SQLException e) {
             showAlert(AlertType.ERROR, "Erreur SQL", e.getMessage());
         }
     }

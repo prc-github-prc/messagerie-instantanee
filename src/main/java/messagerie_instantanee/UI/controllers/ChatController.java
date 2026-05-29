@@ -2,11 +2,15 @@ package messagerie_instantanee.UI.controllers;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -81,6 +85,7 @@ public class ChatController {
             MenuBar menuBarNode = menuLoader.load();
             menuBarController = menuLoader.getController();
             menuBarController.setParent(this);
+            menuBarController.setDarkTheme(tagsLabel.getStyleClass().contains("dark-theme"));
 
             // Injecte la MenuBar dans le slot de la TitleBar
             if (App.titleBarController != null) {
@@ -103,7 +108,7 @@ public class ChatController {
             
             salonsFiltres.setPredicate(salon -> {
                 if (recherche.isEmpty()) return true;
-                return salon.getNom_discussion().toLowerCase().contains(recherche);
+                return normaliserTexte(salon.getNom_discussion().toLowerCase()).contains(recherche);
             });
         });
 
@@ -161,7 +166,10 @@ public class ChatController {
         }
 
         // === popule la list des salon ===
-        rafraichirSalons();
+        //rafraichirSalons();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(rafraichirSalonsAuto, 0, 60, TimeUnit.SECONDS);
+
     }
 
     // ------------------------------------------------------------------ déconnexion
@@ -242,6 +250,12 @@ public class ChatController {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
     }
+
+    Runnable rafraichirSalonsAuto = new Runnable(){
+        public void run(){
+            rafraichirSalons();
+        }
+    };
 
     // ------------------------------------------------------------------ création
 
@@ -634,5 +648,12 @@ public class ChatController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String normaliserTexte(String texte){
+        if (texte == null) return "";
+       String sansAccents = Normalizer.normalize(texte, Normalizer.Form.NFD)
+                                   .replaceAll("\\p{M}", "");
+        return sansAccents.toLowerCase().trim();
     }
 }
