@@ -10,14 +10,13 @@ import java.util.Stack;
 import messagerie_instantanee.interfaces.InterfaceAffichageClient;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
+import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
 import messagerie_instantanee.server.database.DAO.RoleDAO;
 import messagerie_instantanee.server.database.DAO.UserDAO;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.Message;
 import messagerie_instantanee.server.models.User;
 import messagerie_instantanee.server.utils.Enum.Role;
-
-import static messagerie_instantanee.server.database.DAO.MessageDAO.addMessageToDiscussion;
 
 public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussion {
     private int id_discussion;
@@ -142,4 +141,5 @@ public class Salon extends UnicastRemoteObject implements InterfaceSujetDiscussi
     public String getSalonNom() { return nom; }
     public List<InterfaceAffichageClient> getParticipants() { return lst_participants; }
     public Boolean getEstPrivee() { return estPrivee; }
+
 }

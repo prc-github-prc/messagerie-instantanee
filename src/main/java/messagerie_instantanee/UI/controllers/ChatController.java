@@ -210,8 +210,10 @@ public class ChatController {
         currentSalon.inscription(clientRMI);
         titreLabel.setText("# " + d.getNom_discussion());
         messagesBox.getChildren().clear();
-        System.out.println(discussionActuelle.getNom_discussion()+"=================================");// TODO à enlever
-        boutonInvitation.setVisible(discussionActuelle.getPrive());
+        System.out.println(discussionActuelle.getPrive());
+        if(discussionActuelle.getPrive()){
+            boutonInvitation.setVisible(true);
+        }
         utils_loadMessages(currentSalon.getArchive());
     }
 
@@ -230,16 +232,18 @@ public class ChatController {
             List<Discussion> lst = serveur.listerSalons();
             //cretaion du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
+            System.out.println(masque.toString());
             masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
+            System.out.println(masque.toString());
             //application du masque
             lst.removeAll(masque);
+            System.out.println(lst.toString());
             if (lst == null || lst.isEmpty()) {
                 currentSalon = null;
                 discussionActuelle = null;
                 titreLabel.setText("Aucun salon disponible");
                 return;
             }
-            boutonInvitation.setVisible(false);
             tousLesSalons.setAll(lst);
             Platform.runLater(() -> {
                 tousLesSalons.setAll(lst);
@@ -247,6 +251,7 @@ public class ChatController {
                 if (titreLabel   != null) titreLabel.setText("Bienvenue " + pseudo + " !");
                 if (tagsLabel    != null) tagsLabel.setText("Choisis un salon à gauche pour commencer à discuter");
                 setChatVisible(false);
+                boutonInvitation.setVisible(false);
             });
         } catch (RemoteException e) {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());

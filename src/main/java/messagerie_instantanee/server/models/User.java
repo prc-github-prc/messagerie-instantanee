@@ -24,4 +24,16 @@ public class User implements Serializable {
     public int getId_user() { return id_user; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
+
+    //==============Equals==========================
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof User) {
+            User u = (User) o;
+            return u.id_user==this.id_user && u.username.equals(this.username);
+            
+        }
+        return false;
+
+    }
 }

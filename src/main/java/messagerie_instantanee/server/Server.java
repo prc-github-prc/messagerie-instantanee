@@ -15,8 +15,6 @@ import messagerie_instantanee.interfaces.InterfaceServeurForum;
 import messagerie_instantanee.interfaces.InterfaceSujetDiscussion;
 import messagerie_instantanee.server.database.DAO.DiscussionDAO;
 import messagerie_instantanee.server.database.DAO.HideDAO;
-import messagerie_instantanee.server.database.DAO.UserDAO;
-
 import static messagerie_instantanee.server.database.DAO.HideDAO.findHidedDiscussionListByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.findUserByUsername;
 import static messagerie_instantanee.server.database.DAO.UserDAO.insertUser;
@@ -24,6 +22,7 @@ import messagerie_instantanee.server.database.DatabaseLaucher;
 import messagerie_instantanee.server.models.Discussion;
 import messagerie_instantanee.server.models.User;
 import static messagerie_instantanee.server.services.ServiceServer.salonToDiscussion;
+import messagerie_instantanee.server.utils.Equal;
 
 
 public class Server extends UnicastRemoteObject implements InterfaceServeurForum {
@@ -120,20 +119,19 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     @Override
     public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) throws RemoteException {
         User user = findUserByUsername(username);
-        return map_salons.values().stream()
-            .filter(salon -> salon.getEstPrivee() //check si le salon est privé
-            && ! (salon.getUser().contains(user) || salon.getAdmin().contains(user)) // on enlève ceux ou l'utilisateur est dans la BDD
-            && salon.getParticipants().stream() // on enlève ceux ou l'utilisateur est dans la liste des participants en local
-                .noneMatch(participants -> {
-                    try {
-                        return participants.getId_user() == user.getId_user();
-                    } catch (RemoteException e) {
-                        System.out.println("[Server] Impossible de recuperer l'id des user en local : " + e.getMessage());
-                        return false;
-                    }
-                }))
-            .map(salon -> salonToDiscussion(salon))
-            .collect(Collectors.toList());
+        List<Discussion> masque = new ArrayList<>();
+        for(Salon salon : map_salons.values()){
+            Boolean contain1 = salon.getUser().contains(user);
+            List<User> lis_Admiin = salon.getAdmin();
+            Boolean contain2 = Equal.Contient(lis_Admiin, user);
+            Boolean isInSalon =!(contain1 || contain2);
+            Boolean add = salon.getEstPrivee() && isInSalon;
+
+            if(add){
+                masque.add(salonToDiscussion(salon));
+            }
+        }
+        return  masque;
     }
 
     @Override
