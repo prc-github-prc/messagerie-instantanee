@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -162,7 +165,10 @@ public class ChatController {
         }
 
         // === popule la list des salon ===
-        rafraichirSalons();
+        //rafraichirSalons();
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(rafraichirSalonsAuto, 0, 60, TimeUnit.SECONDS);
+
     }
 
     // ------------------------------------------------------------------ déconnexion
@@ -247,6 +253,12 @@ public class ChatController {
             System.err.println("[ChatController] Erreur rafraîchissement : " + e.getMessage());
         }
     }
+
+    Runnable rafraichirSalonsAuto = new Runnable(){
+        public void run(){
+            rafraichirSalons();
+        }
+    };
 
     // ------------------------------------------------------------------ création
 
