@@ -181,7 +181,7 @@ public class ChatController {
         serveur      = null;
     }
 
-    // ------------------------------------------------------------------ salon
+    // ========================== salon ========================
 
     private void rejoindre(Discussion d) throws RemoteException {
         // si on était sur un salon, se désinscrit
@@ -223,9 +223,9 @@ public class ChatController {
         if (serveur == null) return;
         try {
             List<Discussion> lst = serveur.listerSalons();
-            //cretaion du masque
+            //creation du masque
             List<Discussion> masque = serveur.getDiscussionsHidedByUser(pseudo);
-            //masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo)); //REMOVE ME (le filtre se fait dans listerSalon)
+            //masque.addAll(serveur.getPrivateDiscussionsNotVisibleByUser(pseudo));
             //application du masque
             lst.removeAll(masque);
             if (lst == null || lst.isEmpty()) {

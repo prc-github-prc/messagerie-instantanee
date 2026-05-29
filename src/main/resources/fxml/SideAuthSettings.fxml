@@ -43,19 +43,28 @@
                                     style="-fx-padding: 12; -fx-background-radius: 8;"/>
                     </VBox>
                     
-                    <ScrollPane fitToWidth="true"
-                                fitToHeight="true"
-                                hbarPolicy="NEVER"
-                                vbarPolicy="AS_NEEDED"
-                                VBox.vgrow="ALWAYS"
-                                styleClass="sidebar-scroll">
-                        <content>
-                            <VBox fx:id="bookMarkList"
-                                    styleClass="settings-display-card"
+                    <VBox styleClass="settings-display-card" VBox.vgrow="ALWAYS" spacing="8">
+                        <HBox>
+                            <Label text="liste de serveur enregistrer" styleClass="sidebar-title" alignment="CENTER_LEFT"/>
+                            <Button fx:id="newBookmarkButton" onAction="#handleNewBookmark" styleClass="icon-button-clean" alignment="CENTER_RIGHT">
+                                <graphic>
+                                    <FontIcon iconLiteral="fas-plus-square" iconSize="20" iconColor="white"/>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                        <ScrollPane fitToWidth="true"
+                                    fitToHeight="true"
+                                    hbarPolicy="NEVER"
+                                    vbarPolicy="AS_NEEDED"
                                     VBox.vgrow="ALWAYS"
-                                    minHeight="0"/>
-                        </content>
-                    </ScrollPane>
+                                    styleClass="sidebar-scroll">
+                            <content>
+                                <VBox fx:id="bookMarkList"
+                                        VBox.vgrow="ALWAYS"
+                                        minHeight="0"/>
+                            </content>
+                        </ScrollPane>
+                    </VBox>
 
                 </children>
             </VBox>
