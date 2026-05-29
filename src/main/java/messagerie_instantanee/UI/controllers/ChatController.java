@@ -81,6 +81,7 @@ public class ChatController {
             MenuBar menuBarNode = menuLoader.load();
             menuBarController = menuLoader.getController();
             menuBarController.setParent(this);
+            menuBarController.setDarkTheme(tagsLabel.getStyleClass().contains("dark-theme"));
 
             // Injecte la MenuBar dans le slot de la TitleBar
             if (App.titleBarController != null) {

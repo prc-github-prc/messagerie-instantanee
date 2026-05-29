@@ -121,4 +121,9 @@ public class MenuBarController {
         );
         alert.showAndWait();
     }
+
+    public void setDarkTheme(boolean isDark) {
+        darkThemeItem.setSelected(isDark);
+        //handleToggleTheme();
+    }
 }
