@@ -121,9 +121,9 @@ public class Server extends UnicastRemoteObject implements InterfaceServeurForum
     public List<Discussion> getPrivateDiscussionsNotVisibleByUser(String username) throws RemoteException {
         User user = findUserByUsername(username);
         return map_salons.values().stream()
-            .filter(salon -> salon.getEstPrivee() 
-            && ! (salon.getUser().contains(user) || salon.getAdmin().contains(user)) 
-            && salon.getParticipants().stream()
+            .filter(salon -> salon.getEstPrivee() //check si le salon est privé
+            && ! (salon.getUser().contains(user) || salon.getAdmin().contains(user)) // on enlève ceux ou l'utilisateur est dans la BDD
+            && salon.getParticipants().stream() // on enlève ceux ou l'utilisateur est dans la liste des participants en local
                 .noneMatch(participants -> {
                     try {
                         return participants.getId_user() == user.getId_user();
